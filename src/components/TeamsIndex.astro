@@ -1,0 +1,48 @@
+---
+import { teams } from '../data/teams'
+---
+
+<section
+  class="teams-index on-light"
+  id="teams"
+  aria-labelledby="teams-heading"
+  data-teams-index
+>
+  <h2 class="teams-index__statement" id="teams-heading">
+    <span>BlueNode is</span>
+    <span>organized into</span>
+    <strong>three teams.</strong>
+  </h2>
+
+  <div class="teams-index__divider" aria-hidden="true"></div>
+
+  <ul class="teams-index__list" aria-label="BlueNode teams">
+    {teams.map((team) => (
+      <li class="teams-index__item">
+        <h3>{team.english}</h3>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<script>
+  const teamsIndex = document.querySelector<HTMLElement>('[data-teams-index]')
+  const entryHeader = document.querySelector<HTMLElement>('[data-entry-header]')
+  let teamsFrame = 0
+
+  if (teamsIndex) {
+    const syncTeamsHeader = () => {
+      teamsFrame = 0
+      const rect = teamsIndex.getBoundingClientRect()
+      entryHeader?.classList.toggle('hdr--teams-active', rect.top < innerHeight && rect.bottom > 0)
+    }
+
+    const requestTeamsSync = () => {
+      if (!teamsFrame) teamsFrame = requestAnimationFrame(syncTeamsHeader)
+    }
+
+    addEventListener('scroll', requestTeamsSync, { passive: true })
+    addEventListener('resize', requestTeamsSync, { passive: true })
+    syncTeamsHeader()
+  }
+</script>

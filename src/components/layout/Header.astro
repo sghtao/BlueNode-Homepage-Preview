@@ -1,0 +1,77 @@
+---
+import { Image } from 'astro:assets'
+import logo from '../../assets/bluenode blue horizontal.png'
+import { withBase } from '../../lib/paths'
+
+interface Props {
+  // Home follows the surface-to-depth ramp; no-JS remains the light masthead.
+  depthAware?: boolean
+  // Entry mode mirrors the minimal masthead in the approved Figma opening scene.
+  entry?: boolean
+}
+
+const { depthAware = false, entry = false } = Astro.props
+const configuredBase = import.meta.env.BASE_URL.replace(/\/$/, '')
+const pathWithoutBase = configuredBase && Astro.url.pathname.startsWith(configuredBase)
+  ? Astro.url.pathname.slice(configuredBase.length) || '/'
+  : Astro.url.pathname
+const normalizedPath = pathWithoutBase.replace(/\/$/, '') || '/'
+const isHome = normalizedPath === '/'
+const isResearchRoute = normalizedPath.startsWith('/research')
+const isResearchIndex = normalizedPath === '/research'
+const homeHref = withBase()
+const researchHref = isResearchRoute ? withBase('research/') : '#research'
+const homeAnchor = (id: string) => isHome ? `#${id}` : `${homeHref}#${id}`
+---
+
+<header
+  class:list={['hdr', { 'hdr--depth': depthAware, 'hdr--entry': entry }]}
+  aria-label="사이트 헤더"
+  data-entry-header={entry ? '' : undefined}
+>
+  {entry && <a class="hdr__entry-brand" href={homeHref} aria-label="BlueNode 홈">BlueNode</a>}
+  <div class="shell">
+    <div class="hdr__in">
+      <a class="brand" href={homeHref} aria-label="BlueNode 홈">
+        <Image class="brand__image brand__image--blue" src={logo} alt="" loading="eager" />
+        <img
+          class="brand__image brand__image--white"
+          src={withBase('images/bluenode-white-horizontal.png')}
+          width="1420"
+          height="256"
+          alt=""
+          loading="eager"
+        />
+        <span class="brand__campus">/ INHA</span>
+      </a>
+
+      <div class="hstatus">
+        <span class="hstatus__node" aria-hidden="true"></span>
+        <span>COMMUNITY · ACTIVE 2026</span>
+      </div>
+
+      <nav class="hnav" aria-label="주요 메뉴">
+        <a class="hlink" href={homeAnchor('activities')}>활동</a>
+        <a class="hlink" href={homeAnchor('awards')}>기록</a>
+        <a class="hlink" href={researchHref} aria-current={isResearchIndex ? 'page' : undefined}>리서치</a>
+        <a class="hlink" href={homeAnchor('connections')}>커넥션</a>
+        <a class="hcta" href={homeAnchor('join')}>
+          <span class="roll-window"><span class="roll-track" data-label="합류">합류</span></span>
+        </a>
+
+        <details class="hmenu">
+          <summary>메뉴</summary>
+          <div class="hmenu__panel">
+            <a href={homeAnchor('teams')}>팀</a>
+            <a href={homeAnchor('activities')}>활동</a>
+            <a href={homeAnchor('awards')}>기록</a>
+            <a href={researchHref} aria-current={isResearchIndex ? 'page' : undefined}>리서치</a>
+            <a href={homeAnchor('connections')}>커넥션</a>
+            <a href={homeAnchor('join')}>합류</a>
+          </div>
+        </details>
+      </nav>
+    </div>
+  </div>
+  {depthAware && <div class="scroll-progress" aria-hidden="true"></div>}
+</header>

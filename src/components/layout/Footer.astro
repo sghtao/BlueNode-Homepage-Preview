@@ -1,0 +1,69 @@
+---
+import { withBase } from '../../lib/paths'
+
+const configuredBase = import.meta.env.BASE_URL.replace(/\/$/, '')
+const pathWithoutBase = configuredBase && Astro.url.pathname.startsWith(configuredBase)
+  ? Astro.url.pathname.slice(configuredBase.length) || '/'
+  : Astro.url.pathname
+const isHome = pathWithoutBase.replace(/\/$/, '') === ''
+const homeHref = withBase()
+const homeAnchor = (id: string) => isHome ? `#${id}` : `${homeHref}#${id}`
+---
+
+<footer
+  class="ftr on-light"
+  aria-label="사이트 정보"
+  data-footer-scene
+  data-node-id="301:1185"
+>
+  <a class="ftr__brand" href={homeHref} aria-label="BlueNode 홈" data-node-id="301:1186">
+    BlueNode
+  </a>
+
+  <div class="ftr__divider" aria-hidden="true" data-node-id="301:1187"></div>
+
+  <div class="ftr__identity">
+    <p class="ftr__location" data-node-id="301:1188">Inha University · Incheon</p>
+    <p class="ftr__descriptor" data-node-id="301:1189">Student-led · Non-commercial</p>
+  </div>
+
+  <nav class="ftr__nav ftr__nav--primary" aria-label="BlueNode 소개" data-node-id="301:1190">
+    <a href={homeAnchor('about')}>About</a>
+    <a href={homeAnchor('teams')}>Teams</a>
+    <a href={homeAnchor('awards')}>Awards</a>
+  </nav>
+
+  <nav class="ftr__nav ftr__nav--content" aria-label="BlueNode 콘텐츠" data-node-id="301:1191">
+    <a href={homeAnchor('research')}>Research</a>
+    <a href={homeAnchor('connections')}>Network</a>
+    <a href={homeAnchor('join')}>Join</a>
+  </nav>
+
+  <nav class="ftr__nav ftr__nav--external" aria-label="BlueNode 외부 링크" data-node-id="301:1192">
+    <a href="https://medium.com/bluenode" target="_blank" rel="noopener noreferrer">Medium</a>
+    <a href="mailto:contact@web3bluenode.xyz">Contact</a>
+  </nav>
+
+  <p class="ftr__copyright" data-node-id="301:1193">© BlueNode</p>
+</footer>
+
+<script>
+  const footerScene = document.querySelector<HTMLElement>('[data-footer-scene]')
+  const entryHeader = document.querySelector<HTMLElement>('[data-entry-header]')
+  let footerFrame = 0
+
+  const syncFooterHeader = () => {
+    footerFrame = 0
+    if (!footerScene) return
+    const rect = footerScene.getBoundingClientRect()
+    entryHeader?.classList.toggle('hdr--footer-active', rect.top < innerHeight && rect.bottom > 0)
+  }
+
+  const requestFooterSync = () => {
+    if (!footerFrame) footerFrame = requestAnimationFrame(syncFooterHeader)
+  }
+
+  addEventListener('scroll', requestFooterSync, { passive: true })
+  addEventListener('resize', requestFooterSync, { passive: true })
+  syncFooterHeader()
+</script>

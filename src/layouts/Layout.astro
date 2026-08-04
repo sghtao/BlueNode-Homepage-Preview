@@ -1,0 +1,58 @@
+---
+import '../index.css'
+import { withBase } from '../lib/paths'
+
+interface Props {
+  title?: string
+  description?: string
+  home?: boolean
+}
+
+const defaultTitle = 'BlueNode — 인하대학교 기반 블록체인 학회이자 커뮤니티'
+const defaultDescription =
+  '인하대학교를 기반으로 하는 블록체인 학회이자 커뮤니티. 블록체인을 읽고, 만들고, 검증합니다.'
+const defaultSocialDescription =
+  '인하대학교를 기반으로 하는 블록체인 학회이자 커뮤니티. 블록체인을 읽고, 만들고, 검증합니다.'
+
+const { title = defaultTitle, description, home = false } = Astro.props
+const pageDescription = description ?? defaultDescription
+const socialDescription = description ?? defaultSocialDescription
+const siteUrl = Astro.site ?? new URL('https://www.web3bluenode.xyz')
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl)
+const socialImageUrl = new URL(withBase('og-image.png'), siteUrl)
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <script is:inline>
+      document.documentElement.classList.add('js')
+    </script>
+    <link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
+    <link rel="icon" type="image/png" sizes="32x32" href={withBase('favicon-32x32.png')} />
+    <link rel="apple-touch-icon" sizes="180x180" href={withBase('apple-touch-icon.png')} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={pageDescription} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={socialDescription} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={socialImageUrl} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@web3BlueNode" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={socialDescription} />
+    <meta name="twitter:image" content={socialImageUrl} />
+  </head>
+  <body class:list={{ 'home-page': home }}>
+    <a class="skip" href="#main">본문으로 건너뛰기</a>
+    <slot />
+  </body>
+</html>

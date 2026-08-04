@@ -1,0 +1,19 @@
+---
+import Footer from '../../components/layout/Footer.astro'
+import Header from '../../components/layout/Header.astro'
+import ResearchLedger from '../../components/ResearchLedger.astro'
+import { getMediumFeedArticles } from '../../lib/medium'
+import Layout from '../../layouts/Layout.astro'
+
+const articles = await getMediumFeedArticles()
+const title = '리서치 — 우리가 남긴 글 | BlueNode'
+const description = `BlueNode가 공부하며 정리한 블록체인·Web3 글 ${articles.length}편을 날짜와 저자별로 살펴보세요.`
+---
+
+<Layout title={title} description={description}>
+  <Header />
+  <main id="main" tabindex="-1">
+    <ResearchLedger headingLevel="h1" number="" articles={articles} />
+  </main>
+  <Footer />
+</Layout>

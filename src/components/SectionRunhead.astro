@@ -1,0 +1,29 @@
+---
+interface Props {
+  as?: 'h1' | 'h2'
+  count: string
+  english: string
+  headingId: string
+  korean: string
+  number: string
+}
+
+const {
+  as = 'h2',
+  count,
+  english,
+  headingId,
+  korean,
+  number,
+} = Astro.props
+const Heading = as
+---
+
+<div class="runhead">
+  <Heading class="runhead__sig" id={headingId}>
+    <span class="no">{number}</span>
+    <span class="ko">{korean}</span>
+    <span class="en">{english}</span>
+  </Heading>
+  <span class="runhead__count">{count}</span>
+</div>

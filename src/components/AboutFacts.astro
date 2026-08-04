@@ -1,0 +1,71 @@
+---
+import { orgProfile } from '../data/orgFacts'
+import { withBase } from '../lib/paths'
+---
+
+<section
+  class="about-facts on-light"
+  id="about"
+  aria-labelledby="about-facts-heading"
+  data-about-facts
+>
+  <h2 class="about-facts__mark" id="about-facts-heading" data-about-mark>
+    <span>Blue</span>
+    <span>Node</span>
+  </h2>
+
+  <div class="about-facts__divider" aria-hidden="true"></div>
+
+  <p class="about-facts__copy">
+    Founded in <strong>{orgProfile.foundedMonth} {orgProfile.foundedYear}</strong> by students at<br class="about-facts__desktop-break" />
+    Inha University.<br />
+    A community of nearly <strong>{orgProfile.approximateMemberCount}</strong> members.<br />
+    <strong class="about-facts__sentence-start">Student-led</strong>, non-commercial, and<br class="about-facts__desktop-break" />
+    rooted in Incheon.<br />
+    From Inha University and Incheon to the<br class="about-facts__desktop-break" />
+    wider <strong>Web3 ecosystem</strong>.
+  </p>
+
+  <a class="about-facts__action" href="#teams">
+    <span>About BlueNode</span>
+    <img src={withBase('images/about-arrow-right.svg')} width="32" height="32" alt="" aria-hidden="true" />
+  </a>
+</section>
+
+<script>
+  const aboutFacts = document.querySelector<HTMLElement>('[data-about-facts]')
+  const aboutMark = aboutFacts?.querySelector<HTMLElement>('[data-about-mark]')
+  const entryHeader = document.querySelector<HTMLElement>('[data-entry-header]')
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
+  let aboutFrame = 0
+
+  if (aboutFacts && aboutMark) {
+    if (reducedMotion.matches || !('IntersectionObserver' in window)) {
+      aboutMark.classList.add('is-visible')
+    } else {
+      const markObserver = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return
+          aboutMark.classList.add('is-visible')
+          markObserver.disconnect()
+        },
+        { threshold: 0.2 },
+      )
+      markObserver.observe(aboutMark)
+    }
+
+    const syncAboutHeader = () => {
+      aboutFrame = 0
+      const rect = aboutFacts.getBoundingClientRect()
+      entryHeader?.classList.toggle('hdr--about-active', rect.top < innerHeight && rect.bottom > 0)
+    }
+
+    const requestAboutSync = () => {
+      if (!aboutFrame) aboutFrame = requestAnimationFrame(syncAboutHeader)
+    }
+
+    addEventListener('scroll', requestAboutSync, { passive: true })
+    addEventListener('resize', requestAboutSync, { passive: true })
+    syncAboutHeader()
+  }
+</script>

@@ -1,0 +1,232 @@
+/* Approved Figma Research / Editorial Index: 301:1158 at 1440×1280. */
+.research-index {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  height: 1280px;
+  overflow: hidden;
+  isolation: isolate;
+  background: #fff;
+  color: #080a10;
+}
+
+.research-index__heading {
+  position: absolute;
+  top: 28px;
+  left: 56px;
+  width: 1328px;
+  margin: 0;
+  color: #080a10;
+  font-size: 208px;
+  font-weight: 500;
+  line-height: 0.92;
+  letter-spacing: -10.4px;
+  white-space: nowrap;
+}
+
+.research-index__list {
+  position: absolute;
+  top: 330px;
+  left: 56px;
+  width: 760px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  list-style: none;
+}
+
+.research-index__article {
+  display: flex;
+  width: 100%;
+  padding: 24px 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  color: #080a10;
+}
+
+.research-index__divider {
+  display: block;
+  width: 100%;
+  height: 1px;
+  flex: 0 0 auto;
+  background: #1c2230;
+}
+
+.research-index__meta {
+  width: 100%;
+  color: #080a10;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.2px;
+  opacity: 0.55;
+}
+
+.research-index__title {
+  display: -webkit-box;
+  width: 100%;
+  overflow: hidden;
+  color: #080a10;
+  font-size: 44px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -1.1px;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.research-index__article[data-research-active='true'] .research-index__title,
+.research-index__article:hover .research-index__title,
+.research-index__article:focus-visible .research-index__title {
+  color: #164cf5;
+}
+
+.research-index__article:focus-visible {
+  outline: 2px solid #164cf5;
+  outline-offset: 4px;
+}
+
+.research-index__preview {
+  position: absolute;
+  top: 330px;
+  left: 856px;
+  display: block;
+  width: 528px;
+  height: 680px;
+  overflow: hidden;
+  background: #164cf5;
+  color: #fff;
+}
+
+.research-index__preview:focus-visible {
+  outline: 3px solid #f4e927;
+  outline-offset: -7px;
+}
+
+.research-index__preview-label,
+.research-index__preview-source {
+  position: absolute;
+  left: 32px;
+  margin: 0;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.36px;
+  white-space: nowrap;
+}
+
+.research-index__preview-label {
+  top: 30px;
+}
+
+.research-index__preview-source {
+  top: 626px;
+}
+
+.research-index__symbol {
+  position: absolute;
+  top: 158px;
+  left: 84px;
+  display: block;
+  width: 360px;
+  height: 332.182px;
+  transform-origin: 50% 50%;
+  animation:
+    research-symbol-opacity 2s linear infinite,
+    research-symbol-scale 2s linear infinite;
+}
+
+.research-index__symbol img {
+  width: 100%;
+  height: 100%;
+  filter: brightness(0) invert(1);
+}
+
+.research-index__footer {
+  position: absolute;
+  top: 1090px;
+  left: 56px;
+  display: flex;
+  width: 1328px;
+  height: 113px;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #1c2230;
+  color: #080a10;
+  font-size: 36px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.9px;
+  white-space: nowrap;
+}
+
+.research-index__footer:focus-visible {
+  outline: 2px solid #164cf5;
+  outline-offset: 4px;
+}
+
+.research-index__arrow {
+  font-size: 44px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+@keyframes research-symbol-opacity {
+  0%,
+  14% {
+    opacity: 0;
+  }
+
+  14% {
+    animation-timing-function: ease-out;
+  }
+
+  38%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes research-symbol-scale {
+  0%,
+  14% {
+    scale: 0.9 0.9;
+  }
+
+  14% {
+    animation-timing-function: ease-out;
+  }
+
+  38%,
+  100% {
+    scale: 1 1;
+  }
+}
+
+.hdr--entry.hdr--research-active {
+  min-height: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  pointer-events: none;
+}
+
+.hdr--entry.hdr--research-active > .shell,
+.hdr--entry.hdr--research-active > .scroll-progress,
+.hdr--entry.hdr--research-active .hdr__entry-brand {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .research-index__symbol {
+    opacity: 1;
+    scale: 1;
+    animation: none;
+  }
+}

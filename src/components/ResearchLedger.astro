@@ -1,0 +1,99 @@
+---
+import SectionRunhead from './SectionRunhead.astro'
+import { getMembersByHandles } from '../data/members'
+import {
+  formatResearchDate,
+  getResearchArticlesNewestFirst,
+} from '../data/research'
+import type { FeedArticle } from '../lib/medium'
+
+interface Props {
+  headingLevel?: 'h1' | 'h2'
+  articles?: FeedArticle[]
+  number?: string
+}
+
+const { headingLevel = 'h2', articles = getResearchArticlesNewestFirst(), number = '03' } = Astro.props
+const RowHeading = headingLevel === 'h1' ? 'h2' : 'h3'
+const getAuthors = (article: FeedArticle) => {
+  if (article.authorNames?.length) {
+    return article.authorNames.map((name) => ({
+      key: encodeURIComponent(name.toLocaleLowerCase('en-US')),
+      name,
+    }))
+  }
+  return getMembersByHandles(article.authorHandles).map((author) => ({
+    key: author.handle,
+    name: author.displayName,
+  }))
+}
+const authorKeys = [...new Set(articles.flatMap((article) => getAuthors(article).map((author) => author.key)))]
+---
+
+<section class="research beat on-dark" id="research" aria-labelledby="research-heading">
+  <div class="wrap">
+    <SectionRunhead
+      as={headingLevel}
+      count={`${articles.length} POSTS · ${authorKeys.length} AUTHORS`}
+      english="Medium mirror"
+      headingId="research-heading"
+      korean="리서치"
+      number={number}
+    />
+
+    <div class="feed-head rv">
+      <p class="research__intro">블록체인 리서치와 분석 글을 Medium에 발행합니다.</p>
+      <a class="feed-source" href="https://medium.com/bluenode" target="_blank" rel="noopener noreferrer">
+        Medium 채널
+      </a>
+    </div>
+
+    <div class="filterbar" data-filter-chip hidden>
+      <span class="filterchip">
+        저자 필터 — <b data-filter-name></b>
+        <button type="button" aria-label="저자 필터 해제">× 전체 보기</button>
+      </span>
+    </div>
+    <p class="sr-only" data-filter-status aria-live="polite"></p>
+
+    <div class="feed-list stagger" data-research-ledger>
+      {articles.map((article) => {
+        const authors = getAuthors(article)
+        return (
+          <article class="feed-item" data-authors={authors.map((author) => author.key).join(' ')} data-glare>
+            <div class="feed-meta">
+              <time datetime={article.publishedAt}>{formatResearchDate(article.publishedAt)}</time>
+              {authors.map((author) => (
+                <button
+                  class="author-button"
+                  type="button"
+                  data-author-filter={author.key}
+                  data-author-name={author.name}
+                >
+                  {author.name}
+                </button>
+              ))}
+              {article.tags.map((tag) => <span class="feed-tag">{tag}</span>)}
+            </div>
+
+            <div class="feed-body">
+              <RowHeading class="feed-title">
+                <a href={article.externalUrl} target="_blank" rel="noopener noreferrer">{article.title}</a>
+              </RowHeading>
+              {article.snippet && <p class="feed-excerpt">{article.snippet}</p>}
+            </div>
+
+            <a class="feed-read" href={article.externalUrl} target="_blank" rel="noopener noreferrer">
+              Medium에서 읽기
+            </a>
+          </article>
+        )
+      })}
+    </div>
+  </div>
+</section>
+
+<!-- Static by default; this progressive enhancement remains below 1 KB. -->
+<script is:inline>
+  (function(){var l=document.querySelector('[data-research-ledger]'),c=document.querySelector('[data-filter-chip]'),s=document.querySelector('[data-filter-status]');if(!l||!c||!s)return;var n=c.querySelector('[data-filter-name]'),x=c.querySelector('button'),r=l.querySelectorAll('.feed-item'),t;function a(h,v){var q=0;for(var i=0;i<r.length;i++){r[i].hidden=!!h&&!r[i].dataset.authors.split(' ').includes(h);if(!r[i].hidden)q++}c.hidden=!h;s.textContent=h?v+' 글 '+q+'편 표시':'전체 '+r.length+'편 표시';if(h)n.textContent=v}l.addEventListener('click',function(e){var b=e.target.closest('[data-author-filter]');if(!b)return;t=b;a(b.dataset.authorFilter,b.dataset.authorName);x.focus()});x.addEventListener('click',function(){a('');if(t)t.focus()})})()
+</script>

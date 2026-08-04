@@ -1,0 +1,83 @@
+@media (min-width: 40rem) and (max-width: 63.9375rem) {
+  .hstatus {
+    display: none;
+  }
+}
+
+@media (min-width: 64rem) {
+  .hstatus {
+    justify-self: center;
+  }
+}
+
+@media (max-width: 47.9375rem) {
+  .hstatus,
+  .hnav > .hlink {
+    display: none;
+  }
+
+  .hnav {
+    gap: 0.5rem;
+  }
+
+  .hmenu {
+    display: block;
+  }
+
+  .hmenu summary {
+    min-width: var(--target);
+    min-height: var(--target);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    cursor: pointer;
+    font-size: 0.72rem;
+    font-weight: 650;
+    letter-spacing: 0.06em;
+    list-style: none;
+  }
+
+  .hdr--deep .hmenu summary {
+    border-color: var(--line-dark);
+    color: var(--paper-text);
+  }
+
+  .hmenu summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .hmenu__panel {
+    position: absolute;
+    z-index: 40;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    min-width: 12rem;
+    display: grid;
+    padding: 0.5rem;
+    border: 1px solid var(--ink);
+    background: var(--w0);
+    box-shadow: 0 12px 30px rgba(8, 23, 51, 0.18);
+  }
+
+  .hdr--deep .hmenu__panel a {
+    color: var(--ink-soft);
+  }
+
+  .action {
+    padding-inline: 1rem;
+  }
+
+  .detail__sheet {
+    margin-left: calc(-1 * var(--gut));
+    margin-right: calc(-1 * var(--gut));
+  }
+}
+
+@media (max-width: 22.5rem) {
+  .brand__campus,
+  .hnav .hcta {
+    display: none;
+  }
+}

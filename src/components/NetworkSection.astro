@@ -1,0 +1,327 @@
+---
+import { connections } from '../data/connections'
+import { withBase } from '../lib/paths'
+
+const partnerOrder = [
+  'dsrv',
+  'catalyze-research',
+  'four-pillars',
+  'tiger-research',
+  'xangle',
+  'web3-japan',
+  'ntu',
+  'solana',
+  'bnb-chain',
+  'xrpl',
+  'mantle',
+  'injective',
+  'monad',
+  'b-harvest',
+] as const
+
+const partnerDisplayNames: Partial<Record<(typeof partnerOrder)[number], string>> = {
+  'web3-japan': 'Web3 Japan',
+  ntu: 'Blockchain@NTU',
+}
+
+const partnerLogoSources: Partial<Record<(typeof partnerOrder)[number], string>> = {
+  'four-pillars': '/images/connections/four-pillars-black.svg',
+  mantle: '/images/connections/mantle-obsidian.png',
+}
+
+const partnerLogoSizes: Record<(typeof partnerOrder)[number], [number, number]> = {
+  dsrv: [138, 41.4],
+  'catalyze-research': [70, 70],
+  'four-pillars': [140, 13.5],
+  'tiger-research': [138, 42.316],
+  xangle: [138, 26.161],
+  'web3-japan': [116.36, 70],
+  ntu: [62.741, 70],
+  solana: [82.727, 70],
+  'bnb-chain': [70, 70],
+  xrpl: [92.711, 70],
+  mantle: [138, 80],
+  injective: [70, 70],
+  monad: [70, 70],
+  'b-harvest': [138, 39.429],
+}
+
+const connectionBySlug = new Map(connections.map((connection) => [connection.slug, connection]))
+const partners = partnerOrder.map((slug) => {
+  const connection = connectionBySlug.get(slug)
+  if (!connection) throw new Error(`Missing Network partner data: ${slug}`)
+  const [logoWidth, logoHeight] = partnerLogoSizes[slug]
+  return {
+    ...connection,
+    displayName: partnerDisplayNames[slug] ?? connection.name,
+    logoSrc: partnerLogoSources[slug] ?? connection.logoSrc,
+    logoWidth,
+    logoHeight,
+  }
+})
+---
+
+<section
+  class="network-section on-light"
+  id="connections"
+  aria-labelledby="network-heading"
+  data-network-section
+>
+  <h2 class="network-section__heading" id="network-heading">network</h2>
+
+  <p class="network-section__statement">
+    <span>From Incheon,</span>
+    <span>connected to a wider Web3</span>
+    <span>ecosystem.</span>
+  </p>
+
+  <p class="network-section__count">{partners.length} CONNECTIONS</p>
+
+  <div class="network-globe" data-network-globe>
+    <canvas
+      class="network-globe__canvas"
+      width="900"
+      height="900"
+      tabindex="0"
+      role="img"
+      aria-label="인천을 중심으로 도쿄와 싱가포르에 연결된 BlueNode 네트워크 지구본"
+      aria-describedby="network-globe-help"
+      data-network-canvas
+    ></canvas>
+
+    <div class="network-globe__labels" aria-hidden="true">
+      <span class="network-globe__label network-globe__label--incheon">INCHEON / KOREA</span>
+      <span class="network-globe__label network-globe__label--tokyo">TOKYO</span>
+      <span class="network-globe__label network-globe__label--singapore">SINGAPORE</span>
+    </div>
+
+    <div class="network-globe__fallback" data-network-fallback>
+      <span class="network-globe__fallback-route network-globe__fallback-route--tokyo"></span>
+      <span class="network-globe__fallback-route network-globe__fallback-route--singapore"></span>
+      <span class="network-globe__fallback-node network-globe__fallback-node--incheon"></span>
+      <span class="network-globe__fallback-node network-globe__fallback-node--tokyo"></span>
+      <span class="network-globe__fallback-node network-globe__fallback-node--singapore"></span>
+      <span class="network-globe__fallback-label network-globe__fallback-label--incheon">INCHEON / KOREA</span>
+      <span class="network-globe__fallback-label network-globe__fallback-label--tokyo">TOKYO</span>
+      <span class="network-globe__fallback-label network-globe__fallback-label--singapore">SINGAPORE</span>
+    </div>
+
+    <p class="sr-only" id="network-globe-help">
+      방향키로 지구본을 움직일 수 있으며 Home 키를 누르면 인천 중심 위치로 돌아옵니다.
+    </p>
+  </div>
+
+  <div class="network-section__baseline" aria-hidden="true"></div>
+
+  <ul class="network-partners" aria-label="BlueNode connections">
+    {partners.map((partner) => (
+      <li class="network-partners__item" data-partner={partner.slug}>
+        <div class="network-partners__logo-box">
+          <img
+            src={withBase(partner.logoSrc)}
+            width={partner.logoWidth}
+            height={partner.logoHeight}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            style={`--partner-logo-width:${partner.logoWidth}px;--partner-logo-height:${partner.logoHeight}px`}
+          />
+        </div>
+        <span>{partner.displayName}</span>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<script>
+  import createGlobe, { type Globe } from 'cobe'
+
+  const networkSection = document.querySelector<HTMLElement>('[data-network-section]')
+  const globeStage = networkSection?.querySelector<HTMLElement>('[data-network-globe]')
+  const globeCanvas = networkSection?.querySelector<HTMLCanvasElement>('[data-network-canvas]')
+  const globeLabels = networkSection?.querySelector<HTMLElement>('.network-globe__labels')
+  const globeFallback = networkSection?.querySelector<HTMLElement>('[data-network-fallback]')
+  const entryHeader = document.querySelector<HTMLElement>('[data-entry-header]')
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
+  const saveData = Boolean(
+    (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData,
+  )
+
+  const INCHEON: [number, number] = [37.4563, 126.7052]
+  const TOKYO: [number, number] = [35.6895, 139.6917]
+  const SINGAPORE: [number, number] = [1.3521, 103.8198]
+  const INITIAL_PHI = Math.PI / 2 - (INCHEON[1] * Math.PI) / 180 + Math.PI
+  const INITIAL_THETA = (INCHEON[0] * Math.PI) / 180
+
+  let globe: Globe | undefined
+  let phi = INITIAL_PHI
+  let theta = INITIAL_THETA
+  let dragStartX = 0
+  let dragStartY = 0
+  let dragStartPhi = phi
+  let dragStartTheta = theta
+  let dragging = false
+  let settleFrame = 0
+  let settleFramesLeft = 0
+  let headerFrame = 0
+
+  const showFallback = () => {
+    networkSection?.classList.remove('network-section--globe-ready')
+    globeFallback?.setAttribute('aria-hidden', 'false')
+  }
+
+  const renderGlobe = () => {
+    if (!globe || !globeCanvas) return
+    const bounds = globeCanvas.getBoundingClientRect()
+    globe.update({
+      width: Math.max(1, Math.round(bounds.width)),
+      height: Math.max(1, Math.round(bounds.height)),
+      devicePixelRatio: Math.min(devicePixelRatio || 1, 2),
+      phi,
+      theta,
+    })
+  }
+
+  const settleGlobe = (frames = 24) => {
+    settleFramesLeft = Math.max(settleFramesLeft, frames)
+    if (settleFrame || document.hidden) return
+    const tick = () => {
+      renderGlobe()
+      settleFramesLeft -= 1
+      if (settleFramesLeft > 0 && !document.hidden) settleFrame = requestAnimationFrame(tick)
+      else settleFrame = 0
+    }
+    settleFrame = requestAnimationFrame(tick)
+  }
+
+  const createNetworkGlobe = () => {
+    if (!networkSection || !globeStage || !globeCanvas || saveData) {
+      showFallback()
+      return
+    }
+
+    const hasWebGl = Boolean(globeCanvas.getContext('webgl2') || globeCanvas.getContext('webgl'))
+    if (!hasWebGl) {
+      showFallback()
+      return
+    }
+
+    const bounds = globeCanvas.getBoundingClientRect()
+    const pixelRatio = Math.min(devicePixelRatio || 1, 2)
+
+    try {
+      globe = createGlobe(globeCanvas, {
+        width: Math.max(1, Math.round(bounds.width)),
+        height: Math.max(1, Math.round(bounds.height)),
+        devicePixelRatio: pixelRatio,
+        phi,
+        theta,
+        dark: 0,
+        diffuse: 1.2,
+        scale: 1.06,
+        mapSamples: 16000,
+        mapBrightness: 6,
+        baseColor: [1, 1, 1],
+        markerColor: [0, 0.282, 1],
+        glowColor: [1, 1, 1],
+        arcColor: [0, 0.282, 1],
+        arcWidth: 0.78,
+        arcHeight: 0.18,
+        markerElevation: 0.02,
+        markers: [
+          { location: INCHEON, size: 0.065, id: 'incheon' },
+          { location: TOKYO, size: 0.035, id: 'tokyo' },
+          { location: SINGAPORE, size: 0.035, id: 'singapore' },
+        ],
+        arcs: [
+          { from: INCHEON, to: TOKYO, id: 'incheon-tokyo' },
+          { from: INCHEON, to: SINGAPORE, id: 'incheon-singapore' },
+        ],
+      })
+      // COBE creates a positioning wrapper and marker anchors around the canvas.
+      // Keep the visible HTML labels in that same anchor scope.
+      if (globeLabels && globeCanvas.parentElement) {
+        globeLabels.querySelectorAll<HTMLElement>('.network-globe__label').forEach((label) => {
+          globeCanvas.parentElement?.append(label)
+        })
+        globeLabels.remove()
+      }
+      networkSection.classList.add('network-section--globe-ready')
+      globeFallback?.setAttribute('aria-hidden', 'true')
+      settleGlobe(reducedMotion.matches ? 4 : 30)
+    } catch {
+      globe = undefined
+      showFallback()
+    }
+  }
+
+  if (globeCanvas) {
+    globeCanvas.addEventListener('pointerdown', (event) => {
+      if (reducedMotion.matches || !globe) return
+      dragging = true
+      dragStartX = event.clientX
+      dragStartY = event.clientY
+      dragStartPhi = phi
+      dragStartTheta = theta
+      globeCanvas.setPointerCapture(event.pointerId)
+      globeCanvas.classList.add('is-dragging')
+    })
+
+    globeCanvas.addEventListener('pointermove', (event) => {
+      if (!dragging || !globe) return
+      phi = dragStartPhi + (event.clientX - dragStartX) / 260
+      theta = Math.max(-1.1, Math.min(1.1, dragStartTheta + (event.clientY - dragStartY) / 360))
+      renderGlobe()
+    })
+
+    const stopDragging = (event: PointerEvent) => {
+      if (!dragging) return
+      dragging = false
+      if (globeCanvas.hasPointerCapture(event.pointerId)) globeCanvas.releasePointerCapture(event.pointerId)
+      globeCanvas.classList.remove('is-dragging')
+    }
+
+    globeCanvas.addEventListener('pointerup', stopDragging)
+    globeCanvas.addEventListener('pointercancel', stopDragging)
+
+    globeCanvas.addEventListener('keydown', (event) => {
+      if (!globe || reducedMotion.matches) return
+      const step = event.shiftKey ? 0.16 : 0.06
+      if (event.key === 'ArrowLeft') phi -= step
+      else if (event.key === 'ArrowRight') phi += step
+      else if (event.key === 'ArrowUp') theta = Math.max(-1.1, theta - step)
+      else if (event.key === 'ArrowDown') theta = Math.min(1.1, theta + step)
+      else if (event.key === 'Home') {
+        phi = INITIAL_PHI
+        theta = INITIAL_THETA
+      } else return
+      event.preventDefault()
+      renderGlobe()
+    })
+  }
+
+  if (networkSection) {
+    const syncHeader = () => {
+      headerFrame = 0
+      const rect = networkSection.getBoundingClientRect()
+      entryHeader?.classList.toggle('hdr--network-active', rect.top < innerHeight && rect.bottom > 0)
+    }
+    const requestHeaderSync = () => {
+      if (!headerFrame) headerFrame = requestAnimationFrame(syncHeader)
+    }
+
+    addEventListener('scroll', requestHeaderSync, { passive: true })
+    addEventListener('resize', requestHeaderSync, { passive: true })
+    syncHeader()
+  }
+
+  if (globeCanvas && 'ResizeObserver' in window) {
+    new ResizeObserver(() => settleGlobe(reducedMotion.matches ? 2 : 8)).observe(globeCanvas)
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) settleGlobe(reducedMotion.matches ? 2 : 12)
+  })
+
+  createNetworkGlobe()
+</script>

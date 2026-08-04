@@ -1,0 +1,112 @@
+---
+import { activities } from '../data/activities'
+import { withBase } from '../lib/paths'
+---
+
+<section
+  class="activities-stage on-light"
+  id="activities"
+  aria-labelledby="activities-heading"
+  data-activities-stage
+>
+  <h2 class="activities-stage__heading" id="activities-heading">activities</h2>
+
+  <h3 class="activities-stage__title" aria-live="polite" data-activity-title>
+    {activities[0].title}
+  </h3>
+  <div class="activities-stage__title-rule" aria-hidden="true"></div>
+
+  <div class="activities-stage__media">
+    {activities.map((activity, index) => (
+      <img
+        class:list={['activities-stage__photo', { 'is-active': index === 0 }]}
+        src={withBase(activity.src)}
+        alt={activity.alt}
+        width={activity.width}
+        height={activity.height}
+        loading={index === 0 ? 'eager' : 'lazy'}
+        decoding="async"
+        data-activity-photo
+        data-title={activity.title}
+      />
+    ))}
+  </div>
+
+  <button
+    class="activities-stage__action"
+    type="button"
+    aria-label={`다음 활동 보기: ${activities[1].title}`}
+    data-activity-next
+  >
+    <span>View all activities</span>
+    <span class="activities-stage__arrow" aria-hidden="true">→</span>
+  </button>
+</section>
+
+<script>
+  const stage = document.querySelector<HTMLElement>('[data-activities-stage]')
+  const title = stage?.querySelector<HTMLElement>('[data-activity-title]')
+  const nextButton = stage?.querySelector<HTMLButtonElement>('[data-activity-next]')
+  const photos = Array.from(stage?.querySelectorAll<HTMLImageElement>('[data-activity-photo]') ?? [])
+  const entryHeader = document.querySelector<HTMLElement>('[data-entry-header]')
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
+
+  let currentIndex = 0
+  let timer = 0
+  let isVisible = false
+  let headerFrame = 0
+
+  const showActivity = (index: number) => {
+    if (!photos.length || !title || !nextButton) return
+
+    currentIndex = (index + photos.length) % photos.length
+    photos.forEach((photo, photoIndex) => photo.classList.toggle('is-active', photoIndex === currentIndex))
+
+    const currentPhoto = photos[currentIndex]
+    const nextPhoto = photos[(currentIndex + 1) % photos.length]
+    title.textContent = currentPhoto.dataset.title ?? ''
+    nextButton.setAttribute('aria-label', `다음 활동 보기: ${nextPhoto.dataset.title ?? ''}`)
+  }
+
+  const stopRotation = () => {
+    if (timer) window.clearInterval(timer)
+    timer = 0
+  }
+
+  const startRotation = () => {
+    stopRotation()
+    if (!isVisible || document.hidden || reducedMotion.matches || photos.length < 2) return
+    timer = window.setInterval(() => showActivity(currentIndex + 1), 5000)
+  }
+
+  nextButton?.addEventListener('click', () => {
+    showActivity(currentIndex + 1)
+    startRotation()
+  })
+
+  if (stage) {
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting
+      if (isVisible) startRotation()
+      else stopRotation()
+    }, { threshold: 0.25 })
+
+    observer.observe(stage)
+
+    const syncHeader = () => {
+      headerFrame = 0
+      const rect = stage.getBoundingClientRect()
+      entryHeader?.classList.toggle('hdr--activities-active', rect.top < innerHeight && rect.bottom > 0)
+    }
+
+    const requestHeaderSync = () => {
+      if (!headerFrame) headerFrame = requestAnimationFrame(syncHeader)
+    }
+
+    addEventListener('scroll', requestHeaderSync, { passive: true })
+    addEventListener('resize', requestHeaderSync, { passive: true })
+    document.addEventListener('visibilitychange', startRotation)
+    reducedMotion.addEventListener('change', startRotation)
+    syncHeader()
+  }
+</script>

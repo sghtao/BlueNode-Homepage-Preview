@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.web3bluenode.xyz/sitemap-index.xml

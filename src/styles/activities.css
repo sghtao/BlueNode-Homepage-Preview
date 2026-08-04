@@ -1,0 +1,138 @@
+/* Approved Figma Activities / People Stage: 301:1141 at 1440×1200. */
+.activities-stage {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  height: 1200px;
+  overflow: hidden;
+  isolation: isolate;
+  background: #fff;
+  color: #080a10;
+}
+
+.activities-stage__heading {
+  position: absolute;
+  top: 28px;
+  left: 52px;
+  width: 1336px;
+  margin: 0;
+  font-size: 208px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -10.4px;
+  white-space: nowrap;
+}
+
+.activities-stage__title {
+  position: absolute;
+  top: 298px;
+  left: 56px;
+  margin: 0;
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.9px;
+  white-space: nowrap;
+}
+
+.activities-stage__title-rule {
+  position: absolute;
+  top: 356px;
+  left: 56px;
+  width: 1328px;
+  height: 1px;
+  background: #080a10;
+}
+
+.activities-stage__media {
+  position: absolute;
+  top: 380px;
+  left: 56px;
+  width: 1328px;
+  height: 600px;
+  overflow: hidden;
+  background: #f3f3f3;
+}
+
+.activities-stage__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 360ms ease;
+}
+
+.activities-stage__photo.is-active {
+  z-index: 1;
+  opacity: 1;
+}
+
+.activities-stage__action {
+  position: absolute;
+  top: 1032px;
+  left: 56px;
+  display: flex;
+  width: 1328px;
+  height: 141px;
+  margin: 0;
+  padding: 16px 0 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  border: 0;
+  border-top: 1px solid #080a10;
+  border-bottom: 1px solid #080a10;
+  background: transparent;
+  color: #080a10;
+  cursor: pointer;
+  font: inherit;
+  font-size: 36px;
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.9px;
+  text-align: left;
+}
+
+.activities-stage__arrow {
+  color: #164cf5;
+  font-size: 44px;
+  font-weight: 400;
+  line-height: 0.9;
+  transition: transform 180ms ease;
+}
+
+.activities-stage__action:hover .activities-stage__arrow,
+.activities-stage__action:focus-visible .activities-stage__arrow {
+  transform: translateX(8px);
+}
+
+.activities-stage__action:focus-visible {
+  outline: 2px solid #164cf5;
+  outline-offset: 4px;
+}
+
+.hdr--entry.hdr--activities-active {
+  min-height: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  pointer-events: none;
+}
+
+.hdr--entry.hdr--activities-active > .shell,
+.hdr--entry.hdr--activities-active > .scroll-progress,
+.hdr--entry.hdr--activities-active .hdr__entry-brand {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .activities-stage__photo,
+  .activities-stage__arrow {
+    transition: none;
+  }
+}

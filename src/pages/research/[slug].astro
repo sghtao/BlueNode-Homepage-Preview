@@ -1,0 +1,67 @@
+---
+import Footer from '../../components/layout/Footer.astro'
+import Header from '../../components/layout/Header.astro'
+import { getMembersByHandles } from '../../data/members'
+import {
+  formatResearchDate,
+  getResearchArticlesNewestFirst,
+  type ResearchArticle,
+} from '../../data/research'
+import Layout from '../../layouts/Layout.astro'
+import { withBase } from '../../lib/paths'
+
+export function getStaticPaths() {
+  return getResearchArticlesNewestFirst().map((article) => ({
+    params: { slug: article.slug },
+    props: { article },
+  }))
+}
+
+interface Props {
+  article: ResearchArticle
+}
+
+const { article } = Astro.props
+const authors = getMembersByHandles(article.authorHandles)
+const byline = authors.map((author) => author.displayName).join(', ')
+const title = `${article.title} | BlueNode Research`
+const isArchive = Number(article.publishedAt.slice(0, 4)) <= 2024
+---
+
+<Layout title={title} description={article.snippet}>
+  <Header />
+  <main class="detail band" id="main" tabindex="-1">
+    <div class="shell">
+      <a class="detail__back" href={withBase('research/')}>← 리서치</a>
+
+      <article class="detail__sheet">
+        <p class="detail__meta">
+          <time datetime={article.publishedAt}>{formatResearchDate(article.publishedAt)}</time>
+          {isArchive && <span class="archive-badge">지난 글</span>}
+        </p>
+
+        <h1>{article.title}</h1>
+        <p class="detail__byline">BY {byline}</p>
+
+        <ul class="detail__tags" aria-label="리서치 태그">
+          {article.tags.map((tag) => <li>{tag}</li>)}
+        </ul>
+
+        <p class="detail__abstract">{article.snippet}</p>
+
+        <div class="detail__actions">
+          <a
+            class="action action--primary"
+            href={article.externalUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Medium에서 전문 읽기 <span aria-hidden="true">↗</span>
+          </a>
+          <a class="action action--secondary" href={withBase('research/')}>리서치 목록으로</a>
+        </div>
+      </article>
+    </div>
+  </main>
+  <Footer />
+</Layout>

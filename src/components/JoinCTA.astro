@@ -1,0 +1,65 @@
+---
+import { withBase } from '../lib/paths'
+
+const APPLY_URL = 'https://x.com/web3BlueNode'
+---
+
+<section
+  class="join-scene on-light"
+  id="join"
+  aria-labelledby="join-heading"
+  data-join-section
+  data-node-id="301:1174"
+>
+  <h2 class="join-scene__heading" id="join-heading" data-node-id="301:1175">join</h2>
+
+  <div class="join-scene__symbol" aria-hidden="true" data-node-id="301:1176">
+    <img src={withBase('images/join-symbol-ghost.svg')} alt="" width="650" height="600" />
+  </div>
+
+  <p class="join-scene__statement" data-node-id="301:1179">
+    <span>Read what’s <strong>changing</strong>.</span>
+    <span>Build what comes <strong>next</strong>.</span>
+  </p>
+
+  <a
+    class="join-scene__apply"
+    href={APPLY_URL}
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Apply to BlueNode on X"
+    data-node-id="301:1180"
+  >
+    <span>Apply to BlueNode</span>
+    <span class="join-scene__arrow" aria-hidden="true">→</span>
+  </a>
+</section>
+
+<script>
+  const joinSection = document.querySelector<HTMLElement>('[data-join-section]')
+  const entryHeader = document.querySelector<HTMLElement>('[data-entry-header]')
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
+  let joinFrame = 0
+
+  const syncJoinScene = () => {
+    joinFrame = 0
+    if (!joinSection) return
+    const rect = joinSection.getBoundingClientRect()
+    const visible = rect.top < innerHeight && rect.bottom > 0
+    entryHeader?.classList.toggle('hdr--join-active', visible)
+    joinSection.classList.toggle(
+      'join-scene--active',
+      visible && !document.hidden && !reducedMotion.matches,
+    )
+  }
+
+  const requestJoinSync = () => {
+    if (!joinFrame) joinFrame = requestAnimationFrame(syncJoinScene)
+  }
+
+  addEventListener('scroll', requestJoinSync, { passive: true })
+  addEventListener('resize', requestJoinSync, { passive: true })
+  document.addEventListener('visibilitychange', requestJoinSync)
+  reducedMotion.addEventListener('change', requestJoinSync)
+  syncJoinScene()
+</script>

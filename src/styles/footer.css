@@ -1,0 +1,141 @@
+/* Approved Figma Footer / Brand Close: 301:1185 at 1440×560. */
+.ftr {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  height: 560px;
+  overflow: clip;
+  background: #fff;
+  color: #080a10;
+}
+
+.ftr__brand {
+  position: absolute;
+  top: 24px;
+  left: 52px;
+  width: 1240px;
+  margin: 0;
+  color: #080a10;
+  font-size: 184px;
+  font-weight: 600;
+  line-height: 0.88;
+  letter-spacing: -7.36px;
+  white-space: nowrap;
+}
+
+.ftr__brand:focus-visible {
+  outline: 2px solid #164cf5;
+  outline-offset: 4px;
+}
+
+.ftr__divider {
+  position: absolute;
+  top: 268px;
+  left: 58px;
+  width: 1324px;
+  height: 1px;
+  background: #777b85;
+}
+
+.ftr__identity {
+  position: absolute;
+  top: 316px;
+  left: 58px;
+  width: 500px;
+}
+
+.ftr__identity p {
+  margin: 0;
+}
+
+.ftr__location {
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.39px;
+}
+
+.ftr__descriptor {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.09px;
+}
+
+.ftr__nav {
+  position: absolute;
+  top: 312px;
+  display: flex;
+  margin: 0;
+  flex-direction: column;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: -0.1px;
+}
+
+.ftr__nav--primary {
+  left: 720px;
+  width: 150px;
+}
+
+.ftr__nav--content {
+  left: 930px;
+  width: 170px;
+}
+
+.ftr__nav--external {
+  left: 1200px;
+  width: 150px;
+  color: #164cf5;
+}
+
+.ftr__nav a {
+  width: fit-content;
+}
+
+.ftr__nav a:hover,
+.ftr__nav a:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.ftr__nav a:focus-visible {
+  outline: 2px solid #164cf5;
+  outline-offset: 3px;
+}
+
+.ftr__copyright {
+  position: absolute;
+  top: 506px;
+  left: 1182px;
+  width: 200px;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.09px;
+  text-align: right;
+}
+
+.hdr--entry.hdr--footer-active {
+  min-height: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  pointer-events: none;
+}
+
+.hdr--entry.hdr--footer-active > .shell,
+.hdr--entry.hdr--footer-active > .scroll-progress,
+.hdr--entry.hdr--footer-active .hdr__entry-brand {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}

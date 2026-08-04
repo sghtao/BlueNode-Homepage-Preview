@@ -1,0 +1,334 @@
+/* Approved Figma Network / COBE Draft: 301:147 at 1440×1660. */
+.network-section {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  height: 1660px;
+  overflow: clip;
+  isolation: isolate;
+  background: #fff;
+  color: #09090a;
+}
+
+.network-section__heading {
+  position: absolute;
+  top: 54px;
+  left: 52px;
+  width: 690px;
+  height: 208px;
+  margin: 0;
+  font-size: 184px;
+  font-weight: 500;
+  line-height: 0.92;
+  letter-spacing: -9.2px;
+  white-space: nowrap;
+}
+
+.network-section__statement {
+  position: absolute;
+  top: 302px;
+  left: 58px;
+  display: flex;
+  width: 560px;
+  height: 142px;
+  margin: 0;
+  flex-direction: column;
+  font-size: 44px;
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -1.32px;
+}
+
+.network-section__statement span {
+  display: block;
+}
+
+.network-section__count {
+  position: absolute;
+  top: 510px;
+  left: 58px;
+  width: 280px;
+  height: 30px;
+  margin: 0;
+  color: #0048ff;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.72px;
+}
+
+.network-globe {
+  position: absolute;
+  top: -10px;
+  left: 650px;
+  width: 900px;
+  height: 900px;
+}
+
+.network-globe__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  opacity: 0;
+  touch-action: none;
+  transition: opacity 180ms ease;
+}
+
+.network-section--globe-ready .network-globe__canvas {
+  opacity: 1;
+}
+
+.network-globe__canvas.is-dragging {
+  cursor: grabbing;
+}
+
+.network-globe__canvas:focus-visible {
+  outline: 2px solid #0048ff;
+  outline-offset: -34px;
+}
+
+.network-globe__labels {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.network-section--globe-ready .network-globe__labels {
+  opacity: 1;
+}
+
+.network-globe__label {
+  position: absolute;
+  z-index: 3;
+  color: rgba(14, 20, 36, 0.72);
+  font-family: Inter, var(--sans);
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: 0.24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+  white-space: nowrap;
+}
+
+.network-globe__label--incheon {
+  position-anchor: --cobe-incheon;
+  top: anchor(center);
+  left: anchor(center);
+  color: #0048ff;
+  font-size: 18px;
+  transform: translate(-47%, 35px);
+}
+
+.network-globe__label--tokyo {
+  position-anchor: --cobe-tokyo;
+  top: anchor(center);
+  left: anchor(center);
+  transform: translate(14px, -29px);
+}
+
+.network-globe__label--singapore {
+  position-anchor: --cobe-singapore;
+  top: anchor(center);
+  left: anchor(center);
+  transform: translate(-73px, 18px);
+}
+
+.network-section--globe-ready .network-globe__label {
+  opacity: 1;
+}
+
+.network-globe__fallback {
+  position: absolute;
+  inset: 68px;
+  overflow: hidden;
+  border: 2px solid #dce1ea;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 44% 49%, rgba(0, 72, 255, 0.08) 0 18px, transparent 19px),
+    radial-gradient(circle at 56% 46%, rgba(0, 72, 255, 0.06) 0 12px, transparent 13px),
+    radial-gradient(circle at 27% 75%, rgba(0, 72, 255, 0.06) 0 12px, transparent 13px),
+    radial-gradient(circle, #111 0 1.5px, transparent 1.8px) 0 0 / 13px 13px,
+    #fff;
+  box-shadow: 0 14px 34px rgba(25, 52, 105, 0.08);
+}
+
+.network-section--globe-ready .network-globe__fallback {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.network-globe__fallback-route,
+.network-globe__fallback-node,
+.network-globe__fallback-label {
+  position: absolute;
+  z-index: 2;
+}
+
+.network-globe__fallback-route {
+  top: 382px;
+  left: 382px;
+  height: 2px;
+  background: #0048ff;
+  transform-origin: left center;
+}
+
+.network-globe__fallback-route--tokyo {
+  width: 86px;
+  transform: rotate(-8deg);
+}
+
+.network-globe__fallback-route--singapore {
+  width: 270px;
+  transform: rotate(126deg);
+}
+
+.network-globe__fallback-node {
+  width: 14px;
+  height: 14px;
+  border: 4px solid rgba(0, 72, 255, 0.28);
+  border-radius: 50%;
+  background: #0048ff;
+  box-sizing: content-box;
+}
+
+.network-globe__fallback-node--incheon {
+  top: 370px;
+  left: 370px;
+}
+
+.network-globe__fallback-node--tokyo {
+  top: 358px;
+  left: 458px;
+}
+
+.network-globe__fallback-node--singapore {
+  top: 585px;
+  left: 210px;
+}
+
+.network-globe__fallback-label {
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.network-globe__fallback-label--incheon {
+  top: 408px;
+  left: 315px;
+  color: #0048ff;
+}
+
+.network-globe__fallback-label--tokyo {
+  top: 343px;
+  left: 492px;
+}
+
+.network-globe__fallback-label--singapore {
+  top: 620px;
+  left: 174px;
+}
+
+.network-section__baseline {
+  position: absolute;
+  top: 870px;
+  left: 56px;
+  width: 1328px;
+  height: 2px;
+  background: #09090a;
+}
+
+.network-partners {
+  position: absolute;
+  top: 930px;
+  left: 56px;
+  display: grid;
+  width: 1328px;
+  height: 530px;
+  margin: 0;
+  padding: 0;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(2, 265px);
+  border-top: 1px solid #c2c2c7;
+  border-left: 1px solid #c2c2c7;
+  list-style: none;
+}
+
+.network-partners__item {
+  display: flex;
+  min-width: 0;
+  padding: 36px 20px 24px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  overflow: hidden;
+  border-right: 1px solid #c2c2c7;
+  border-bottom: 1px solid #c2c2c7;
+  background: #fff;
+}
+
+.network-partners__logo-box {
+  position: relative;
+  display: grid;
+  width: 148px;
+  height: 92px;
+  flex: 0 0 auto;
+  place-items: center;
+}
+
+.network-partners__logo-box img {
+  width: var(--partner-logo-width);
+  height: var(--partner-logo-height);
+  max-width: 148px;
+  max-height: 92px;
+  object-fit: contain;
+}
+
+.network-partners__item > span {
+  width: 160px;
+  height: 26px;
+  color: #09090a;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.18px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.hdr--entry.hdr--network-active {
+  min-height: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  pointer-events: none;
+}
+
+.hdr--entry.hdr--network-active > .shell,
+.hdr--entry.hdr--network-active > .scroll-progress,
+.hdr--entry.hdr--network-active .hdr__entry-brand {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .network-globe__canvas,
+  .network-globe__labels {
+    transition: none;
+  }
+
+  .network-globe__canvas {
+    cursor: default;
+  }
+}

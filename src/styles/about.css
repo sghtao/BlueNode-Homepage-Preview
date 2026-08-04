@@ -1,0 +1,187 @@
+/* Approved Figma About Facts: 301:75 at 1440×1000. */
+.about-facts {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  height: 1000px;
+  overflow: hidden;
+  isolation: isolate;
+  background: #fff;
+  color: #000;
+}
+
+.about-facts__mark {
+  position: absolute;
+  top: 165px;
+  left: 52px;
+  width: 350px;
+  margin: 0;
+  color: #0048ff;
+  font-size: 144px;
+  font-weight: 700;
+  line-height: 130px;
+  letter-spacing: -8.64px;
+  transform-origin: 50% 50%;
+}
+
+.about-facts__mark span {
+  display: block;
+}
+
+.about-facts__mark.is-visible {
+  animation: about-mark-settle 2s linear both;
+}
+
+@keyframes about-mark-settle {
+  0%,
+  14% {
+    opacity: 0;
+    transform: scale(0.9);
+    animation-timing-function: ease-out;
+  }
+
+  38%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.about-facts__divider {
+  position: absolute;
+  top: 118px;
+  left: 432px;
+  width: 1px;
+  height: 570px;
+  background: rgba(20, 20, 20, 0.16);
+}
+
+.about-facts__copy {
+  position: absolute;
+  top: 118px;
+  left: 500px;
+  width: 895px;
+  margin: 0;
+  color: #000;
+  font-size: 50px;
+  font-weight: 700;
+  line-height: 60px;
+  letter-spacing: -1.34px;
+}
+
+.about-facts__copy strong {
+  color: #103e96;
+  font: inherit;
+}
+
+.about-facts__action {
+  position: absolute;
+  top: 820px;
+  right: 52px;
+  left: 52px;
+  display: flex;
+  height: 113px;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(23, 16, 16, 0.22);
+  background: #fff;
+  color: #171010;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 32px;
+  letter-spacing: -0.52px;
+  text-decoration: none;
+  transition: background-color 160ms ease;
+}
+
+.about-facts__action img {
+  width: 32px;
+  height: 32px;
+}
+
+.about-facts__action:hover {
+  background: #f3f4f6;
+}
+
+.about-facts__action:active {
+  background: #e5e7eb;
+}
+
+.about-facts__action:focus-visible {
+  outline: 2px solid #0048ff;
+  outline-offset: 4px;
+}
+
+/* The legacy masthead resumes only after this migrated scene. */
+.hdr--entry.hdr--about-active {
+  min-height: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  pointer-events: none;
+}
+
+.hdr--entry.hdr--about-active > .shell,
+.hdr--entry.hdr--about-active > .scroll-progress,
+.hdr--entry.hdr--about-active .hdr__entry-brand {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 62rem) {
+  .about-facts {
+    height: auto;
+    min-height: 100svh;
+    padding: 7rem 1.25rem 3rem;
+  }
+
+  .about-facts__mark,
+  .about-facts__divider,
+  .about-facts__copy,
+  .about-facts__action {
+    position: static;
+  }
+
+  .about-facts__mark {
+    width: auto;
+    font-size: clamp(5rem, 22vw, 9rem);
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+  }
+
+  .about-facts__divider {
+    width: 100%;
+    height: 1px;
+    margin: 3rem 0;
+  }
+
+  .about-facts__copy {
+    width: auto;
+    font-size: clamp(2rem, 7vw, 3.125rem);
+    line-height: 1.18;
+    letter-spacing: -0.027em;
+  }
+
+  .about-facts__desktop-break {
+    display: none;
+  }
+
+  .about-facts__action {
+    width: 100%;
+    margin-top: 5rem;
+    font-size: 1.375rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-facts__mark.is-visible {
+    animation: none;
+  }
+
+  .about-facts__action {
+    transition: none;
+  }
+}

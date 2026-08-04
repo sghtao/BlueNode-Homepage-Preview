@@ -1,0 +1,170 @@
+/* Approved Figma Awards / Archive: 301:102 at 1440×2460. */
+.awards-archive {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  height: 2460px;
+  overflow: hidden;
+  isolation: isolate;
+  background: #fff;
+  color: #09090a;
+}
+
+.awards-archive__heading {
+  position: absolute;
+  top: 56px;
+  left: 52px;
+  width: 1336px;
+  margin: 0;
+  font-size: 248px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -12.4px;
+  white-space: nowrap;
+}
+
+.awards-archive__table-head {
+  position: absolute;
+  top: 390px;
+  left: 56px;
+  display: grid;
+  width: 1328px;
+  height: 56px;
+  grid-template-columns: 220px 1040px;
+  column-gap: 68px;
+  border-bottom: 2px solid #09090a;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.75px;
+}
+
+.awards-archive__years {
+  position: absolute;
+  top: 486px;
+  left: 56px;
+  width: 1328px;
+}
+
+.awards-archive__year {
+  display: grid;
+  grid-template-columns: 220px 1040px;
+  column-gap: 68px;
+  margin-bottom: 58px;
+}
+
+.awards-archive__year:last-child {
+  margin-bottom: 0;
+}
+
+.awards-archive__year h3 {
+  margin: 0;
+  color: #0048ff;
+  font-size: 72px;
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -3.6px;
+}
+
+.awards-archive__year ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.awards-archive__year li {
+  position: relative;
+  height: 88px;
+  margin-bottom: 16px;
+  padding-top: 2px;
+  border-bottom: 1px solid #c4c4c7;
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.63px;
+  white-space: nowrap;
+}
+
+.awards-archive__year li:last-child {
+  margin-bottom: 0;
+  border-bottom: 2px solid #09090a;
+}
+
+.awards-archive__footer {
+  position: absolute;
+  top: 2220px;
+  left: 56px;
+  width: 1328px;
+  height: 142px;
+  margin: 0;
+  padding: 0;
+  border-top: 2px solid #09090a;
+  border-right: 0;
+  border-bottom: 2px solid #09090a;
+  border-left: 0;
+  background: transparent;
+  color: #09090a;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.awards-archive__footer:focus-visible {
+  outline: 2px solid #0048ff;
+  outline-offset: 4px;
+}
+
+.awards-archive__footer strong {
+  position: absolute;
+  top: 36px;
+  left: 0;
+  margin: 0;
+  font-size: 36px;
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.9px;
+}
+
+.awards-archive__summary {
+  position: absolute;
+  top: 45px;
+  right: 120px;
+  width: 520px;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.24px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.awards-archive__arrow {
+  position: absolute;
+  top: 31px;
+  right: 0;
+  width: 68px;
+  color: #0048ff;
+  font-size: 42px;
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -1.26px;
+  text-align: right;
+}
+
+.hdr--entry.hdr--awards-active {
+  min-height: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  pointer-events: none;
+}
+
+.hdr--entry.hdr--awards-active > .shell,
+.hdr--entry.hdr--awards-active > .scroll-progress,
+.hdr--entry.hdr--awards-active .hdr__entry-brand {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}

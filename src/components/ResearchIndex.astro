@@ -1,0 +1,118 @@
+---
+import type { FeedArticle } from '../lib/medium'
+import { withBase } from '../lib/paths'
+
+interface Props {
+  articles: FeedArticle[]
+}
+
+const { articles } = Astro.props
+const featuredArticles = articles.slice(0, 3)
+const mediumChannelUrl = 'https://medium.com/bluenode'
+const rowLabels = ['LATEST · RESEARCH', 'MEDIUM · INSIGHT', 'MEDIUM · REPORT']
+const initialArticle = featuredArticles[0]
+---
+
+<section
+  class="research-index on-light"
+  id="research"
+  aria-labelledby="research-index-heading"
+  data-research-index
+>
+  <h2 class="research-index__heading" id="research-index-heading">research</h2>
+
+  <ol class="research-index__list" aria-label="BlueNode Medium 최신 리서치">
+    {featuredArticles.map((article, index) => (
+      <li class="research-index__item">
+        <a
+          class="research-index__article"
+          href={article.externalUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-research-article
+          data-research-active={index === 0 ? 'true' : 'false'}
+          data-article-title={article.title}
+          data-article-url={article.externalUrl}
+          aria-current={index === 0 ? 'true' : undefined}
+        >
+          <span class="research-index__divider" aria-hidden="true"></span>
+          <span class="research-index__meta">{rowLabels[index]}</span>
+          <span class="research-index__title">{article.title}</span>
+        </a>
+      </li>
+    ))}
+  </ol>
+
+  {initialArticle && (
+    <a
+      class="research-index__preview"
+      href={initialArticle.externalUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`선택된 글: ${initialArticle.title}`}
+      data-research-preview
+    >
+      <span class="research-index__preview-label">Selected article</span>
+      <span class="research-index__symbol" aria-hidden="true">
+        <img src={withBase('images/bluenode-symbol-entry.svg')} alt="" width="360" height="332" />
+      </span>
+      <span class="research-index__preview-source">BlueNode / Medium</span>
+    </a>
+  )}
+
+  <a
+    class="research-index__footer"
+    href={mediumChannelUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <span>View all research on Medium</span>
+    <span class="research-index__arrow" aria-hidden="true">→</span>
+  </a>
+</section>
+
+<script>
+  const researchIndex = document.querySelector<HTMLElement>('[data-research-index]')
+  const researchPreview = researchIndex?.querySelector<HTMLAnchorElement>('[data-research-preview]')
+  const researchArticles = researchIndex
+    ? [...researchIndex.querySelectorAll<HTMLAnchorElement>('[data-research-article]')]
+    : []
+  const entryHeader = document.querySelector<HTMLElement>('[data-entry-header]')
+  let researchHeaderFrame = 0
+
+  const selectResearchArticle = (article: HTMLAnchorElement) => {
+    researchArticles.forEach((candidate) => {
+      const active = candidate === article
+      candidate.dataset.researchActive = String(active)
+      if (active) candidate.setAttribute('aria-current', 'true')
+      else candidate.removeAttribute('aria-current')
+    })
+
+    if (!researchPreview) return
+    const title = article.dataset.articleTitle
+    const url = article.dataset.articleUrl
+    if (title) researchPreview.setAttribute('aria-label', `선택된 글: ${title}`)
+    if (url) researchPreview.href = url
+  }
+
+  researchArticles.forEach((article) => {
+    article.addEventListener('pointerenter', () => selectResearchArticle(article))
+    article.addEventListener('focus', () => selectResearchArticle(article))
+  })
+
+  if (researchIndex) {
+    const syncResearchHeader = () => {
+      researchHeaderFrame = 0
+      const rect = researchIndex.getBoundingClientRect()
+      entryHeader?.classList.toggle('hdr--research-active', rect.top < innerHeight && rect.bottom > 0)
+    }
+
+    const requestResearchHeaderSync = () => {
+      if (!researchHeaderFrame) researchHeaderFrame = requestAnimationFrame(syncResearchHeader)
+    }
+
+    addEventListener('scroll', requestResearchHeaderSync, { passive: true })
+    addEventListener('resize', requestResearchHeaderSync, { passive: true })
+    syncResearchHeader()
+  }
+</script>

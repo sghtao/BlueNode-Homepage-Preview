@@ -1,0 +1,80 @@
+---
+import { awardItems, totalAwardCount } from '../data/awards'
+
+const awards = [...awardItems].sort((a, b) => b.year - a.year)
+const years = awards.map((item) => item.year)
+const awardRange = `${Math.min(...years)}—${Math.max(...years)}`
+---
+
+<section
+  class="awards-archive on-light"
+  id="awards"
+  aria-labelledby="awards-heading"
+  data-awards-archive
+>
+  <h2 class="awards-archive__heading" id="awards-heading">awards</h2>
+
+  <div class="awards-archive__table-head" aria-hidden="true">
+    <span>YEAR</span>
+    <span>AWARDS</span>
+  </div>
+
+  <div class="awards-archive__years" aria-label={`${awardRange} 수상 기록 ${totalAwardCount}건`}>
+    {awards.map((item) => (
+      <section class="awards-archive__year" aria-labelledby={`awards-${item.year}`}>
+        <h3 id={`awards-${item.year}`}>
+          <time datetime={String(item.year)}>{item.year}</time>
+        </h3>
+        <ul>
+          {item.records.map((record) => (
+            <li>
+              <span>{record.displayTitle}</span>
+              <span class="sr-only">원문 기록: {record.title}, {record.rank}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+
+  <button
+    class="awards-archive__footer"
+    type="button"
+    aria-label={`수상 기록 ${totalAwardCount}건 처음부터 보기`}
+    data-awards-top
+  >
+    <strong>View all awards</strong>
+    <span class="awards-archive__summary">{totalAwardCount} awards &amp; recognitions · {awardRange}</span>
+    <span class="awards-archive__arrow" aria-hidden="true">→</span>
+  </button>
+</section>
+
+<script>
+  const awardsArchive = document.querySelector<HTMLElement>('[data-awards-archive]')
+  const awardsTopButton = awardsArchive?.querySelector<HTMLButtonElement>('[data-awards-top]')
+  const entryHeader = document.querySelector<HTMLElement>('[data-entry-header]')
+  let awardsHeaderFrame = 0
+
+  if (awardsArchive) {
+    awardsTopButton?.addEventListener('click', () => {
+      awardsArchive.scrollIntoView({
+        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        block: 'start',
+      })
+    })
+
+    const syncAwardsHeader = () => {
+      awardsHeaderFrame = 0
+      const rect = awardsArchive.getBoundingClientRect()
+      entryHeader?.classList.toggle('hdr--awards-active', rect.top < innerHeight && rect.bottom > 0)
+    }
+
+    const requestAwardsHeaderSync = () => {
+      if (!awardsHeaderFrame) awardsHeaderFrame = requestAnimationFrame(syncAwardsHeader)
+    }
+
+    addEventListener('scroll', requestAwardsHeaderSync, { passive: true })
+    addEventListener('resize', requestAwardsHeaderSync, { passive: true })
+    syncAwardsHeader()
+  }
+</script>
