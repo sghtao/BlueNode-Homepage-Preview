@@ -7,7 +7,7 @@ import { withBase } from '../lib/paths'
     <div class="entry__symbol" aria-hidden="true">
       <div class="entry__reveal entry__reveal--symbol">
         <img
-          src={withBase('images/bluenode-symbol-entry.svg')}
+          src={withBase('images/bluenode-symbol-primary.svg')}
           width="150"
           height="139"
           alt=""
@@ -32,45 +32,14 @@ import { withBase } from '../lib/paths'
 <script>
   const entry = document.querySelector<HTMLElement>('[data-entry]')
   const entryHeader = document.querySelector<HTMLElement>('[data-entry-header]')
-  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
-  const clampEntry = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value))
   let entryFrame = 0
-
-  const easeInOutCubic = (value: number) =>
-    value < 0.5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2
 
   const renderEntry = () => {
     entryFrame = 0
     if (!entry) return
 
     const rect = entry.getBoundingClientRect()
-    const scrollRange = Math.max(1, entry.offsetHeight - innerHeight)
-    const rawProgress = reducedMotion.matches
-      ? 1
-      : clampEntry(-rect.top / scrollRange, 0, 1)
-    const symbolTimeline = clampEntry(rawProgress / 0.8273, 0, 1)
-    const symbolProgress = easeInOutCubic(symbolTimeline)
-    const sloganProgress = clampEntry(rawProgress / 0.3545, 0, 1)
-    const wordmarkProgress = clampEntry(rawProgress / 0.4773, 0, 1)
-    const compact = innerWidth <= 760
-    const symbolLeft = compact ? 78 - 45 * symbolProgress : 79.166667 - 38.194445 * symbolProgress
-    const symbolWidth = compact ? 14 + 20 * symbolProgress : 10.416667 + 7.638889 * symbolProgress
-    const startTop = compact ? innerHeight * 0.14 : innerHeight * (94 / 900)
-    const finalWidth = innerWidth * (compact ? 0.34 : 260 / 1440)
-    const finalHeight = finalWidth * (138.409 / 150)
-    const finalOffset = innerWidth * (compact ? 10 / 1440 : 20 / 1440)
-    const finalTop = (innerHeight - finalHeight) / 2 - finalOffset
-    const symbolTop = startTop + (finalTop - startTop) * symbolProgress
-
-    entry.style.setProperty('--entry-progress', rawProgress.toFixed(5))
-    entry.style.setProperty('--entry-symbol-left', symbolLeft.toFixed(5) + 'vw')
-    entry.style.setProperty('--entry-symbol-top', symbolTop.toFixed(3) + 'px')
-    entry.style.setProperty('--entry-symbol-width', symbolWidth.toFixed(5) + 'vw')
-    entry.style.setProperty('--entry-slogan-opacity', (1 - sloganProgress).toFixed(5))
-    entry.style.setProperty('--entry-slogan-shift', (-14.093 * sloganProgress).toFixed(3) + 'px')
-    entry.style.setProperty('--entry-wordmark-opacity', (1 - wordmarkProgress).toFixed(5))
-    entry.style.setProperty('--entry-wordmark-shift', (77.375 * wordmarkProgress).toFixed(3) + 'px')
-    entryHeader?.classList.toggle('hdr--entry-past', rect.bottom < innerHeight - 1)
+    entryHeader?.classList.toggle('hdr--entry-past', rect.bottom <= 1)
   }
 
   const requestEntryRender = () => {
@@ -79,6 +48,5 @@ import { withBase } from '../lib/paths'
 
   addEventListener('scroll', requestEntryRender, { passive: true })
   addEventListener('resize', requestEntryRender, { passive: true })
-  reducedMotion.addEventListener('change', requestEntryRender)
   renderEntry()
 </script>

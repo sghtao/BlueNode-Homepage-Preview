@@ -1,24 +1,18 @@
-/* Approved Figma Entry: 301:30 resting → 301:46 settled. */
+/* Approved Entry resting frame, followed directly by About. */
 .entry {
-  --entry-progress: 0;
   --entry-symbol-left: 79.166667vw;
   --entry-symbol-top: 10.444444svh;
   --entry-symbol-width: 10.416667vw;
-  --entry-slogan-opacity: 1;
-  --entry-slogan-shift: 0px;
-  --entry-wordmark-opacity: 1;
-  --entry-wordmark-shift: 0px;
   position: relative;
   z-index: 5;
-  height: 200svh;
+  height: 100svh;
   background: #fff;
   color: #000;
   isolation: isolate;
 }
 
 .entry__stage {
-  position: sticky;
-  top: 0;
+  position: relative;
   width: 100%;
   height: 100svh;
   min-height: 34rem;
@@ -50,8 +44,6 @@
 .entry__slogan {
   top: 57.777778svh;
   width: 43.055556vw;
-  opacity: var(--entry-slogan-opacity);
-  transform: translateY(var(--entry-slogan-shift));
 }
 
 .entry__slogan-text {
@@ -66,8 +58,6 @@
 
 .entry__wordmark {
   top: 67.888889svh;
-  opacity: var(--entry-wordmark-opacity);
-  transform: translateY(var(--entry-wordmark-shift));
 }
 
 .entry__wordmark-text {
@@ -190,12 +180,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .entry {
-    height: 100svh;
-  }
-
-  .entry__slogan,
-  .entry__wordmark {
-    visibility: hidden;
+  .entry__reveal,
+  .entry__slogan-text,
+  .entry__wordmark-text,
+  .hdr--entry:not(.hdr--entry-past) .hdr__entry-brand {
+    animation: none;
   }
 }
