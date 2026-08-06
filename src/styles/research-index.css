@@ -1,9 +1,43 @@
-/* Approved Figma Research / Editorial Index: 301:1158 at 1440×1280. */
+/* Approved responsive Figma Research: 394:20, 394:42, 394:73, 394:104. */
 .research-index {
+  --research-height: 1280px;
+  --research-heading-top: 28px;
+  --research-heading-left: 56px;
+  --research-heading-width: calc(100vw - 112px);
+  --research-heading-size: 208px;
+  --research-heading-tracking: -10.4px;
+  --research-list-top: 330px;
+  --research-list-left: 56px;
+  --research-list-width: 760px;
+  --research-item-padding: 24px;
+  --research-item-gap: 12px;
+  --research-meta-size: 20px;
+  --research-meta-tracking: -0.2px;
+  --research-title-size: 44px;
+  --research-title-line: 1;
+  --research-title-tracking: -1.1px;
+  --research-preview-top: 330px;
+  --research-preview-left: 856px;
+  --research-preview-width: 528px;
+  --research-preview-height: 680px;
+  --research-preview-label-left: 32px;
+  --research-preview-label-top: 30px;
+  --research-preview-source-top: 626px;
+  --research-preview-label-size: 24px;
+  --research-symbol-top: 158px;
+  --research-symbol-left: 84px;
+  --research-symbol-width: 360px;
+  --research-symbol-height: 332.182px;
+  --research-footer-top: 1090px;
+  --research-footer-left: 56px;
+  --research-footer-width: calc(100vw - 112px);
+  --research-footer-height: 113px;
+  --research-footer-size: 36px;
+  --research-arrow-size: 44px;
   position: relative;
   z-index: 5;
   width: 100%;
-  height: 1280px;
+  min-height: var(--research-height);
   overflow: hidden;
   isolation: isolate;
   background: #fff;
@@ -12,23 +46,23 @@
 
 .research-index__heading {
   position: absolute;
-  top: 28px;
-  left: 56px;
-  width: 1328px;
+  top: var(--research-heading-top);
+  left: var(--research-heading-left);
+  width: var(--research-heading-width);
   margin: 0;
   color: #080a10;
-  font-size: 208px;
+  font-size: var(--research-heading-size);
   font-weight: 500;
   line-height: 0.92;
-  letter-spacing: -10.4px;
+  letter-spacing: var(--research-heading-tracking);
   white-space: nowrap;
 }
 
 .research-index__list {
   position: absolute;
-  top: 330px;
-  left: 56px;
-  width: 760px;
+  top: var(--research-list-top);
+  left: var(--research-list-left);
+  width: var(--research-list-width);
   margin: 0;
   padding: 0;
   overflow: hidden;
@@ -38,10 +72,10 @@
 .research-index__article {
   display: flex;
   width: 100%;
-  padding: 24px 0;
+  padding: var(--research-item-padding) 0;
   flex-direction: column;
   align-items: flex-start;
-  gap: 12px;
+  gap: var(--research-item-gap);
   color: #080a10;
 }
 
@@ -56,10 +90,10 @@
 .research-index__meta {
   width: 100%;
   color: #080a10;
-  font-size: 20px;
+  font-size: var(--research-meta-size);
   font-weight: 500;
   line-height: 1.1;
-  letter-spacing: -0.2px;
+  letter-spacing: var(--research-meta-tracking);
   opacity: 0.55;
 }
 
@@ -68,10 +102,10 @@
   width: 100%;
   overflow: hidden;
   color: #080a10;
-  font-size: 44px;
+  font-size: var(--research-title-size);
   font-weight: 500;
-  line-height: 1;
-  letter-spacing: -1.1px;
+  line-height: var(--research-title-line);
+  letter-spacing: var(--research-title-tracking);
   overflow-wrap: anywhere;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -90,11 +124,11 @@
 
 .research-index__preview {
   position: absolute;
-  top: 330px;
-  left: 856px;
+  top: var(--research-preview-top);
+  left: var(--research-preview-left);
   display: block;
-  width: 528px;
-  height: 680px;
+  width: var(--research-preview-width);
+  height: var(--research-preview-height);
   overflow: hidden;
   background: #164cf5;
   color: #fff;
@@ -108,30 +142,30 @@
 .research-index__preview-label,
 .research-index__preview-source {
   position: absolute;
-  left: 32px;
+  left: var(--research-preview-label-left);
   margin: 0;
-  font-size: 24px;
+  font-size: var(--research-preview-label-size);
   font-weight: 500;
   line-height: 1;
-  letter-spacing: -0.36px;
+  letter-spacing: -0.015em;
   white-space: nowrap;
 }
 
 .research-index__preview-label {
-  top: 30px;
+  top: var(--research-preview-label-top);
 }
 
 .research-index__preview-source {
-  top: 626px;
+  top: var(--research-preview-source-top);
 }
 
 .research-index__symbol {
   position: absolute;
-  top: 158px;
-  left: 84px;
+  top: var(--research-symbol-top);
+  left: var(--research-symbol-left);
   display: block;
-  width: 360px;
-  height: 332.182px;
+  width: var(--research-symbol-width);
+  height: var(--research-symbol-height);
   transform-origin: 50% 50%;
   animation:
     research-symbol-opacity 2s linear infinite,
@@ -146,19 +180,19 @@
 
 .research-index__footer {
   position: absolute;
-  top: 1090px;
-  left: 56px;
+  top: var(--research-footer-top);
+  left: var(--research-footer-left);
   display: flex;
-  width: 1328px;
-  height: 113px;
+  width: var(--research-footer-width);
+  height: var(--research-footer-height);
   align-items: center;
   justify-content: space-between;
   border-top: 1px solid #1c2230;
   color: #080a10;
-  font-size: 36px;
+  font-size: var(--research-footer-size);
   font-weight: 500;
   line-height: 1;
-  letter-spacing: -0.9px;
+  letter-spacing: -0.025em;
   white-space: nowrap;
 }
 
@@ -168,9 +202,139 @@
 }
 
 .research-index__arrow {
-  font-size: 44px;
+  color: #080a10;
+  font-size: var(--research-arrow-size);
   font-weight: 400;
   letter-spacing: 0;
+  transition: transform 180ms ease;
+}
+
+.research-index__footer:hover .research-index__arrow,
+.research-index__footer:focus-visible .research-index__arrow {
+  transform: translateX(8px);
+}
+
+@media (min-width: 64rem) and (max-width: 89.9375rem) {
+  .research-index {
+    --research-height: 960px;
+    --research-heading-top: 28px;
+    --research-heading-left: 36px;
+    --research-heading-width: calc(100vw - 72px);
+    --research-heading-size: 147.68px;
+    --research-heading-tracking: -7.384px;
+    --research-list-top: 235px;
+    --research-list-left: 40px;
+    --research-list-width: 520px;
+    --research-item-padding: 13.198px;
+    --research-item-gap: 6.599px;
+    --research-meta-size: 6.6px;
+    --research-meta-tracking: -0.066px;
+    --research-title-size: 13.31px;
+    --research-title-tracking: -0.3328px;
+    --research-preview-top: 235px;
+    --research-preview-left: 600px;
+    --research-preview-width: 384px;
+    --research-preview-height: 494px;
+    --research-preview-label-left: 23.26px;
+    --research-preview-label-top: 21.81px;
+    --research-preview-source-top: 455.1px;
+    --research-preview-label-size: 17.448px;
+    --research-symbol-top: 114.87px;
+    --research-symbol-left: 61.07px;
+    --research-symbol-width: 261.72px;
+    --research-symbol-height: 241.496px;
+    --research-footer-top: 800px;
+    --research-footer-left: 40px;
+    --research-footer-width: calc(100vw - 80px);
+    --research-footer-height: 85px;
+    --research-footer-size: 27px;
+    --research-arrow-size: 33px;
+  }
+}
+
+@media (min-width: 37.5rem) and (max-width: 63.9375rem) {
+  .research-index {
+    --research-height: 1120px;
+    --research-heading-top: 28px;
+    --research-heading-left: 20px;
+    --research-heading-width: calc(100vw - 40px);
+    --research-heading-size: 123.968px;
+    --research-heading-tracking: -6.1984px;
+    --research-list-top: 205px;
+    --research-list-left: 24px;
+    --research-list-width: calc(100vw - 48px);
+    --research-item-padding: 18px;
+    --research-item-gap: 9px;
+    --research-meta-size: 11.25px;
+    --research-meta-tracking: -0.1125px;
+    --research-title-size: 24.75px;
+    --research-title-tracking: -0.6188px;
+    --research-preview-top: 560px;
+    --research-preview-left: 24px;
+    --research-preview-width: calc(100vw - 48px);
+    --research-preview-height: 400px;
+    --research-preview-label-left: 24px;
+    --research-preview-label-top: 22px;
+    --research-preview-source-top: 356px;
+    --research-preview-label-size: 19.992px;
+    --research-symbol-top: 72px;
+    --research-symbol-left: calc(50% - 140.04px);
+    --research-symbol-width: 280.08px;
+    --research-symbol-height: 258.437px;
+    --research-footer-top: 1000px;
+    --research-footer-left: 24px;
+    --research-footer-width: calc(100vw - 48px);
+    --research-footer-height: 91px;
+    --research-footer-size: 25.92px;
+    --research-arrow-size: 31.68px;
+  }
+}
+
+@media (max-width: 37.4375rem) {
+  .research-index {
+    --research-height: 950px;
+    --research-heading-top: 24px;
+    --research-heading-left: 16px;
+    --research-heading-width: calc(100vw - 32px);
+    --research-heading-size: 74.256px;
+    --research-heading-tracking: -3.7128px;
+    --research-list-top: 140px;
+    --research-list-left: 20px;
+    --research-list-width: calc(100vw - 40px);
+    --research-item-padding: 10.56px;
+    --research-item-gap: 5.28px;
+    --research-meta-size: 12px;
+    --research-meta-tracking: -0.12px;
+    --research-title-size: 20px;
+    --research-title-line: 24px;
+    --research-title-tracking: -0.5px;
+    --research-preview-top: 436px;
+    --research-preview-left: 20px;
+    --research-preview-width: calc(100vw - 40px);
+    --research-preview-height: 320px;
+    --research-preview-label-left: 20px;
+    --research-preview-label-top: 20px;
+    --research-preview-source-top: 285px;
+    --research-preview-label-size: 15px;
+    --research-symbol-top: 70px;
+    --research-symbol-left: calc(50% - 104.94px);
+    --research-symbol-width: 209.88px;
+    --research-symbol-height: 193.662px;
+    --research-footer-top: 796px;
+    --research-footer-left: 20px;
+    --research-footer-width: calc(100vw - 40px);
+    --research-footer-height: 85px;
+    --research-footer-size: 20.88px;
+    --research-arrow-size: 25.52px;
+  }
+
+  .research-index__list {
+    height: 276px;
+  }
+
+  .research-index__article {
+    height: 92px;
+  }
 }
 
 @keyframes research-symbol-opacity {
@@ -228,5 +392,9 @@
     opacity: 1;
     scale: 1;
     animation: none;
+  }
+
+  .research-index__arrow {
+    transition: none;
   }
 }

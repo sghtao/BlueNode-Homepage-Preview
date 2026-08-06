@@ -2,6 +2,7 @@ export type AwardRecord = {
   rank: string;
   title: string;
   displayTitle: string;
+  xsLines?: readonly [string, string];
 };
 
 export type AwardItem = {
@@ -32,6 +33,10 @@ export const awardItems: AwardItem[] = [
         rank: "수상",
         title: "KOBAC",
         displayTitle: "KOBAC (Korea Blockchain Society Conference) — Winner",
+        xsLines: [
+          "KOBAC (Korea Blockchain Society",
+          "Conference) — Winner",
+        ],
       },
       { rank: "3위", title: "ideaTON", displayTitle: "IdeaTON — 3rd Place" },
       {
@@ -58,6 +63,10 @@ export const awardItems: AwardItem[] = [
         rank: "Top Brainrot 트랙",
         title: "Surreal World Assets Buildathon",
         displayTitle: "Surreal World Assets Buildathon — Top Brainrot Track",
+        xsLines: [
+          "Surreal World Assets Buildathon",
+          "— Top Brainrot Track",
+        ],
       },
     ],
   },

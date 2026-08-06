@@ -1,8 +1,15 @@
 /* Approved Entry resting frame, followed directly by About. */
 .entry {
-  --entry-symbol-left: 79.166667vw;
-  --entry-symbol-top: 10.444444svh;
-  --entry-symbol-width: 10.416667vw;
+  --entry-gutter: 45px;
+  --entry-symbol-left: calc(75vw + 60px);
+  --entry-symbol-top: 94px;
+  --entry-symbol-width: 150px;
+  --entry-slogan-top: 520px;
+  --entry-slogan-width: 620px;
+  --entry-slogan-size: 30px;
+  --entry-slogan-leading: 45px;
+  --entry-wordmark-top: 611px;
+  --entry-wordmark-size: min(23.263056vw, 334.988px);
   position: relative;
   z-index: 5;
   height: 100svh;
@@ -15,7 +22,7 @@
   position: relative;
   width: 100%;
   height: 100svh;
-  min-height: 34rem;
+  min-height: 35.5rem;
   overflow: hidden;
   background: #fff;
 }
@@ -30,6 +37,12 @@
 }
 
 .entry__symbol img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.entry__reveal--symbol {
   width: 100%;
   height: 100%;
 }
@@ -37,67 +50,37 @@
 .entry__slogan,
 .entry__wordmark {
   position: absolute;
-  left: 3.125vw;
+  left: var(--entry-gutter);
   margin: 0;
 }
 
 .entry__slogan {
-  top: 57.777778svh;
-  width: 43.055556vw;
+  top: var(--entry-slogan-top);
+  width: var(--entry-slogan-width);
 }
 
 .entry__slogan-text {
   margin: 0;
   color: #000;
-  font-size: min(30px, 2.083333vw);
+  font-size: var(--entry-slogan-size);
   font-weight: 700;
-  line-height: 1.5;
+  line-height: var(--entry-slogan-leading);
   letter-spacing: -0.01em;
   word-break: keep-all;
 }
 
 .entry__wordmark {
-  top: 67.888889svh;
+  top: var(--entry-wordmark-top);
 }
 
 .entry__wordmark-text {
   margin: 0;
   color: #000;
-  font-size: min(23.263056vw, 334.988px);
+  font-size: var(--entry-wordmark-size);
   font-weight: 700;
   line-height: 0.78;
   letter-spacing: -0.07em;
   white-space: nowrap;
-}
-
-.entry__reveal,
-.entry__slogan-text,
-.entry__wordmark-text {
-  animation: entry-reveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.entry__reveal--symbol {
-  animation-delay: 0.28s;
-}
-
-.entry__slogan-text {
-  animation-delay: 0.68s;
-}
-
-.entry__wordmark-text {
-  animation-delay: 1.08s;
-}
-
-@keyframes entry-reveal {
-  from {
-    opacity: 0;
-    transform: translateY(0.5rem) scale(0.98);
-  }
-
-  to {
-    opacity: 1;
-    transform: none;
-  }
 }
 
 /* The existing masthead returns after the pinned Entry stage. */
@@ -125,65 +108,112 @@
 .hdr--entry:not(.hdr--entry-past) .hdr__entry-brand {
   position: absolute;
   top: 28px;
-  left: 3.125vw;
+  left: var(--entry-gutter, 45px);
   display: block;
   color: #000;
-  font-size: min(18px, 1.25vw);
+  font-size: 18px;
   font-weight: 400;
   line-height: 1;
   letter-spacing: -0.04em;
   pointer-events: auto;
-  animation: entry-brand-reveal 0.34s ease-out 0.18s both;
 }
 
-@keyframes entry-brand-reveal {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@media (max-width: 47.5rem) {
-  .entry__symbol {
-    top: var(--entry-symbol-top);
-    left: var(--entry-symbol-left);
-    width: var(--entry-symbol-width);
-  }
-
-  .entry__slogan,
-  .entry__wordmark,
-  .hdr--entry:not(.hdr--entry-past) .hdr__entry-brand {
-    left: 1.25rem;
-  }
-
-  .entry__slogan {
-    width: calc(100vw - 2.5rem);
-  }
-
-  .entry__slogan-text {
-    font-size: clamp(1.25rem, 5.5vw, 1.875rem);
-    line-height: 1.42;
+@media (min-width: 64rem) and (max-width: 89.9375rem) {
+  .entry {
+    --entry-gutter: 32px;
+    --entry-symbol-left: calc(75vw + 9px);
+    --entry-symbol-width: 140px;
+    --entry-slogan-width: 578.667px;
+    --entry-slogan-size: 28px;
+    --entry-slogan-leading: 42px;
+    --entry-wordmark-top: 620px;
+    --entry-wordmark-size: 23.092vw;
   }
 
   .hdr--entry:not(.hdr--entry-past) .hdr__entry-brand {
+    left: 32px;
+    font-size: 17px;
+  }
+}
+
+@media (min-width: 37.5rem) and (max-width: 63.9375rem) {
+  .entry {
+    --entry-gutter: 24px;
+    --entry-symbol-left: calc(62.5vw + 76px);
+    --entry-symbol-top: 107px;
+    --entry-symbol-width: 132px;
+    --entry-slogan-top: 590px;
+    --entry-slogan-width: 537.333px;
+    --entry-slogan-size: 26px;
+    --entry-slogan-leading: 39px;
+    --entry-wordmark-top: 700px;
+    --entry-wordmark-size: 23.092vw;
+  }
+
+  .hdr--entry:not(.hdr--entry-past) .hdr__entry-brand {
+    left: 24px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 37.4375rem) {
+  .entry {
+    --entry-gutter: 20px;
+    --entry-symbol-left: calc(50vw + 44px);
+    --entry-symbol-top: 88px;
+    --entry-symbol-width: 110px;
+    --entry-slogan-top: 490px;
+    --entry-slogan-width: calc(100vw - 40px);
+    --entry-slogan-size: 22px;
+    --entry-slogan-leading: 33px;
+    --entry-wordmark-top: 610px;
+    --entry-wordmark-size: 22.105128vw;
+  }
+
+  .hdr--entry:not(.hdr--entry-past) .hdr__entry-brand {
+    top: 24px;
+    left: 20px;
     font-size: 1rem;
   }
+}
 
-  .entry__wordmark-text {
-    font-size: 23vw;
+@media (min-width: 64rem) and (max-height: 43.75rem) {
+  .entry {
+    --entry-gutter: clamp(32px, calc(3.80117vw - 6.924px), 45px);
+    --entry-symbol-left: calc(75vw + clamp(9px, calc(16.5205vw - 160.169px), 65.5px));
+    --entry-symbol-top: clamp(60px, calc(12.0567svh - 14.507px), 94px);
+    --entry-symbol-width: clamp(140px, calc(2.924vw + 110.058px), 150px);
+    --entry-slogan-top: clamp(210px, calc(109.929svh - 469.362px), 520px);
+    --entry-slogan-width: 620px;
+    --entry-slogan-size: clamp(28px, calc(0.5848vw + 22.012px), 30px);
+    --entry-slogan-leading: clamp(42px, calc(0.8772vw + 33.018px), 45px);
+    --entry-wordmark-top: clamp(313px, calc(105.674svh - 340.069px), 611px);
+    --entry-wordmark-size: 23.052vw;
+  }
+
+  .hdr--entry:not(.hdr--entry-past) .hdr__entry-brand {
+    left: clamp(32px, calc(3.80117vw - 6.924px), 45px);
+    font-size: clamp(17px, calc(0.2924vw + 14.006px), 18px);
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .entry__reveal,
-  .entry__slogan-text,
-  .entry__wordmark-text,
+@media (max-width: 37.4375rem) and (max-height: 43.75rem) {
+  .entry {
+    --entry-gutter: clamp(16px, calc(5.71429vw - 2.2857px), 20px);
+    --entry-symbol-left: calc(50vw + clamp(36px, calc(11.42857vw - 0.5714px), 44px));
+    --entry-symbol-top: clamp(64px, calc(8.69565svh + 14.6087px), 88px);
+    --entry-symbol-width: clamp(90.256px, 28.2057vw, 110px);
+    --entry-slogan-top: clamp(350px, calc(50.72464svh + 61.884px), 490px);
+    --entry-slogan-width: calc(100vw - (2 * var(--entry-gutter)));
+    --entry-slogan-size: clamp(18.051px, 5.64143vw, 22px);
+    --entry-slogan-leading: clamp(27.077px, 8.46143vw, 33px);
+    --entry-wordmark-top: clamp(474px, calc(49.27536svh + 194.116px), 610px);
+    --entry-wordmark-size: 22.105vw;
+  }
+
   .hdr--entry:not(.hdr--entry-past) .hdr__entry-brand {
-    animation: none;
+    top: clamp(20px, calc(5.71429vw + 1.7143px), 24px);
+    left: clamp(16px, calc(5.71429vw - 2.2857px), 20px);
+    font-size: clamp(13.128px, 4.10256vw, 16px);
   }
 }

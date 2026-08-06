@@ -1,9 +1,29 @@
-/* Approved Figma Activities / People Stage: 301:1141 at 1440×1200. */
+/* Approved responsive Figma Activities: 382:20, 382:37, 382:54, 382:71. */
 .activities-stage {
+  --activities-height: 1200px;
+  --activities-heading-top: 28px;
+  --activities-heading-left: 52px;
+  --activities-heading-width: calc(100vw - 104px);
+  --activities-heading-size: 208px;
+  --activities-heading-tracking: -10.4px;
+  --activities-content-left: 56px;
+  --activities-content-width: calc(100vw - 112px);
+  --activities-title-top: 298px;
+  --activities-title-size: 36px;
+  --activities-title-tracking: -0.9px;
+  --activities-title-rule-top: 356px;
+  --activities-media-top: 380px;
+  --activities-media-height: 600px;
+  --activities-action-top: 1032px;
+  --activities-action-height: 141px;
+  --activities-action-padding-top: 16px;
+  --activities-action-padding-bottom: 20px;
+  --activities-action-size: 36px;
+  --activities-arrow-size: 44px;
   position: relative;
   z-index: 5;
   width: 100%;
-  height: 1200px;
+  min-height: var(--activities-height);
   overflow: hidden;
   isolation: isolate;
   background: #fff;
@@ -12,44 +32,44 @@
 
 .activities-stage__heading {
   position: absolute;
-  top: 28px;
-  left: 52px;
-  width: 1336px;
+  top: var(--activities-heading-top);
+  left: var(--activities-heading-left);
+  width: var(--activities-heading-width);
   margin: 0;
-  font-size: 208px;
+  font-size: var(--activities-heading-size);
   font-weight: 500;
   line-height: 1;
-  letter-spacing: -10.4px;
+  letter-spacing: var(--activities-heading-tracking);
   white-space: nowrap;
 }
 
 .activities-stage__title {
   position: absolute;
-  top: 298px;
-  left: 56px;
+  top: var(--activities-title-top);
+  left: var(--activities-content-left);
   margin: 0;
-  font-size: 36px;
+  font-size: var(--activities-title-size);
   font-weight: 600;
   line-height: 1.08;
-  letter-spacing: -0.9px;
+  letter-spacing: var(--activities-title-tracking);
   white-space: nowrap;
 }
 
 .activities-stage__title-rule {
   position: absolute;
-  top: 356px;
-  left: 56px;
-  width: 1328px;
+  top: var(--activities-title-rule-top);
+  left: var(--activities-content-left);
+  width: var(--activities-content-width);
   height: 1px;
   background: #080a10;
 }
 
 .activities-stage__media {
   position: absolute;
-  top: 380px;
-  left: 56px;
-  width: 1328px;
-  height: 600px;
+  top: var(--activities-media-top);
+  left: var(--activities-content-left);
+  width: var(--activities-content-width);
+  height: var(--activities-media-height);
   overflow: hidden;
   background: #f3f3f3;
 }
@@ -60,6 +80,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: var(--activity-position, center);
   opacity: 0;
   transition: opacity 360ms ease;
 }
@@ -71,32 +92,33 @@
 
 .activities-stage__action {
   position: absolute;
-  top: 1032px;
-  left: 56px;
+  top: var(--activities-action-top);
+  left: var(--activities-content-left);
   display: flex;
-  width: 1328px;
-  height: 141px;
+  width: var(--activities-content-width);
+  height: var(--activities-action-height);
   margin: 0;
-  padding: 16px 0 0;
-  align-items: flex-start;
+  padding: var(--activities-action-padding-top) 0 var(--activities-action-padding-bottom);
+  align-items: center;
   justify-content: space-between;
-  border: 0;
   border-top: 1px solid #080a10;
   border-bottom: 1px solid #080a10;
+  border-right: 0;
+  border-left: 0;
   background: transparent;
   color: #080a10;
   cursor: pointer;
   font: inherit;
-  font-size: 36px;
+  font-size: var(--activities-action-size);
   font-weight: 500;
   line-height: 1.08;
-  letter-spacing: -0.9px;
+  letter-spacing: -0.025em;
   text-align: left;
 }
 
 .activities-stage__arrow {
-  color: #164cf5;
-  font-size: 44px;
+  color: #0048ff;
+  font-size: var(--activities-arrow-size);
   font-weight: 400;
   line-height: 0.9;
   transition: transform 180ms ease;
@@ -108,8 +130,87 @@
 }
 
 .activities-stage__action:focus-visible {
-  outline: 2px solid #164cf5;
+  outline: 2px solid #0048ff;
   outline-offset: 4px;
+}
+
+@media (min-width: 64rem) and (max-width: 89.9375rem) {
+  .activities-stage {
+    --activities-height: 1000px;
+    --activities-heading-top: 24px;
+    --activities-heading-left: 32px;
+    --activities-heading-width: calc(100vw - 88.8px);
+    --activities-heading-size: 145.6px;
+    --activities-heading-tracking: -7.28px;
+    --activities-content-left: 32px;
+    --activities-content-width: calc(100vw - 64px);
+    --activities-title-top: 220px;
+    --activities-title-size: 30px;
+    --activities-title-tracking: -0.75px;
+    --activities-title-rule-top: 270px;
+    --activities-media-top: 294px;
+    --activities-media-height: 480px;
+    --activities-action-top: 820px;
+    --activities-action-height: 129px;
+    --activities-action-padding-top: 16px;
+    --activities-action-padding-bottom: 16px;
+    --activities-action-size: 30px;
+    --activities-arrow-size: 36px;
+  }
+}
+
+@media (min-width: 37.5rem) and (max-width: 63.9375rem) {
+  .activities-stage {
+    --activities-height: 900px;
+    --activities-heading-top: 24px;
+    --activities-heading-left: 24px;
+    --activities-heading-width: calc(100vw - 73.28px);
+    --activities-heading-size: 108.16px;
+    --activities-heading-tracking: -5.408px;
+    --activities-content-left: 24px;
+    --activities-content-width: calc(100vw - 48px);
+    --activities-title-top: 180px;
+    --activities-title-size: 28px;
+    --activities-title-tracking: -0.7px;
+    --activities-title-rule-top: 226px;
+    --activities-media-top: 250px;
+    --activities-media-height: 405px;
+    --activities-action-top: 700px;
+    --activities-action-height: 117px;
+    --activities-action-padding-top: 16px;
+    --activities-action-padding-bottom: 16px;
+    --activities-action-size: 28px;
+    --activities-arrow-size: 34px;
+  }
+}
+
+@media (max-width: 37.4375rem) {
+  .activities-stage {
+    --activities-height: 620px;
+    --activities-heading-top: 20px;
+    --activities-heading-left: 20px;
+    --activities-heading-width: calc(100vw - 49.32px);
+    --activities-heading-size: 53.04px;
+    --activities-heading-tracking: -2.652px;
+    --activities-content-left: 20px;
+    --activities-content-width: calc(100vw - 40px);
+    --activities-title-top: 110px;
+    --activities-title-size: 24px;
+    --activities-title-tracking: -0.6px;
+    --activities-title-rule-top: 150px;
+    --activities-media-top: 170px;
+    --activities-media-height: 240px;
+    --activities-action-top: 454px;
+    --activities-action-height: 107px;
+    --activities-action-padding-top: 14px;
+    --activities-action-padding-bottom: 16px;
+    --activities-action-size: 22px;
+    --activities-arrow-size: 28px;
+  }
+
+  .activities-stage__photo {
+    object-position: var(--activity-position-xs, var(--activity-position, center));
+  }
 }
 
 .hdr--entry.hdr--activities-active {

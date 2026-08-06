@@ -9,22 +9,32 @@ import { withBase } from '../lib/paths'
   aria-labelledby="about-facts-heading"
   data-about-facts
 >
-  <h2 class="about-facts__mark" id="about-facts-heading" data-about-mark>
-    <span>Blue</span>
-    <span>Node</span>
-  </h2>
+  <h2 class="sr-only" id="about-facts-heading">About BlueNode</h2>
+
+  <img
+    class="about-facts__mascot"
+    src={withBase('images/about-bluenode-female-mascot.jpg')}
+    width="1024"
+    height="1024"
+    alt="BlueNode mascot"
+  />
 
   <div class="about-facts__divider" aria-hidden="true"></div>
 
-  <p class="about-facts__copy">
-    Founded in <strong>{orgProfile.foundedMonth} {orgProfile.foundedYear}</strong> by students at<br class="about-facts__desktop-break" />
-    Inha University.<br />
-    A community of nearly <strong>{orgProfile.approximateMemberCount}</strong> members.<br />
-    <strong class="about-facts__sentence-start">Student-led</strong>, non-commercial, and<br class="about-facts__desktop-break" />
-    rooted in Incheon.<br />
-    From Inha University and Incheon to the<br class="about-facts__desktop-break" />
-    wider <strong>Web3 ecosystem</strong>.
-  </p>
+  <div class="about-facts__copy">
+    <p>
+      <strong>BlueNode</strong> was founded in{' '}
+      <strong>{orgProfile.foundedMonth} {orgProfile.foundedYear}</strong> by students at Inha University.
+    </p>
+    <p>
+      We are a <strong>student-led</strong> blockchain research club and a community of nearly
+      {' '}<strong>{orgProfile.approximateMemberCount} members</strong>.
+    </p>
+    <p>
+      From Inha University in Incheon, we look outward to the
+      {' '}<strong>wider Web3 ecosystem</strong>.
+    </p>
+  </div>
 
   <a class="about-facts__action" href="#teams">
     <span>About BlueNode</span>
@@ -34,26 +44,10 @@ import { withBase } from '../lib/paths'
 
 <script>
   const aboutFacts = document.querySelector<HTMLElement>('[data-about-facts]')
-  const aboutMark = aboutFacts?.querySelector<HTMLElement>('[data-about-mark]')
   const entryHeader = document.querySelector<HTMLElement>('[data-entry-header]')
-  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
   let aboutFrame = 0
 
-  if (aboutFacts && aboutMark) {
-    if (reducedMotion.matches || !('IntersectionObserver' in window)) {
-      aboutMark.classList.add('is-visible')
-    } else {
-      const markObserver = new IntersectionObserver(
-        (entries) => {
-          if (!entries.some((entry) => entry.isIntersecting)) return
-          aboutMark.classList.add('is-visible')
-          markObserver.disconnect()
-        },
-        { threshold: 0.2 },
-      )
-      markObserver.observe(aboutMark)
-    }
-
+  if (aboutFacts) {
     const syncAboutHeader = () => {
       aboutFrame = 0
       const rect = aboutFacts.getBoundingClientRect()

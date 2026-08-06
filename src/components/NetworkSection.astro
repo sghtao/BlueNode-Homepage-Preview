@@ -164,6 +164,7 @@ const partners = partnerOrder.map((slug) => {
   let settleFrame = 0
   let settleFramesLeft = 0
   let headerFrame = 0
+  let networkVisible = true
 
   const showFallback = () => {
     networkSection?.classList.remove('network-section--globe-ready')
@@ -171,7 +172,7 @@ const partners = partnerOrder.map((slug) => {
   }
 
   const renderGlobe = () => {
-    if (!globe || !globeCanvas) return
+    if (!globe || !globeCanvas || document.hidden || !networkVisible) return
     const bounds = globeCanvas.getBoundingClientRect()
     globe.update({
       width: Math.max(1, Math.round(bounds.width)),
@@ -184,11 +185,11 @@ const partners = partnerOrder.map((slug) => {
 
   const settleGlobe = (frames = 24) => {
     settleFramesLeft = Math.max(settleFramesLeft, frames)
-    if (settleFrame || document.hidden) return
+    if (settleFrame || document.hidden || !networkVisible) return
     const tick = () => {
       renderGlobe()
       settleFramesLeft -= 1
-      if (settleFramesLeft > 0 && !document.hidden) settleFrame = requestAnimationFrame(tick)
+      if (settleFramesLeft > 0 && !document.hidden && networkVisible) settleFrame = requestAnimationFrame(tick)
       else settleFrame = 0
     }
     settleFrame = requestAnimationFrame(tick)
@@ -317,6 +318,16 @@ const partners = partnerOrder.map((slug) => {
 
   if (globeCanvas && 'ResizeObserver' in window) {
     new ResizeObserver(() => settleGlobe(reducedMotion.matches ? 2 : 8)).observe(globeCanvas)
+  }
+
+  if (networkSection && 'IntersectionObserver' in window) {
+    new IntersectionObserver(
+      ([entry]) => {
+        networkVisible = entry?.isIntersecting ?? true
+        if (networkVisible) settleGlobe(reducedMotion.matches ? 2 : 12)
+      },
+      { rootMargin: '160px 0px' },
+    ).observe(networkSection)
   }
 
   document.addEventListener('visibilitychange', () => {

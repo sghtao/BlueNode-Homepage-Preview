@@ -4,6 +4,8 @@ export type Activity = {
   alt: string
   width: number
   height: number
+  objectPosition: string
+  objectPositionXs: string
 }
 
 // The six approved people-centered moments in Figma frame 301:1141.
@@ -14,6 +16,8 @@ export const activities: Activity[] = [
     alt: 'Mantle Global Hackathon 행사장에서 함께한 BlueNode 구성원들',
     width: 1920,
     height: 1440,
+    objectPosition: 'center 50%',
+    objectPositionXs: 'center 50%',
   },
   {
     title: 'BlueNode × Tiger Research',
@@ -21,6 +25,8 @@ export const activities: Activity[] = [
     alt: 'Tiger Research 공간에서 단체 사진을 찍는 BlueNode 구성원들',
     width: 2048,
     height: 1536,
+    objectPosition: 'center 58%',
+    objectPositionXs: 'center 55%',
   },
   {
     title: 'Ninja Labs Session / Lecture',
@@ -28,6 +34,8 @@ export const activities: Activity[] = [
     alt: '강의실에서 Ninja Labs 세션을 듣는 참가자들',
     width: 1280,
     height: 720,
+    objectPosition: 'center 52%',
+    objectPositionXs: 'center 52%',
   },
   {
     title: 'Ninja Labs Session / Group',
@@ -35,6 +43,8 @@ export const activities: Activity[] = [
     alt: 'Ninja Labs 세션을 마치고 함께한 참가자 단체 사진',
     width: 1280,
     height: 960,
+    objectPosition: 'center 58%',
+    objectPositionXs: 'center 55%',
   },
   {
     title: 'BUIDL Hack 1st Place',
@@ -42,6 +52,8 @@ export const activities: Activity[] = [
     alt: 'BUIDL Hack 2026에서 1위 수상 팻말을 든 팀',
     width: 1280,
     height: 960,
+    objectPosition: 'center 58%',
+    objectPositionXs: 'center 55%',
   },
   {
     title: 'Onboarding Study',
@@ -49,5 +61,7 @@ export const activities: Activity[] = [
     alt: '강의실에서 온보딩 스터디에 참여한 BlueNode 구성원들',
     width: 1920,
     height: 2560,
+    objectPosition: 'center 60%',
+    objectPositionXs: 'center 60%',
   },
 ]

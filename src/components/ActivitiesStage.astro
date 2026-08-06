@@ -28,6 +28,7 @@ import { withBase } from '../lib/paths'
         decoding="async"
         data-activity-photo
         data-title={activity.title}
+        style={`--activity-position: ${activity.objectPosition}; --activity-position-xs: ${activity.objectPositionXs};`}
       />
     ))}
   </div>

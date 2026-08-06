@@ -1,72 +1,69 @@
-/* Approved Figma About Facts: 301:75 at 1440×1000. */
+/* Approved responsive Figma About Facts: 371:79, 371:105, 371:131, 371:157. */
 .about-facts {
+  --about-gutter: 52px;
+  --about-height: 1000px;
+  --about-mascot-top: 110px;
+  --about-mascot-left: 32px;
+  --about-mascot-size: 400px;
+  --about-copy-top: 118px;
+  --about-copy-left: calc(33.333333vw + 20px);
+  --about-copy-width: 895.12px;
+  --about-copy-size: 50.027px;
+  --about-copy-leading: 56px;
+  --about-copy-tracking: -1.34px;
+  --about-divider-top: 118px;
+  --about-divider-left: calc(25vw + 72px);
+  --about-divider-height: 570px;
+  --about-action-top: 820px;
+  --about-action-height: 113px;
+  --about-action-size: 26px;
+  --about-action-leading: 32px;
+  --about-arrow-size: 32px;
   position: relative;
   z-index: 5;
   width: 100%;
-  height: 1000px;
+  min-height: var(--about-height);
   overflow: hidden;
   isolation: isolate;
   background: #fff;
   color: #000;
 }
 
-.about-facts__mark {
+.about-facts__mascot {
   position: absolute;
-  top: 165px;
-  left: 52px;
-  width: 350px;
-  margin: 0;
-  color: #0048ff;
-  font-size: 144px;
-  font-weight: 700;
-  line-height: 130px;
-  letter-spacing: -8.64px;
-  transform-origin: 50% 50%;
-}
-
-.about-facts__mark span {
+  top: var(--about-mascot-top);
+  left: var(--about-mascot-left);
   display: block;
-}
-
-.about-facts__mark.is-visible {
-  animation: about-mark-settle 2s linear both;
-}
-
-@keyframes about-mark-settle {
-  0%,
-  14% {
-    opacity: 0;
-    transform: scale(0.9);
-    animation-timing-function: ease-out;
-  }
-
-  38%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
+  width: var(--about-mascot-size);
+  height: var(--about-mascot-size);
+  object-fit: contain;
 }
 
 .about-facts__divider {
   position: absolute;
-  top: 118px;
-  left: 432px;
+  top: var(--about-divider-top);
+  left: var(--about-divider-left);
   width: 1px;
-  height: 570px;
+  height: var(--about-divider-height);
   background: rgba(20, 20, 20, 0.16);
 }
 
 .about-facts__copy {
   position: absolute;
-  top: 118px;
-  left: 500px;
-  width: 895px;
+  top: var(--about-copy-top);
+  left: var(--about-copy-left);
+  width: var(--about-copy-width);
   margin: 0;
   color: #000;
-  font-size: 50px;
+  font-size: var(--about-copy-size);
   font-weight: 700;
-  line-height: 60px;
-  letter-spacing: -1.34px;
+  line-height: var(--about-copy-leading);
+  letter-spacing: var(--about-copy-tracking);
+  word-break: break-word;
+}
+
+.about-facts__copy p {
+  margin: 0;
 }
 
 .about-facts__copy strong {
@@ -76,27 +73,27 @@
 
 .about-facts__action {
   position: absolute;
-  top: 820px;
-  right: 52px;
-  left: 52px;
+  top: var(--about-action-top);
+  left: var(--about-gutter);
   display: flex;
-  height: 113px;
+  width: calc(100vw - (2 * var(--about-gutter)));
+  height: var(--about-action-height);
   align-items: center;
   justify-content: space-between;
   border-top: 1px solid rgba(23, 16, 16, 0.22);
   background: #fff;
   color: #171010;
-  font-size: 26px;
+  font-size: var(--about-action-size);
   font-weight: 600;
-  line-height: 32px;
-  letter-spacing: -0.52px;
+  line-height: var(--about-action-leading);
+  letter-spacing: -0.02em;
   text-decoration: none;
   transition: background-color 160ms ease;
 }
 
 .about-facts__action img {
-  width: 32px;
-  height: 32px;
+  width: var(--about-arrow-size);
+  height: var(--about-arrow-size);
 }
 
 .about-facts__action:hover {
@@ -131,56 +128,80 @@
   pointer-events: none;
 }
 
-@media (max-width: 62rem) {
+@media (min-width: 64rem) and (max-width: 89.9375rem) {
   .about-facts {
-    height: auto;
-    min-height: 100svh;
-    padding: 7rem 1.25rem 3rem;
+    --about-gutter: 32px;
+    --about-mascot-top: 128px;
+    --about-mascot-left: 16px;
+    --about-mascot-size: 280px;
+    --about-copy-top: 104px;
+    --about-copy-left: calc(33.333333vw + 3.667px);
+    --about-copy-width: calc(66.666667vw - 38.527px);
+    --about-copy-size: 36px;
+    --about-copy-leading: 43.2px;
+    --about-copy-tracking: -0.96px;
+    --about-divider-top: 104px;
+    --about-divider-left: calc(25vw + 56px);
+    --about-divider-height: 540px;
+    --about-action-top: 760px;
+    --about-action-height: 105px;
+    --about-action-size: 24px;
+    --about-action-leading: 29.538px;
+    --about-arrow-size: 28px;
   }
+}
 
-  .about-facts__mark,
-  .about-facts__divider,
-  .about-facts__copy,
-  .about-facts__action {
-    position: static;
-  }
-
-  .about-facts__mark {
-    width: auto;
-    font-size: clamp(5rem, 22vw, 9rem);
-    line-height: 0.9;
-    letter-spacing: -0.06em;
+@media (min-width: 37.5rem) and (max-width: 63.9375rem) {
+  .about-facts {
+    --about-gutter: 24px;
+    --about-height: 1050px;
+    --about-mascot-top: 64px;
+    --about-mascot-left: 24px;
+    --about-mascot-size: 240px;
+    --about-copy-top: 330px;
+    --about-copy-left: 24px;
+    --about-copy-width: calc(100vw - 48px);
+    --about-copy-size: 36px;
+    --about-copy-leading: 43.2px;
+    --about-copy-tracking: -0.96px;
+    --about-action-top: 820px;
+    --about-action-height: 97px;
+    --about-action-size: 22px;
+    --about-action-leading: 27.077px;
+    --about-arrow-size: 28px;
   }
 
   .about-facts__divider {
-    width: 100%;
-    height: 1px;
-    margin: 3rem 0;
-  }
-
-  .about-facts__copy {
-    width: auto;
-    font-size: clamp(2rem, 7vw, 3.125rem);
-    line-height: 1.18;
-    letter-spacing: -0.027em;
-  }
-
-  .about-facts__desktop-break {
     display: none;
   }
+}
 
-  .about-facts__action {
-    width: 100%;
-    margin-top: 5rem;
-    font-size: 1.375rem;
+@media (max-width: 37.4375rem) {
+  .about-facts {
+    --about-gutter: 20px;
+    --about-height: 920px;
+    --about-mascot-top: 52px;
+    --about-mascot-left: 20px;
+    --about-mascot-size: 180px;
+    --about-copy-top: 260px;
+    --about-copy-left: 20px;
+    --about-copy-width: calc(100vw - 40px);
+    --about-copy-size: 19px;
+    --about-copy-leading: 23.75px;
+    --about-copy-tracking: -0.51px;
+    --about-action-top: 760px;
+    --about-action-height: 87px;
+    --about-action-size: 20px;
+    --about-action-leading: 24.615px;
+    --about-arrow-size: 24px;
+  }
+
+  .about-facts__divider {
+    display: none;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .about-facts__mark.is-visible {
-    animation: none;
-  }
-
   .about-facts__action {
     transition: none;
   }

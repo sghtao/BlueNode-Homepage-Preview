@@ -1,9 +1,27 @@
-/* Approved Figma Teams / Editorial Index: 301:61 at 1440×900. */
+/* Approved responsive Figma Teams: 377:20, 377:34, 377:48, 377:62. */
 .teams-index {
+  --teams-gutter: 52px;
+  --teams-height: 900px;
+  --teams-statement-top: 104px;
+  --teams-statement-left: 52px;
+  --teams-statement-width: 330px;
+  --teams-statement-size: 40px;
+  --teams-statement-leading: 1.1;
+  --teams-statement-tracking: -0.6px;
+  --teams-divider-top: 84px;
+  --teams-divider-left: calc(25vw + 72px);
+  --teams-divider-height: 732px;
+  --teams-list-top: 84px;
+  --teams-list-left: calc(33.333333vw + 20px);
+  --teams-list-width: calc(100vw - var(--teams-list-left) - var(--teams-gutter));
+  --teams-list-height: 732px;
+  --teams-row-height: 244px;
+  --teams-name-size: 112px;
+  --teams-name-tracking: -3.36px;
   position: relative;
   z-index: 5;
   width: 100%;
-  height: 900px;
+  min-height: var(--teams-height);
   overflow: hidden;
   isolation: isolate;
   background: #fff;
@@ -12,19 +30,19 @@
 
 .teams-index__statement {
   position: absolute;
-  top: 104px;
-  left: 52px;
+  top: var(--teams-statement-top);
+  left: var(--teams-statement-left);
   display: flex;
-  width: 330px;
+  width: var(--teams-statement-width);
   margin: 0;
   flex-direction: column;
   align-items: flex-start;
   overflow: hidden;
   background: #fff;
-  font-size: 40px;
+  font-size: var(--teams-statement-size);
   font-weight: 500;
-  line-height: 44px;
-  letter-spacing: -0.6px;
+  line-height: var(--teams-statement-leading);
+  letter-spacing: var(--teams-statement-tracking);
   white-space: nowrap;
 }
 
@@ -34,25 +52,25 @@
 }
 
 .teams-index__statement strong {
-  color: #164cf5;
+  color: #0048ff;
   font: inherit;
 }
 
 .teams-index__divider {
   position: absolute;
-  top: 84px;
-  left: 432px;
+  top: var(--teams-divider-top);
+  left: var(--teams-divider-left);
   width: 1px;
-  height: 732px;
+  height: var(--teams-divider-height);
   background: #dad4c9;
 }
 
 .teams-index__list {
   position: absolute;
-  top: 84px;
-  left: 500px;
-  width: 888px;
-  height: 732px;
+  top: var(--teams-list-top);
+  left: var(--teams-list-left);
+  width: var(--teams-list-width);
+  height: var(--teams-list-height);
   margin: 0;
   padding: 0;
   overflow: hidden;
@@ -62,7 +80,7 @@
 .teams-index__item {
   display: flex;
   width: 100%;
-  height: 244px;
+  height: var(--teams-row-height);
   align-items: center;
   overflow: hidden;
   border-bottom: 1px solid #dad4c9;
@@ -75,11 +93,71 @@
 .teams-index__item h3 {
   margin: 0;
   color: #080a10;
-  font-size: 112px;
+  font-size: var(--teams-name-size);
   font-weight: 600;
   line-height: 0.92;
-  letter-spacing: -3.36px;
+  letter-spacing: var(--teams-name-tracking);
   white-space: nowrap;
+}
+
+@media (min-width: 64rem) and (max-width: 89.9375rem) {
+  .teams-index {
+    --teams-gutter: 32px;
+    --teams-statement-top: 96px;
+    --teams-statement-left: 32px;
+    --teams-statement-width: 264px;
+    --teams-statement-size: 32px;
+    --teams-statement-tracking: -0.48px;
+    --teams-divider-left: calc(25vw + 56px);
+    --teams-list-left: calc(33.333333vw + 3.667px);
+    --teams-name-size: 104px;
+    --teams-name-tracking: -3.12px;
+  }
+}
+
+@media (min-width: 37.5rem) and (max-width: 63.9375rem) {
+  .teams-index {
+    --teams-gutter: 24px;
+    --teams-statement-top: 72px;
+    --teams-statement-left: 24px;
+    --teams-statement-width: 280.5px;
+    --teams-statement-size: 34px;
+    --teams-statement-tracking: -0.51px;
+    --teams-list-top: 250px;
+    --teams-list-left: 24px;
+    --teams-list-width: calc(100vw - 48px);
+    --teams-list-height: 600px;
+    --teams-row-height: 200px;
+    --teams-name-size: clamp(75px, 12.5vw, 96px);
+    --teams-name-tracking: -0.03em;
+  }
+
+  .teams-index__divider {
+    display: none;
+  }
+}
+
+@media (max-width: 37.4375rem) {
+  .teams-index {
+    --teams-gutter: 20px;
+    --teams-height: 720px;
+    --teams-statement-top: 56px;
+    --teams-statement-left: 20px;
+    --teams-statement-width: 231px;
+    --teams-statement-size: clamp(26px, 7.179487vw, 28px);
+    --teams-statement-tracking: -0.015em;
+    --teams-list-top: 210px;
+    --teams-list-left: 20px;
+    --teams-list-width: calc(100vw - 40px);
+    --teams-list-height: 360px;
+    --teams-row-height: 120px;
+    --teams-name-size: clamp(48px, 14.358974vw, 72px);
+    --teams-name-tracking: -0.03em;
+  }
+
+  .teams-index__divider {
+    display: none;
+  }
 }
 
 /* The legacy masthead resumes after the migrated Teams scene. */
