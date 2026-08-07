@@ -1,18 +1,29 @@
-/* Approved Entry resting frame, followed directly by About. */
-.entry {
+/*
+ * Approved static Entry, followed directly by About.
+ * Width interpolation is piecewise between approved Figma references; height is
+ * independent so normal and low-height viewports do not scale as one picture.
+ */
+.entry,
+.hdr--entry {
   --entry-gutter: 45px;
-  --entry-symbol-left: calc(75vw + 60px);
+  --entry-header-top: 28px;
+  --entry-header-size: 18px;
+}
+
+.entry {
+  --entry-symbol-right: 150px;
   --entry-symbol-top: 94px;
   --entry-symbol-width: 150px;
-  --entry-slogan-top: 520px;
+  --entry-slogan-bottom: 290px;
   --entry-slogan-width: 620px;
   --entry-slogan-size: 30px;
   --entry-slogan-leading: 45px;
-  --entry-wordmark-top: 611px;
-  --entry-wordmark-size: min(23.263056vw, 334.988px);
+  --entry-wordmark-bottom: 28px;
+  --entry-wordmark-size: 334.9876px;
   position: relative;
   z-index: 5;
-  height: 100svh;
+  height: 100vh;
+  height: max(35.5rem, 100svh);
   background: #fff;
   color: #000;
   isolation: isolate;
@@ -21,8 +32,7 @@
 .entry__stage {
   position: relative;
   width: 100%;
-  height: 100svh;
-  min-height: 35.5rem;
+  height: 100%;
   overflow: hidden;
   background: #fff;
 }
@@ -31,18 +41,14 @@
   position: absolute;
   z-index: 2;
   top: var(--entry-symbol-top);
-  left: var(--entry-symbol-left);
+  right: var(--entry-symbol-right);
   width: var(--entry-symbol-width);
   aspect-ratio: 150 / 138.409;
 }
 
-.entry__symbol img {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
+.entry__symbol img,
 .entry__reveal--symbol {
+  display: block;
   width: 100%;
   height: 100%;
 }
@@ -55,7 +61,7 @@
 }
 
 .entry__slogan {
-  top: var(--entry-slogan-top);
+  bottom: var(--entry-slogan-bottom);
   width: var(--entry-slogan-width);
 }
 
@@ -70,7 +76,7 @@
 }
 
 .entry__wordmark {
-  top: var(--entry-wordmark-top);
+  bottom: var(--entry-wordmark-bottom);
 }
 
 .entry__wordmark-text {
@@ -83,7 +89,7 @@
   white-space: nowrap;
 }
 
-/* The existing masthead returns after the pinned Entry stage. */
+/* The full masthead returns after Entry; the opening uses only this wordmark. */
 .hdr__entry-brand {
   display: none;
 }
@@ -107,113 +113,239 @@
 
 .hdr--entry:not(.hdr--entry-past) .hdr__entry-brand {
   position: absolute;
-  top: 28px;
-  left: var(--entry-gutter, 45px);
+  top: var(--entry-header-top);
+  left: var(--entry-gutter);
   display: block;
   color: #000;
-  font-size: 18px;
+  font-size: var(--entry-header-size);
   font-weight: 400;
   line-height: 1;
   letter-spacing: -0.04em;
   pointer-events: auto;
 }
 
-@media (min-width: 64rem) and (max-width: 89.9375rem) {
+/* 1920–2560: sizes stay capped; only the approved outer field expands. */
+@media (min-width: 1920px) {
+  .entry,
+  .hdr--entry {
+    --entry-gutter: clamp(64px, calc(15vw - 224px), 160px);
+    --entry-header-top: 36px;
+    --entry-header-size: 18px;
+  }
+
   .entry {
-    --entry-gutter: 32px;
-    --entry-symbol-left: calc(75vw + 9px);
-    --entry-symbol-width: 140px;
-    --entry-slogan-width: 578.667px;
-    --entry-slogan-size: 28px;
-    --entry-slogan-leading: 42px;
-    --entry-wordmark-top: 620px;
-    --entry-wordmark-size: 23.092vw;
-  }
-
-  .hdr--entry:not(.hdr--entry-past) .hdr__entry-brand {
-    left: 32px;
-    font-size: 17px;
-  }
-}
-
-@media (min-width: 37.5rem) and (max-width: 63.9375rem) {
-  .entry {
-    --entry-gutter: 24px;
-    --entry-symbol-left: calc(62.5vw + 76px);
-    --entry-symbol-top: 107px;
-    --entry-symbol-width: 132px;
-    --entry-slogan-top: 590px;
-    --entry-slogan-width: 537.333px;
-    --entry-slogan-size: 26px;
-    --entry-slogan-leading: 39px;
-    --entry-wordmark-top: 700px;
-    --entry-wordmark-size: 23.092vw;
-  }
-
-  .hdr--entry:not(.hdr--entry-past) .hdr__entry-brand {
-    left: 24px;
-    font-size: 16px;
-  }
-}
-
-@media (max-width: 37.4375rem) {
-  .entry {
-    --entry-gutter: 20px;
-    --entry-symbol-left: calc(50vw + 44px);
-    --entry-symbol-top: 88px;
-    --entry-symbol-width: 110px;
-    --entry-slogan-top: 490px;
-    --entry-slogan-width: calc(100vw - 40px);
-    --entry-slogan-size: 22px;
-    --entry-slogan-leading: 33px;
-    --entry-wordmark-top: 610px;
-    --entry-wordmark-size: 22.105128vw;
-  }
-
-  .hdr--entry:not(.hdr--entry-past) .hdr__entry-brand {
-    top: 24px;
-    left: 20px;
-    font-size: 1rem;
-  }
-}
-
-@media (min-width: 64rem) and (max-height: 43.75rem) {
-  .entry {
-    --entry-gutter: clamp(32px, calc(3.80117vw - 6.924px), 45px);
-    --entry-symbol-left: calc(75vw + clamp(9px, calc(16.5205vw - 160.169px), 65.5px));
-    --entry-symbol-top: clamp(60px, calc(12.0567svh - 14.507px), 94px);
-    --entry-symbol-width: clamp(140px, calc(2.924vw + 110.058px), 150px);
-    --entry-slogan-top: clamp(210px, calc(109.929svh - 469.362px), 520px);
+    --entry-symbol-right: max(150px, var(--entry-gutter));
+    --entry-symbol-top: 112px;
+    --entry-symbol-width: 150px;
+    --entry-slogan-bottom: clamp(370px, calc(6.25vw + 250px), 410px);
     --entry-slogan-width: 620px;
-    --entry-slogan-size: clamp(28px, calc(0.5848vw + 22.012px), 30px);
-    --entry-slogan-leading: clamp(42px, calc(0.8772vw + 33.018px), 45px);
-    --entry-wordmark-top: clamp(313px, calc(105.674svh - 340.069px), 611px);
-    --entry-wordmark-size: 23.052vw;
-  }
-
-  .hdr--entry:not(.hdr--entry-past) .hdr__entry-brand {
-    left: clamp(32px, calc(3.80117vw - 6.924px), 45px);
-    font-size: clamp(17px, calc(0.2924vw + 14.006px), 18px);
+    --entry-slogan-size: 30px;
+    --entry-slogan-leading: 45px;
+    --entry-wordmark-bottom: clamp(28px, calc(6.25vw - 92px), 68px);
+    --entry-wordmark-size: 428.7841px;
   }
 }
 
-@media (max-width: 37.4375rem) and (max-height: 43.75rem) {
-  .entry {
-    --entry-gutter: clamp(16px, calc(5.71429vw - 2.2857px), 20px);
-    --entry-symbol-left: calc(50vw + clamp(36px, calc(11.42857vw - 0.5714px), 44px));
-    --entry-symbol-top: clamp(64px, calc(8.69565svh + 14.6087px), 88px);
-    --entry-symbol-width: clamp(90.256px, 28.2057vw, 110px);
-    --entry-slogan-top: clamp(350px, calc(50.72464svh + 61.884px), 490px);
-    --entry-slogan-width: calc(100vw - (2 * var(--entry-gutter)));
-    --entry-slogan-size: clamp(18.051px, 5.64143vw, 22px);
-    --entry-slogan-leading: clamp(27.077px, 8.46143vw, 33px);
-    --entry-wordmark-top: clamp(474px, calc(49.27536svh + 194.116px), 610px);
-    --entry-wordmark-size: 22.105vw;
+/* 1440–1919: Large reference 1440→1920. */
+@media (min-width: 1440px) and (max-width: 1919.98px) {
+  .entry,
+  .hdr--entry {
+    --entry-gutter: calc(3.958333vw - 12px);
+    --entry-header-top: calc(1.666667vw + 4px);
+    --entry-header-size: 18px;
   }
 
-  .hdr--entry:not(.hdr--entry-past) .hdr__entry-brand {
-    top: clamp(20px, calc(5.71429vw + 1.7143px), 24px);
-    left: clamp(16px, calc(5.71429vw - 2.2857px), 20px);
-    font-size: clamp(13.128px, 4.10256vw, 16px);
+  .entry {
+    --entry-symbol-right: 150px;
+    --entry-symbol-top: calc(3.75vw + 40px);
+    --entry-symbol-width: 150px;
+    --entry-slogan-bottom: calc(16.666667vw + 50px);
+    --entry-slogan-width: 620px;
+    --entry-slogan-size: 30px;
+    --entry-slogan-leading: 45px;
+    --entry-wordmark-bottom: 28px;
+    --entry-wordmark-size: calc(19.540939vw + 53.598052px);
+  }
+}
+
+/* 1024–1439: Medium reference 1024→1440. */
+@media (min-width: 1024px) and (max-width: 1439.98px) {
+  .entry,
+  .hdr--entry {
+    --entry-gutter: 3.125vw;
+    --entry-header-top: 28px;
+    --entry-header-size: calc(0.240385vw + 14.538462px);
+  }
+
+  .entry {
+    --entry-symbol-right: 10.416667vw;
+    --entry-symbol-top: 94px;
+    --entry-symbol-width: calc(2.403846vw + 115.384615px);
+    --entry-slogan-bottom: calc(-1.442308vw + 310.769231px);
+    --entry-slogan-width: calc(9.935893vw + 476.923147px);
+    --entry-slogan-size: calc(0.480769vw + 23.076923px);
+    --entry-slogan-leading: calc(0.721154vw + 34.615385px);
+    --entry-wordmark-bottom: calc(-16.289591vw + 262.570115px);
+    --entry-wordmark-size: calc(23.68408vw - 6.06317px);
+  }
+}
+
+/* 768–1023: Small reference 768→1024. */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .entry,
+  .hdr--entry {
+    --entry-gutter: 3.125vw;
+    --entry-header-top: 28px;
+    --entry-header-size: calc(0.390625vw + 13px);
+  }
+
+  .entry {
+    --entry-symbol-right: 10.416667vw;
+    --entry-symbol-top: calc(-5.078125vw + 146px);
+    --entry-symbol-width: calc(3.125vw + 108px);
+    --entry-slogan-bottom: calc(-23.4375vw + 536px);
+    --entry-slogan-width: calc(16.145849vw + 413.333191px);
+    --entry-slogan-size: calc(0.78125vw + 20px);
+    --entry-slogan-leading: calc(1.171875vw + 30px);
+    --entry-wordmark-bottom: calc(-35.17923vw + 456px);
+    --entry-wordmark-size: 23.091966vw;
+  }
+}
+
+/* 390–767: phone→tablet values interpolate while the Entry DOM stays identical. */
+@media (min-width: 390px) and (max-width: 767.98px) {
+  .entry,
+  .hdr--entry {
+    --entry-gutter: calc(1.058201vw + 15.873016px);
+    --entry-header-top: calc(1.058201vw + 19.873016px);
+    --entry-header-size: 16px;
+  }
+
+  .entry {
+    --entry-symbol-right: calc(10.31746vw + 0.761905px);
+    --entry-symbol-top: calc(5.026455vw + 68.396825px);
+    --entry-symbol-width: calc(5.820106vw + 87.301587px);
+    --entry-slogan-bottom: calc(17.989418vw + 217.84127px);
+    --entry-slogan-width: calc(49.559078vw + 156.719598px);
+    --entry-slogan-size: calc(1.058201vw + 17.873016px);
+    --entry-slogan-leading: calc(1.587302vw + 26.809524px);
+    --entry-wordmark-bottom: calc(5.024509vw + 147.2353px);
+    --entry-wordmark-size: calc(24.110142vw - 7.819518px);
+  }
+}
+
+/* 360–389: approved bridge from Compact XS 320 to XS 390. */
+@media (min-width: 360px) and (max-width: 389.98px) {
+  .entry,
+  .hdr--entry {
+    --entry-gutter: calc(5.714286vw - 2.285714px);
+    --entry-header-top: calc(5.714286vw + 1.714286px);
+    --entry-header-size: 4.102564vw;
+  }
+
+  .entry {
+    --entry-symbol-right: calc(10.366298vw + 0.571437px);
+    --entry-symbol-top: calc(34.285714vw - 45.714286px);
+    --entry-symbol-width: 28.20513vw;
+    --entry-slogan-bottom: calc(177.362638vw - 403.714289px);
+    --entry-slogan-width: 89.743609vw;
+    --entry-slogan-size: 5.641024vw;
+    --entry-slogan-leading: 8.461538vw;
+    --entry-wordmark-bottom: calc(182.777149vw - 545.999993px);
+    --entry-wordmark-size: 22.105135vw;
+  }
+}
+
+/* <=359: compact reference remains capped at the approved 320×568 geometry. */
+@media (max-width: 359.98px) {
+  .entry,
+  .hdr--entry {
+    --entry-gutter: 16px;
+    --entry-header-top: 20px;
+    --entry-header-size: 13.1282px;
+  }
+
+  .entry {
+    --entry-symbol-right: 33.7436px;
+    --entry-symbol-top: 64px;
+    --entry-symbol-width: 90.2564px;
+    --entry-slogan-bottom: 163.8462px;
+    --entry-slogan-width: calc(100vw - 32px);
+    --entry-slogan-size: 18.0513px;
+    --entry-slogan-leading: 27.0769px;
+    --entry-wordmark-bottom: 38.8869px;
+    --entry-wordmark-size: 70.7364px;
+  }
+}
+
+/*
+ * F4 low desktop: preserve header/symbol and slogan/wordmark bands. The wordmark
+ * cap is shared by 1366×618 and 1440×700; only the quiet middle field changes.
+ */
+@media (min-width: 1280px) and (max-height: 700px) {
+  .entry {
+    --entry-symbol-top: 60px;
+    --entry-symbol-width: 150px;
+    --entry-slogan-bottom: clamp(302px, calc(-21.621622vw + 613.351351px), 318px);
+    --entry-slogan-width: 620px;
+    --entry-slogan-size: 30px;
+    --entry-slogan-leading: 45px;
+    --entry-wordmark-bottom: clamp(41.66px, calc(-24.324324vw + 391.93027px), 59.66px);
+    --entry-wordmark-size: 314.8883px;
+  }
+}
+
+/* 1366×618 needs one horizontal bridge before the 1440 Large rules take over. */
+@media (min-width: 1280px) and (max-width: 1439.98px) and (max-height: 700px) {
+  .entry,
+  .hdr--entry {
+    --entry-gutter: 45px;
+    --entry-header-top: 28px;
+    --entry-header-size: 18px;
+  }
+
+  .entry {
+    --entry-symbol-right: clamp(126px, calc(32.432432vw - 317.027027px), 150px);
+  }
+}
+
+/* Low M screens use the same fixed-band logic with the Medium type scale. */
+@media (min-width: 1024px) and (max-width: 1279.98px) and (max-height: 700px) {
+  .entry {
+    --entry-symbol-top: 60px;
+    --entry-slogan-bottom: 318px;
+    --entry-wordmark-bottom: 59.66px;
+    --entry-wordmark-size: calc(23.68408vw - 6.06317px);
+  }
+}
+
+/* F4 low mobile: 320×568→390×700, with the complete wordmark protected. */
+@media (max-width: 599.98px) and (max-height: 700px) {
+  .entry,
+  .hdr--entry {
+    --entry-gutter: clamp(16px, calc(5.714286vw - 2.285714px), 20px);
+    --entry-header-top: clamp(20px, calc(5.714286vw + 1.714286px), 24px);
+    --entry-header-size: clamp(13.1282px, 4.102564vw, 16px);
+  }
+
+  .entry {
+    --entry-symbol-right: clamp(33.7436px, calc(10.366298vw + 0.571437px), 41px);
+    --entry-symbol-top: clamp(64px, calc(11.428571vw + 27.428571px), 72px);
+    --entry-symbol-width: clamp(90.2564px, 28.20513vw, 110px);
+    --entry-slogan-bottom: clamp(163.8462px, calc(57.362639vw - 19.71429px), 204px);
+    --entry-slogan-width: calc(100vw - (2 * var(--entry-gutter)));
+    --entry-slogan-size: clamp(18.0513px, 5.641024vw, 22px);
+    --entry-slogan-leading: clamp(27.0769px, 8.461538vw, 33px);
+    --entry-wordmark-bottom: 38.86px;
+    --entry-wordmark-size: clamp(70.7364px, 22.105135vw, 86.21px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entry__symbol,
+  .entry__reveal--symbol {
+    animation: none;
+    transform: none;
+    opacity: 1;
   }
 }

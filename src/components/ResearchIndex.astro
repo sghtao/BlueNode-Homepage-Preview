@@ -21,44 +21,46 @@ const initialArticle = featuredArticles[0]
 >
   <h2 class="research-index__heading" id="research-index-heading">research</h2>
 
-  <ol class="research-index__list" aria-label="BlueNode Medium 최신 리서치">
-    {featuredArticles.map((article, index) => (
-      <li class="research-index__item">
-        <a
-          class="research-index__article"
-          href={article.externalUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          data-research-article
-          data-research-active={index === 0 ? 'true' : 'false'}
-          data-article-title={article.title}
-          data-article-url={article.externalUrl}
-          aria-current={index === 0 ? 'true' : undefined}
-        >
-          <span class="research-index__divider" aria-hidden="true"></span>
-          <span class="research-index__meta">{rowLabels[index]}</span>
-          <span class="research-index__title">{article.title}</span>
-        </a>
-      </li>
-    ))}
-  </ol>
+  <div class="research-index__content">
+    <ol class="research-index__list" aria-label="BlueNode Medium 최신 리서치">
+      {featuredArticles.map((article, index) => (
+        <li class="research-index__item">
+          <a
+            class="research-index__article"
+            href={article.externalUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-research-article
+            data-research-active={index === 0 ? 'true' : 'false'}
+            data-article-title={article.title}
+            data-article-url={article.externalUrl}
+            aria-current={index === 0 ? 'true' : undefined}
+          >
+            <span class="research-index__divider" aria-hidden="true"></span>
+            <span class="research-index__meta">{rowLabels[index]}</span>
+            <span class="research-index__title">{article.title}</span>
+          </a>
+        </li>
+      ))}
+    </ol>
 
-  {initialArticle && (
-    <a
-      class="research-index__preview"
-      href={initialArticle.externalUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={`선택된 글: ${initialArticle.title}`}
-      data-research-preview
-    >
-      <span class="research-index__preview-label">Selected article</span>
-      <span class="research-index__symbol" aria-hidden="true">
-        <img src={withBase('images/bluenode-symbol-entry.svg')} alt="" width="360" height="332" />
-      </span>
-      <span class="research-index__preview-source">BlueNode / Medium</span>
-    </a>
-  )}
+    {initialArticle && (
+      <a
+        class="research-index__preview"
+        href={initialArticle.externalUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`선택된 글: ${initialArticle.title}`}
+        data-research-preview
+      >
+        <span class="research-index__preview-label">Selected article</span>
+        <span class="research-index__symbol" aria-hidden="true">
+          <img src={withBase('images/bluenode-symbol-entry.svg')} alt="" width="360" height="332" />
+        </span>
+        <span class="research-index__preview-source">BlueNode / Medium</span>
+      </a>
+    )}
+  </div>
 
   <a
     class="research-index__footer"

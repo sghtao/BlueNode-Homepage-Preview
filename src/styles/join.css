@@ -16,7 +16,7 @@
   --join-statement-size: 64px;
   --join-action-top: 730px;
   --join-action-left: 58px;
-  --join-action-width: calc(100% - 116px);
+  --join-action-width: calc(100vw - 116px);
   --join-action-height: 112px;
   --join-action-size: 40px;
   --join-arrow-size: 44px;
@@ -137,72 +137,126 @@
 
 @media (min-width: 1024px) and (max-width: 1439px) {
   .join-scene {
-    --join-heading-top: 36px;
-    --join-heading-left: 36px;
-    --join-heading-size: 132.48px;
-    --join-heading-width: 590.4px;
-    --join-symbol-top: 56px;
-    --join-symbol-left: 650px;
-    --join-symbol-width: 468px;
-    --join-symbol-height: 432px;
-    --join-statement-top: 330px;
-    --join-statement-left: 40px;
-    --join-statement-width: 735px;
-    --join-statement-size: 48px;
-    --join-action-top: 760px;
-    --join-action-left: 40px;
-    --join-action-width: calc(100% - 80px);
-    --join-action-height: 96px;
-    --join-action-size: 32px;
-    --join-arrow-size: 36.08px;
+    --join-height: clamp(618px, 100svh, 900px);
+    --join-heading-top: clamp(36px, calc(0.4808vw + 31.077px), 38px);
+    --join-heading-left: clamp(36px, calc(3.8462vw - 3.385px), 52px);
+    --join-heading-size: clamp(132.48px, calc(12.3846vw + 5.634px), 184px);
+    --join-heading-width: clamp(590.4px, calc(55.1923vw + 25.231px), 820px);
+    --join-symbol-top: clamp(56px, calc(2.4038vw + 31.385px), 66px);
+    --join-symbol-left: clamp(650px, calc(62.5vw + 10px), 910px);
+    --join-symbol-width: clamp(468px, calc(43.75vw + 20px), 650px);
+    --join-symbol-height: clamp(432px, calc(40.3846vw + 18.462px), 600px);
+    --join-statement-top: clamp(330px, calc(7.2115vw + 256.154px), 360px);
+    --join-statement-left: clamp(40px, calc(4.3269vw - 4.308px), 58px);
+    --join-statement-width: clamp(735px, calc(58.8942vw + 131.923px), 980px);
+    --join-statement-size: clamp(48px, calc(3.8462vw + 8.615px), 64px);
+    --join-action-height: clamp(96px, calc(3.8462vw + 56.615px), 112px);
+    --join-action-left: var(--join-statement-left);
+    --join-action-width: calc(100vw - (var(--join-action-left) * 2));
+    --join-action-size: clamp(32px, calc(1.9231vw + 12.308px), 40px);
+    --join-arrow-size: clamp(36.08px, calc(1.9038vw + 16.585px), 44px);
+    --join-action-bottom: clamp(44px, calc(3.3654vw + 9.538px), 58px);
+    --join-action-top: calc(var(--join-height) - var(--join-action-height) - var(--join-action-bottom));
+  }
+}
+
+@media (min-width: 1440px) and (max-width: 1919px) {
+  .join-scene {
+    --join-height: clamp(700px, 100svh, 1080px);
+    --join-heading-top: clamp(38px, calc(1.25vw + 20px), 44px);
+    --join-heading-left: clamp(52px, calc(5.8333vw - 32px), 80px);
+    --join-heading-size: clamp(184px, calc(4.6vw + 117.76px), 206.08px);
+    --join-heading-width: clamp(820px, calc(20.5vw + 524.8px), 918.4px);
+    --join-symbol-top: clamp(66px, calc(2.9167vw + 24px), 80px);
+    --join-symbol-left: clamp(910px, calc(68.2292vw - 72.5px), 1237.5px);
+    --join-symbol-width: clamp(650px, calc(6.7708vw + 552.5px), 682.5px);
+    --join-symbol-height: clamp(600px, calc(6.25vw + 510px), 630px);
+    --join-statement-top: clamp(360px, calc(18.75vw + 90px), 450px);
+    --join-statement-left: clamp(58px, calc(4.5833vw - 8px), 80px);
+    --join-statement-width: clamp(980px, calc(10.2083vw + 833px), 1029px);
+    --join-statement-size: clamp(64px, calc(0.6667vw + 54.4px), 67.2px);
+    --join-action-left: var(--join-statement-left);
+    --join-action-width: calc(100vw - (var(--join-action-left) * 2));
+    --join-action-height: 112px;
+    --join-action-size: 40px;
+    --join-arrow-size: 44px;
+    --join-action-bottom: clamp(58px, calc(16.6667svh - 92px), 88px);
+    --join-action-top: calc(var(--join-height) - var(--join-action-height) - var(--join-action-bottom));
+  }
+}
+
+@media (min-width: 1920px) {
+  .join-scene {
+    --join-canvas-offset: max(0px, calc((100vw - 1920px) / 2));
+    --join-height: min(100svh, 1080px);
+    --join-heading-top: 44px;
+    --join-heading-left: calc(var(--join-canvas-offset) + 80px);
+    --join-heading-size: 206.08px;
+    --join-heading-width: 918.4px;
+    --join-symbol-top: 80px;
+    --join-symbol-left: calc(var(--join-canvas-offset) + 1237.5px);
+    --join-symbol-width: 682.5px;
+    --join-symbol-height: 630px;
+    --join-statement-top: 450px;
+    --join-statement-left: calc(var(--join-canvas-offset) + 80px);
+    --join-statement-width: 1029px;
+    --join-statement-size: 67.2px;
+    --join-action-top: 880px;
+    --join-action-left: calc(var(--join-canvas-offset) + 80px);
+    --join-action-width: 1760px;
+    --join-action-height: 112px;
+    --join-action-size: 40px;
+    --join-arrow-size: 44px;
   }
 }
 
 @media (min-width: 600px) and (max-width: 1023px) {
   .join-scene {
-    --join-height: 1024px;
-    --join-heading-top: 32px;
+    --join-height: clamp(700px, 100svh, 1024px);
+    --join-heading-top: clamp(32px, calc(1.5625vw + 20px), 36px);
     --join-heading-left: 24px;
-    --join-heading-size: 106.72px;
-    --join-heading-width: 475.6px;
-    --join-symbol-top: 90px;
-    --join-symbol-left: 380px;
-    --join-symbol-width: 416px;
-    --join-symbol-height: 384px;
-    --join-statement-top: 430px;
-    --join-statement-left: 28px;
-    --join-statement-width: calc(100% - 56px);
-    --join-statement-size: 41.6px;
-    --join-action-top: 860px;
+    --join-heading-size: clamp(89.82px, calc(10.0625vw + 29.44px), 132.48px);
+    --join-heading-width: clamp(400.34px, calc(44.8438vw + 131.2px), 590.4px);
+    --join-symbol-top: clamp(56px, calc(192px - 13.2813vw), 90px);
+    --join-symbol-left: clamp(202.81px, calc(105.4688vw - 430px), 650px);
+    --join-symbol-width: clamp(381.88px, calc(20.3125vw + 260px), 468px);
+    --join-symbol-height: clamp(352.5px, calc(18.75vw + 240px), 432px);
+    --join-statement-top: clamp(330px, calc(80.6452svh - 395.806px), 430px);
+    --join-statement-left: clamp(28px, calc(4.6875vw - 8px), 40px);
+    --join-statement-width: calc(100vw - (var(--join-statement-left) * 2));
+    --join-statement-size: clamp(36.8px, calc(2.5vw + 22.4px), 48px);
     --join-action-left: 24px;
-    --join-action-width: calc(100% - 48px);
-    --join-action-height: 100px;
-    --join-action-size: 30px;
-    --join-arrow-size: 33px;
+    --join-action-width: calc(100vw - 48px);
+    --join-action-height: clamp(96px, calc(112px - 1.5625vw), 100px);
+    --join-action-size: clamp(27.38px, calc(0.7813vw + 24px), 32px);
+    --join-arrow-size: clamp(30.98px, calc(1.2031vw + 23.75px), 36.08px);
+    --join-action-bottom: clamp(44px, calc(124px - 7.8125vw), 64px);
+    --join-action-top: calc(var(--join-height) - var(--join-action-height) - var(--join-action-bottom));
   }
 }
 
 @media (max-width: 599px) {
   .join-scene {
-    --join-height: 844px;
-    --join-heading-top: 24px;
-    --join-heading-left: 20px;
-    --join-heading-size: 73.6px;
-    --join-heading-width: 328px;
-    --join-symbol-top: 100px;
-    --join-symbol-left: 80px;
-    --join-symbol-width: 312px;
-    --join-symbol-height: 288px;
-    --join-statement-top: 400px;
-    --join-statement-left: 20px;
-    --join-statement-width: calc(100% - 40px);
-    --join-statement-size: 29.44px;
-    --join-action-top: 700px;
-    --join-action-left: 20px;
-    --join-action-width: calc(100% - 40px);
-    --join-action-height: 96px;
-    --join-action-size: 24px;
-    --join-arrow-size: 28.6px;
+    --join-height: clamp(568px, 100svh, 844px);
+    --join-heading-top: clamp(20px, calc(5.7143vw + 1.714px), 24px);
+    --join-heading-left: clamp(16px, calc(5.7143vw - 2.286px), 20px);
+    --join-heading-size: clamp(60.39px, calc(18.8714vw - 0.001px), 73.6px);
+    --join-heading-width: clamp(269.128px, calc(84.1029vw - 0.001px), 328px);
+    --join-symbol-top: clamp(72px, calc(10.1449svh + 14.377px), 100px);
+    --join-symbol-left: clamp(64px, calc(22.8571vw - 9.143px), 80px);
+    --join-symbol-width: clamp(256px, 80vw, 312px);
+    --join-symbol-height: clamp(236.308px, calc(73.8457vw - 0.001px), 288px);
+    --join-statement-top: clamp(332px, calc(51.5152svh + 39.394px), 400px);
+    --join-statement-left: var(--join-heading-left);
+    --join-statement-width: calc(100vw - (var(--join-statement-left) * 2));
+    --join-statement-size: clamp(24.156px, calc(7.5486vw - 0.001px), 29.44px);
+    --join-action-left: var(--join-heading-left);
+    --join-action-width: calc(100vw - (var(--join-action-left) * 2));
+    --join-action-height: clamp(78.769px, calc(24.6157vw - 0.001px), 96px);
+    --join-action-size: clamp(19.692px, calc(6.153vw + 0.002px), 24px);
+    --join-arrow-size: clamp(23.467px, calc(7.3329vw + 0.001px), 28.6px);
+    --join-action-bottom: clamp(20px, calc(19.4444svh - 116.111px), 48px);
+    --join-action-top: calc(var(--join-height) - var(--join-action-height) - var(--join-action-bottom));
   }
 
   .join-scene__statement-wide { display: none; }
@@ -211,49 +265,46 @@
 
 @media (min-width: 1024px) and (max-height: 700px) {
   .join-scene {
-    --join-height: 618px;
-    --join-heading-top: 24px;
-    --join-heading-left: 52px;
-    --join-heading-size: 156.4px;
-    --join-heading-width: 697px;
-    --join-symbol-top: 48px;
-    --join-symbol-left: 850px;
-    --join-symbol-width: 468px;
-    --join-symbol-height: 432px;
-    --join-statement-top: 235px;
-    --join-statement-left: 58px;
-    --join-statement-width: 764.4px;
-    --join-statement-size: 49.92px;
-    --join-action-top: 500px;
-    --join-action-left: 58px;
-    --join-action-width: calc(100% - 116px);
+    --join-height: 100svh;
+    --join-heading-top: clamp(24px, calc(4.878svh - 6.146px), 28px);
+    --join-heading-left: clamp(36px, calc(4.6784vw - 11.906px), 52px);
+    --join-heading-size: clamp(132.48px, calc(7vw + 60.8px), 156.4px);
+    --join-heading-width: clamp(590.4px, calc(31.17vw + 271.2px), 697px);
+    --join-symbol-top: clamp(48px, calc(7.3171svh + 2.78px), 54px);
+    --join-symbol-left: clamp(650px, calc(81.0811vw - 257.568px), 910px);
+    --join-symbol-width: clamp(468px, calc(63.4146svh + 76.171px), 520px);
+    --join-symbol-height: clamp(432px, calc(58.5366svh + 70.244px), 480px);
+    --join-statement-top: clamp(235px, calc(57.3171svh - 119.244px), 282px);
+    --join-statement-left: clamp(40px, calc(5.2632vw - 13.895px), 58px);
+    --join-statement-width: min(calc(100vw - (var(--join-statement-left) * 2)), 764.4px);
+    --join-statement-size: clamp(48px, calc(0.5614vw + 42.253px), 49.92px);
     --join-action-height: 88px;
+    --join-action-top: auto;
+    --join-action-bottom: clamp(20px, calc(105.366px - 12.1951svh), 30px);
+    --join-action-left: var(--join-statement-left);
+    --join-action-width: calc(100vw - (var(--join-action-left) * 2));
     --join-action-size: 32px;
     --join-arrow-size: 36.08px;
   }
+  .join-scene__apply { bottom: var(--join-action-bottom); }
 }
 
-@media (max-width: 359px) and (max-height: 620px) {
+@media (min-width: 1280px) and (min-height: 701px) and (max-height: 899px) {
   .join-scene {
-    --join-height: 568px;
-    --join-heading-top: 20px;
-    --join-heading-left: 16px;
-    --join-heading-size: 60.39px;
-    --join-heading-width: 269.128px;
-    --join-symbol-top: 72px;
-    --join-symbol-left: 64px;
-    --join-symbol-width: 256px;
-    --join-symbol-height: 236.308px;
-    --join-statement-top: 332px;
-    --join-statement-left: 16px;
-    --join-statement-width: calc(100% - 32px);
-    --join-statement-size: 24.156px;
-    --join-action-top: 468px;
-    --join-action-left: 16px;
-    --join-action-width: calc(100% - 32px);
-    --join-action-height: 78.769px;
-    --join-action-size: 19.692px;
-    --join-arrow-size: 23.467px;
+    --join-heading-top: clamp(28px, calc(5svh - 7px), 38px);
+    --join-heading-size: clamp(156.4px, calc(13.8svh + 59.8px), 184px);
+    --join-heading-width: clamp(697px, calc(61.5svh + 266.5px), 820px);
+    --join-symbol-top: clamp(54px, calc(6svh + 12px), 66px);
+    --join-symbol-width: clamp(520px, calc(65svh + 65px), 650px);
+    --join-symbol-height: clamp(480px, calc(60svh + 60px), 600px);
+    --join-statement-top: clamp(282px, calc(39svh + 9px), 360px);
+    --join-statement-width: clamp(764.4px, calc(107.8svh + 9.8px), 980px);
+    --join-statement-size: clamp(49.92px, calc(7.04svh + 0.64px), 64px);
+    --join-action-height: clamp(88px, calc(12svh + 4px), 112px);
+    --join-action-size: clamp(32px, calc(4svh + 4px), 40px);
+    --join-arrow-size: clamp(36.08px, calc(3.96svh + 8.36px), 44px);
+    --join-action-bottom: clamp(20px, calc(19svh - 113px), 58px);
+    --join-action-top: calc(var(--join-height) - var(--join-action-height) - var(--join-action-bottom));
   }
 }
 

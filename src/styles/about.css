@@ -1,65 +1,90 @@
-/* Approved responsive Figma About Facts: 371:79, 371:105, 371:131, 371:157. */
+/*
+ * Continuous responsive About: 371:79/105/131/157 and wide reference 523:55.
+ * The body contributes real height, so copy reflow or text zoom pushes the CTA
+ * instead of colliding with an absolutely positioned lower band.
+ */
 .about-facts {
+  --about-stage-offset: 0px;
+  --about-stage-width: 100vw;
   --about-gutter: 52px;
-  --about-height: 1000px;
-  --about-mascot-top: 110px;
+  --about-body-top: 110px;
+  --about-body-min: 820px;
   --about-mascot-left: 32px;
   --about-mascot-size: 400px;
-  --about-copy-top: 118px;
-  --about-copy-left: calc(33.333333vw + 20px);
+  --about-mascot-offset: 0px;
+  --about-divider-offset: 0px;
+  --about-divider-top-offset: 8px;
+  --about-divider-height: 570px;
+  --about-copy-gap: 67px;
+  --about-copy-top-offset: 8px;
   --about-copy-width: 895.12px;
   --about-copy-size: 50.027px;
   --about-copy-leading: 56px;
   --about-copy-tracking: -1.34px;
-  --about-divider-top: 118px;
-  --about-divider-left: calc(25vw + 72px);
-  --about-divider-height: 570px;
-  --about-action-top: 820px;
   --about-action-height: 113px;
   --about-action-size: 26px;
   --about-action-leading: 32px;
   --about-arrow-size: 32px;
+  --about-bottom-space: 67px;
   position: relative;
   z-index: 5;
   width: 100%;
-  min-height: var(--about-height);
-  overflow: hidden;
+  box-sizing: border-box;
+  padding-bottom: var(--about-bottom-space);
   isolation: isolate;
   background: #fff;
   color: #000;
 }
 
+.about-facts__body {
+  display: grid;
+  width: calc(100% - var(--about-stage-offset) - var(--about-mascot-left));
+  min-width: 0;
+  min-height: var(--about-body-min);
+  box-sizing: border-box;
+  grid-template-columns:
+    var(--about-mascot-size)
+    var(--about-divider-offset)
+    1px
+    var(--about-copy-gap)
+    minmax(0, var(--about-copy-width));
+  align-items: start;
+  margin-inline-start: calc(var(--about-stage-offset) + var(--about-mascot-left));
+  padding-top: var(--about-body-top);
+}
+
 .about-facts__mascot {
-  position: absolute;
-  top: var(--about-mascot-top);
-  left: var(--about-mascot-left);
   display: block;
   width: var(--about-mascot-size);
   height: var(--about-mascot-size);
+  grid-column: 1;
+  grid-row: 1;
+  margin-top: var(--about-mascot-offset);
   object-fit: contain;
 }
 
 .about-facts__divider {
-  position: absolute;
-  top: var(--about-divider-top);
-  left: var(--about-divider-left);
   width: 1px;
   height: var(--about-divider-height);
+  grid-column: 3;
+  grid-row: 1;
+  margin-top: var(--about-divider-top-offset);
   background: rgba(20, 20, 20, 0.16);
 }
 
 .about-facts__copy {
-  position: absolute;
-  top: var(--about-copy-top);
-  left: var(--about-copy-left);
   width: var(--about-copy-width);
-  margin: 0;
+  min-width: 0;
+  grid-column: 5;
+  grid-row: 1;
+  margin: var(--about-copy-top-offset) 0 0;
   color: #000;
   font-size: var(--about-copy-size);
   font-weight: 700;
   line-height: var(--about-copy-leading);
   letter-spacing: var(--about-copy-tracking);
-  word-break: break-word;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .about-facts__copy p {
@@ -72,14 +97,13 @@
 }
 
 .about-facts__action {
-  position: absolute;
-  top: var(--about-action-top);
-  left: var(--about-gutter);
   display: flex;
-  width: calc(100vw - (2 * var(--about-gutter)));
-  height: var(--about-action-height);
+  width: calc(var(--about-stage-width) - (2 * var(--about-gutter)));
+  min-height: max(44px, var(--about-action-height));
+  box-sizing: border-box;
   align-items: center;
   justify-content: space-between;
+  margin-inline: calc(var(--about-stage-offset) + var(--about-gutter)) 0;
   border-top: 1px solid rgba(23, 16, 16, 0.22);
   background: #fff;
   color: #171010;
@@ -94,6 +118,7 @@
 .about-facts__action img {
   width: var(--about-arrow-size);
   height: var(--about-arrow-size);
+  flex: 0 0 auto;
 }
 
 .about-facts__action:hover {
@@ -106,7 +131,7 @@
 
 .about-facts__action:focus-visible {
   outline: 2px solid #0048ff;
-  outline-offset: 4px;
+  outline-offset: -2px;
 }
 
 /* The legacy masthead resumes only after this migrated scene. */
@@ -128,76 +153,164 @@
   pointer-events: none;
 }
 
-@media (min-width: 64rem) and (max-width: 89.9375rem) {
+/* M 1024→1439: preserve the two-column composition and interpolate to L. */
+@media (min-width: 1024px) and (max-width: 1439.98px) {
   .about-facts {
-    --about-gutter: 32px;
-    --about-mascot-top: 128px;
-    --about-mascot-left: 16px;
-    --about-mascot-size: 280px;
-    --about-copy-top: 104px;
-    --about-copy-left: calc(33.333333vw + 3.667px);
-    --about-copy-width: calc(66.666667vw - 38.527px);
-    --about-copy-size: 36px;
-    --about-copy-leading: 43.2px;
-    --about-copy-tracking: -0.96px;
-    --about-divider-top: 104px;
-    --about-divider-left: calc(25vw + 56px);
-    --about-divider-height: 540px;
-    --about-action-top: 760px;
-    --about-action-height: 105px;
-    --about-action-size: 24px;
-    --about-action-leading: 29.538px;
-    --about-arrow-size: 28px;
+    --about-gutter: calc(4.807692vw - 17.230769px);
+    --about-body-top: calc(1.442308vw + 89.230769px);
+    --about-body-min: calc(14.423077vw + 612.307692px);
+    --about-mascot-left: calc(3.846154vw - 23.384615px);
+    --about-mascot-size: calc(28.846154vw - 15.384615px);
+    --about-mascot-offset: calc(-5.769231vw + 83.076923px);
+    --about-divider-offset: calc(-3.846154vw + 55.384615px);
+    --about-divider-top-offset: calc(1.923077vw - 19.692308px);
+    --about-divider-height: calc(7.211538vw + 466.153846px);
+    --about-copy-gap: calc(8.413462vw - 54.153846px);
+    --about-copy-top-offset: calc(1.923077vw - 19.692308px);
+    --about-copy-width: calc(60.331731vw + 26.343077px);
+    --about-copy-size: calc(3.371875vw + 1.468px);
+    --about-copy-leading: calc(3.076923vw + 11.692308px);
+    --about-copy-tracking: calc(-0.091346vw - 0.024615px);
+    --about-action-height: calc(1.923077vw + 85.307692px);
+    --about-action-size: calc(0.480769vw + 19.076923px);
+    --about-action-leading: calc(0.591827vw + 23.477692px);
+    --about-arrow-size: calc(0.961538vw + 18.153846px);
+    --about-bottom-space: calc(-16.346154vw + 302.384615px);
   }
 }
 
-@media (min-width: 37.5rem) and (max-width: 63.9375rem) {
+/* L 1440→1919: reach the approved 1920 wide cap without scaling as one image. */
+@media (min-width: 1440px) and (max-width: 1919.98px) {
+  .about-facts {
+    --about-gutter: calc(5.833333vw - 32px);
+    --about-body-min: calc(22.916667vw + 490px);
+    --about-mascot-left: calc(10vw - 112px);
+    --about-mascot-size: calc(12.5vw + 220px);
+    --about-divider-offset: calc(4.166667vw - 60px);
+    --about-divider-height: calc(10.416667vw + 420px);
+    --about-copy-gap: calc(2.5vw + 31px);
+    --about-copy-width: calc(55.183333vw + 100.48px);
+    --about-copy-size: calc(1.042292vw + 35.018px);
+    --about-copy-leading: calc(1.166667vw + 39.2px);
+    --about-copy-tracking: calc(-0.027917vw - 0.938px);
+    --about-action-height: calc(-0.208333vw + 116px);
+    --about-bottom-space: calc(-6.041667vw + 154px);
+  }
+}
+
+/* >1920: visual and reading width stay capped; the approved 1920 stage centers. */
+@media (min-width: 1920px) {
+  .about-facts {
+    --about-stage-offset: calc((100vw - 1920px) / 2);
+    --about-stage-width: 1920px;
+    --about-gutter: 80px;
+    --about-body-min: 930px;
+    --about-mascot-left: 80px;
+    --about-mascot-size: 460px;
+    --about-divider-offset: 20px;
+    --about-divider-height: 620px;
+    --about-copy-gap: 79px;
+    --about-copy-width: 1160px;
+    --about-copy-size: 55.03px;
+    --about-copy-leading: 61.6px;
+    --about-copy-tracking: -1.474px;
+    --about-action-height: 112px;
+    --about-bottom-space: 38px;
+  }
+}
+
+/* S 600→1023: a stacked reading order, with type and mascot capped at 768. */
+@media (min-width: 600px) and (max-width: 1023.98px) {
   .about-facts {
     --about-gutter: 24px;
-    --about-height: 1050px;
-    --about-mascot-top: 64px;
+    --about-body-top: clamp(56px, 8.333333vw, 64px);
+    --about-body-min: 820px;
     --about-mascot-left: 24px;
-    --about-mascot-size: 240px;
-    --about-copy-top: 330px;
-    --about-copy-left: 24px;
-    --about-copy-width: calc(100vw - 48px);
-    --about-copy-size: 36px;
-    --about-copy-leading: 43.2px;
-    --about-copy-tracking: -0.96px;
-    --about-action-top: 820px;
+    --about-mascot-size: clamp(220px, 31.25vw, 240px);
+    --about-copy-size: clamp(32px, 4.6875vw, 36px);
+    --about-copy-leading: 1.2;
+    --about-copy-tracking: -0.026667em;
     --about-action-height: 97px;
     --about-action-size: 22px;
     --about-action-leading: 27.077px;
     --about-arrow-size: 28px;
+    --about-bottom-space: 133px;
+  }
+
+  .about-facts__body {
+    display: flex;
+    width: calc(var(--about-stage-width) - 48px);
+    flex-direction: column;
+    margin-inline-start: 24px;
+  }
+
+  .about-facts__mascot {
+    flex: 0 0 auto;
+    margin: 0 0 26px;
   }
 
   .about-facts__divider {
     display: none;
+  }
+
+  .about-facts__copy {
+    width: 100%;
+    margin: 0;
   }
 }
 
-@media (max-width: 37.4375rem) {
+/* XS 360→599: interpolate the 390 reference toward the stacked S density. */
+@media (max-width: 599.98px) {
   .about-facts {
-    --about-gutter: 20px;
-    --about-height: 920px;
-    --about-mascot-top: 52px;
-    --about-mascot-left: 20px;
-    --about-mascot-size: 180px;
-    --about-copy-top: 260px;
-    --about-copy-left: 20px;
-    --about-copy-width: calc(100vw - 40px);
-    --about-copy-size: 19px;
-    --about-copy-leading: 23.75px;
-    --about-copy-tracking: -0.51px;
-    --about-action-top: 760px;
-    --about-action-height: 87px;
-    --about-action-size: 20px;
-    --about-action-leading: 24.615px;
-    --about-arrow-size: 24px;
+    --about-gutter: clamp(18px, calc(1.904762vw + 12.571429px), 24px);
+    --about-body-top: clamp(50px, calc(1.904762vw + 44.571429px), 56px);
+    --about-body-min: clamp(750px, calc(28.571429vw + 648.571429px), 820px);
+    --about-mascot-left: var(--about-gutter);
+    --about-mascot-size: clamp(174px, calc(19.047619vw + 105.714286px), 220px);
+    --about-copy-size: clamp(18px, calc(6.190476vw - 5.142856px), 32px);
+    --about-copy-leading: 1.25;
+    --about-copy-tracking: -0.0268em;
+    --about-action-height: clamp(84px, calc(4.761905vw + 68.428571px), 97px);
+    --about-action-size: clamp(19px, calc(0.952381vw + 16.285714px), 22px);
+    --about-action-leading: 1.23;
+    --about-arrow-size: clamp(22px, calc(1.904762vw + 16.571429px), 28px);
+    --about-bottom-space: clamp(64px, calc(28.571429vw - 38.428571px), 133px);
+  }
+
+  .about-facts__body {
+    display: flex;
+    width: calc(var(--about-stage-width) - (2 * var(--about-gutter)));
+    flex-direction: column;
+    margin-inline-start: var(--about-gutter);
+  }
+
+  .about-facts__mascot {
+    flex: 0 0 auto;
+    margin: 0 0 clamp(26px, calc(-0.952381vw + 31.714286px), 28px);
   }
 
   .about-facts__divider {
     display: none;
+  }
+
+  .about-facts__copy {
+    width: 100%;
+    margin: 0;
+  }
+}
+
+/* Compact phones keep readable type and let content extend the scene if needed. */
+@media (max-width: 359.98px) {
+  .about-facts {
+    --about-gutter: 16px;
+    --about-body-top: 48px;
+    --about-body-min: 740px;
+    --about-mascot-size: 168px;
+    --about-copy-size: 18px;
+    --about-action-height: 84px;
+    --about-action-size: 19px;
+    --about-arrow-size: 22px;
+    --about-bottom-space: 64px;
   }
 }
 

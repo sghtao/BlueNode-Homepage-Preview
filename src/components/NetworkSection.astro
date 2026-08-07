@@ -164,7 +164,8 @@ const partners = partnerOrder.map((slug) => {
   let settleFrame = 0
   let settleFramesLeft = 0
   let headerFrame = 0
-  let networkVisible = true
+  let networkVisible = !('IntersectionObserver' in window)
+  let globeAttempted = false
 
   const showFallback = () => {
     networkSection?.classList.remove('network-section--globe-ready')
@@ -196,6 +197,9 @@ const partners = partnerOrder.map((slug) => {
   }
 
   const createNetworkGlobe = () => {
+    if (globeAttempted) return
+    globeAttempted = true
+
     if (!networkSection || !globeStage || !globeCanvas || saveData) {
       showFallback()
       return
@@ -324,15 +328,24 @@ const partners = partnerOrder.map((slug) => {
     new IntersectionObserver(
       ([entry]) => {
         networkVisible = entry?.isIntersecting ?? true
-        if (networkVisible) settleGlobe(reducedMotion.matches ? 2 : 12)
+        if (!networkVisible || document.hidden) return
+        if (!globeAttempted) createNetworkGlobe()
+        else settleGlobe(reducedMotion.matches ? 2 : 12)
       },
       { rootMargin: '160px 0px' },
     ).observe(networkSection)
   }
 
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) settleGlobe(reducedMotion.matches ? 2 : 12)
+    if (document.hidden || !networkVisible) return
+    if (!globeAttempted) createNetworkGlobe()
+    else settleGlobe(reducedMotion.matches ? 2 : 12)
   })
 
-  createNetworkGlobe()
+  if (saveData) {
+    globeAttempted = true
+    showFallback()
+  } else if (!('IntersectionObserver' in window)) {
+    createNetworkGlobe()
+  }
 </script>

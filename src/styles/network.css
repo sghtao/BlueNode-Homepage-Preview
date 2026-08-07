@@ -1,26 +1,28 @@
-/* Approved responsive Figma Network scene: 404:47 / 682 / 1321 / 1961. */
+/* Approved responsive Figma Network: 404:47 / 682 / 1321 / 1961,
+   510:62, 533:64, 542:64 / 702, 546:64 / 703, 550:64 / 715 / 1366. */
 .network-section {
   --network-height: 1660px;
-  --network-heading-top: 54px;
-  --network-heading-left: 52px;
-  --network-heading-size: 184px;
-  --network-heading-width: 690px;
-  --network-statement-top: 302px;
-  --network-statement-left: 58px;
+  --network-heading-top: clamp(54px, calc(36px + 1.25vw), 60px);
+  --network-heading-left: clamp(52px, calc(-32px + 5.8333vw), 80px);
+  --network-heading-size: clamp(184px, calc(117.76px + 4.6vw), 206.08px);
+  --network-heading-width: clamp(690px, calc(441.6px + 17.25vw), 772.8px);
+  --network-statement-top: clamp(302px, calc(218px + 5.8333vw), 330px);
+  --network-statement-left: clamp(58px, calc(-8px + 4.5833vw), 80px);
   --network-statement-width: 560px;
   --network-statement-size: 44px;
-  --network-count-top: 510px;
-  --network-count-left: 58px;
+  --network-count-top: clamp(510px, calc(390px + 8.3333vw), 550px);
+  --network-count-left: clamp(58px, calc(-8px + 4.5833vw), 80px);
   --network-count-size: 18px;
-  --network-globe-top: -10px;
-  --network-globe-left: 650px;
-  --network-globe-size: 900px;
-  --network-baseline-top: 870px;
-  --network-grid-top: 930px;
-  --network-grid-left: 56px;
-  --network-grid-width: calc(100% - 112px);
+  --network-globe-top: clamp(-20px, calc(20px - 2.0833vw), -10px);
+  --network-globe-left: clamp(650px, calc(-430px + 75vw), 1010px);
+  --network-globe-size: clamp(900px, calc(630px + 18.75vw), 990px);
+  --network-baseline-top: clamp(870px, calc(570px + 20.8333vw), 970px);
+  --network-grid-top: clamp(930px, calc(630px + 20.8333vw), 1030px);
+  --network-grid-left: clamp(56px, calc(-16px + 5vw), 80px);
+  --network-grid-width: calc(100vw - (var(--network-grid-left) * 2));
   --network-grid-columns: 7;
   --network-grid-row: 265px;
+  --network-grid-height: 530px;
   --network-item-padding: 36px 20px 24px;
   --network-item-gap: 22px;
   position: relative;
@@ -260,8 +262,9 @@
 }
 
 .network-partners__item > span {
-  width: 100%;
+  width: 160px;
   min-height: 26px;
+  flex: 0 0 auto;
   color: #09090a;
   font-size: 18px;
   font-weight: 500;
@@ -289,57 +292,124 @@
   pointer-events: none;
 }
 
-@media (min-width: 1024px) and (max-width: 1439px) {
+/* M first half: the 4-column archive remains until the approved 1280 step. */
+@media (min-width: 1024px) and (max-width: 1279px) {
   .network-section {
-    --network-height: 1520px;
-    --network-heading-top: 40px;
-    --network-heading-left: 36px;
-    --network-heading-size: 132.48px;
-    --network-heading-width: 496.8px;
-    --network-statement-top: 215px;
-    --network-statement-left: 40px;
-    --network-statement-width: 403.2px;
-    --network-statement-size: 31.68px;
-    --network-count-top: 360px;
-    --network-count-left: 40px;
-    --network-count-size: 14.4px;
-    --network-globe-top: 5px;
-    --network-globe-left: 410px;
-    --network-globe-size: 612px;
-    --network-baseline-top: 650px;
-    --network-grid-top: 710px;
-    --network-grid-left: 24px;
-    --network-grid-width: calc(100% - 48px);
+    --network-grid-bottom: clamp(50px, calc(10px + 3.9063vw), 60px);
+    --network-height: calc(var(--network-grid-top) + 760px + var(--network-grid-bottom));
+    --network-heading-top: clamp(40px, calc(5.5385px + 3.3654vw), 54px);
+    --network-heading-left: clamp(36px, calc(-3.3846px + 3.8462vw), 52px);
+    --network-heading-size: clamp(132.48px, calc(5.68px + 12.3846vw), 184px);
+    --network-heading-width: clamp(496.8px, calc(21.1231px + 46.4615vw), 690px);
+    --network-statement-top: clamp(215px, calc(0.8462px + 20.9135vw), 302px);
+    --network-statement-left: clamp(40px, calc(-4.3077px + 4.3269vw), 58px);
+    --network-statement-width: clamp(403.2px, calc(17.1077px + 37.7048vw), 560px);
+    --network-statement-size: clamp(31.68px, calc(1.3415px + 2.9627vw), 44px);
+    --network-count-top: clamp(360px, calc(-9.2308px + 36.0577vw), 510px);
+    --network-count-left: clamp(40px, calc(-4.3077px + 4.3269vw), 58px);
+    --network-count-size: clamp(14.4px, calc(5.5385px + 0.8654vw), 18px);
+    --network-globe-top: clamp(-10px, calc(41.9231px - 3.6058vw), 5px);
+    --network-globe-left: clamp(410px, calc(-180.7692px + 57.6923vw), 650px);
+    --network-globe-size: clamp(612px, calc(-96.9231px + 69.2308vw), 900px);
+    --network-baseline-top: clamp(650px, calc(108.4615px + 52.8846vw), 870px);
+    --network-grid-top: clamp(710px, calc(168.4615px + 52.8846vw), 930px);
+    --network-grid-left: clamp(24px, calc(-54.7692px + 7.6923vw), 56px);
+    --network-grid-width: calc(100vw - (var(--network-grid-left) * 2));
     --network-grid-columns: 4;
     --network-grid-row: 190px;
+    --network-grid-height: 760px;
     --network-item-padding: 24px 12px 20px;
     --network-item-gap: 16px;
   }
 }
 
-@media (min-width: 600px) and (max-width: 1023px) {
+/* M second half: 1280 is the approved 7-column transition. */
+@media (min-width: 1280px) and (max-width: 1439px) {
   .network-section {
-    --network-height: 1460px;
-    --network-heading-top: 32px;
-    --network-heading-left: 24px;
-    --network-heading-size: 106.72px;
-    --network-heading-width: 400.2px;
-    --network-statement-top: 166px;
-    --network-statement-left: 28px;
-    --network-statement-width: 347.2px;
-    --network-statement-size: 27.28px;
-    --network-count-top: 275px;
-    --network-count-left: 28px;
-    --network-count-size: 13.5px;
-    --network-globe-top: 32px;
-    --network-globe-left: 320px;
-    --network-globe-size: 448px;
-    --network-baseline-top: 510px;
-    --network-grid-top: 560px;
+    --network-height: clamp(1440px, calc(-320px + 137.5vw), 1660px);
+    --network-heading-top: clamp(40px, calc(5.5385px + 3.3654vw), 54px);
+    --network-heading-left: clamp(36px, calc(-3.3846px + 3.8462vw), 52px);
+    --network-heading-size: clamp(132.48px, calc(5.68px + 12.3846vw), 184px);
+    --network-heading-width: clamp(496.8px, calc(21.1231px + 46.4615vw), 690px);
+    --network-statement-top: clamp(215px, calc(0.8462px + 20.9135vw), 302px);
+    --network-statement-left: clamp(40px, calc(-4.3077px + 4.3269vw), 58px);
+    --network-statement-width: clamp(403.2px, calc(17.1077px + 37.7048vw), 560px);
+    --network-statement-size: clamp(31.68px, calc(1.3415px + 2.9627vw), 44px);
+    --network-count-top: clamp(360px, calc(-9.2308px + 36.0577vw), 510px);
+    --network-count-left: clamp(40px, calc(-4.3077px + 4.3269vw), 58px);
+    --network-count-size: clamp(14.4px, calc(5.5385px + 0.8654vw), 18px);
+    --network-globe-top: clamp(-10px, calc(41.9231px - 3.6058vw), 5px);
+    --network-globe-left: clamp(410px, calc(-180.7692px + 57.6923vw), 650px);
+    --network-globe-size: clamp(612px, calc(-96.9231px + 69.2308vw), 900px);
+    --network-baseline-top: clamp(650px, calc(108.4615px + 52.8846vw), 870px);
+    --network-grid-top: clamp(710px, calc(168.4615px + 52.8846vw), 930px);
+    --network-grid-left: clamp(24px, calc(-54.7692px + 7.6923vw), 56px);
+    --network-grid-width: calc(100vw - (var(--network-grid-left) * 2));
+    --network-grid-columns: 7;
+    --network-grid-row: 265px;
+    --network-grid-height: 530px;
+    --network-item-padding: 36px 20px 24px;
+    --network-item-gap: 22px;
+  }
+}
+
+/* S first half: 3 columns through 899px. */
+@media (min-width: 600px) and (max-width: 899px) {
+  .network-section {
+    --network-grid-bottom: clamp(0px, calc(100vw - 768px), 52px);
+    --network-height: calc(var(--network-grid-top) + 900px + var(--network-grid-bottom));
+    --network-heading-top: clamp(32px, calc(8px + 3.125vw), 40px);
+    --network-heading-left: clamp(24px, calc(-12px + 4.6875vw), 36px);
+    --network-heading-size: clamp(106.72px, calc(29.44px + 10.0625vw), 132.48px);
+    --network-heading-width: clamp(400.2px, calc(110.4px + 37.7344vw), 496.8px);
+    --network-statement-top: clamp(166px, calc(19px + 19.1406vw), 215px);
+    --network-statement-left: clamp(28px, calc(-8px + 4.6875vw), 40px);
+    --network-statement-width: clamp(347.2px, calc(179.2px + 21.875vw), 403.2px);
+    --network-statement-size: clamp(27.28px, calc(14.08px + 1.7188vw), 31.68px);
+    --network-count-top: clamp(275px, calc(20px + 33.2031vw), 360px);
+    --network-count-left: clamp(28px, calc(-8px + 4.6875vw), 40px);
+    --network-count-size: clamp(13.5px, calc(10.8px + 0.3516vw), 14.4px);
+    --network-globe-top: clamp(5px, calc(113px - 10.5469vw), 32px);
+    --network-globe-left: clamp(320px, calc(50px + 35.1563vw), 410px);
+    --network-globe-size: clamp(448px, calc(-44px + 64.0625vw), 612px);
+    --network-baseline-top: clamp(510px, calc(90px + 54.6875vw), 650px);
+    --network-grid-top: calc(var(--network-baseline-top) + 50px);
     --network-grid-left: 24px;
-    --network-grid-width: calc(100% - 48px);
+    --network-grid-width: calc(100vw - 48px);
     --network-grid-columns: 3;
     --network-grid-row: 180px;
+    --network-grid-height: 900px;
+    --network-item-padding: 24px 12px 20px;
+    --network-item-gap: 16px;
+  }
+}
+
+/* S second half: 900px switches to the 4-column M archive. */
+@media (min-width: 900px) and (max-width: 1023px) {
+  .network-section {
+    --network-grid-bottom: clamp(47.81px, calc(31.875px + 1.7708vw), 50px);
+    --network-height: calc(var(--network-grid-top) + 760px + var(--network-grid-bottom));
+    --network-heading-top: clamp(32px, calc(8px + 3.125vw), 40px);
+    --network-heading-left: clamp(24px, calc(-12px + 4.6875vw), 36px);
+    --network-heading-size: clamp(106.72px, calc(29.44px + 10.0625vw), 132.48px);
+    --network-heading-width: clamp(400.2px, calc(110.4px + 37.7344vw), 496.8px);
+    --network-statement-top: clamp(166px, calc(19px + 19.1406vw), 215px);
+    --network-statement-left: clamp(28px, calc(-8px + 4.6875vw), 40px);
+    --network-statement-width: clamp(347.2px, calc(179.2px + 21.875vw), 403.2px);
+    --network-statement-size: clamp(27.28px, calc(14.08px + 1.7188vw), 31.68px);
+    --network-count-top: clamp(275px, calc(20px + 33.2031vw), 360px);
+    --network-count-left: clamp(28px, calc(-8px + 4.6875vw), 40px);
+    --network-count-size: clamp(13.5px, calc(10.8px + 0.3516vw), 14.4px);
+    --network-globe-top: clamp(5px, calc(113px - 10.5469vw), 32px);
+    --network-globe-left: clamp(320px, calc(50px + 35.1563vw), 410px);
+    --network-globe-size: clamp(448px, calc(-44px + 64.0625vw), 612px);
+    --network-baseline-top: clamp(510px, calc(90px + 54.6875vw), 650px);
+    --network-grid-top: calc(var(--network-baseline-top) + 60px);
+    --network-grid-left: 24px;
+    --network-grid-width: calc(100vw - 48px);
+    --network-grid-columns: 4;
+    --network-grid-row: 190px;
+    --network-grid-height: 760px;
     --network-item-padding: 24px 12px 20px;
     --network-item-gap: 16px;
   }
@@ -347,27 +417,31 @@
 
 @media (max-width: 599px) {
   .network-section {
-    --network-height: 1930px;
-    --network-heading-top: 24px;
-    --network-heading-left: 20px;
-    --network-heading-size: 73.6px;
-    --network-heading-width: 276px;
-    --network-statement-top: 125px;
-    --network-statement-left: 20px;
-    --network-statement-width: 280px;
-    --network-statement-size: 22px;
-    --network-count-top: 220px;
-    --network-count-left: 20px;
-    --network-count-size: 12.06px;
-    --network-globe-top: 255px;
+    --network-inline-gutter: clamp(16px, calc(-32px + 13.3333vw), 20px);
+    --network-heading-top: clamp(22.15px, 6.1538vw, 29.54px);
+    --network-heading-left: var(--network-inline-gutter);
+    --network-heading-size: clamp(67.938px, 18.8718vw, 90.585px);
+    --network-heading-width: clamp(254.769px, 70.7692vw, 339.692px);
+    --network-statement-top: clamp(115.38px, 32.0513vw, 153.85px);
+    --network-statement-left: var(--network-inline-gutter);
+    --network-statement-width: clamp(258.462px, 71.7949vw, 344.615px);
+    --network-statement-size: clamp(20.308px, 5.641vw, 27.077px);
+    --network-count-top: clamp(203.08px, 56.4103vw, 270.77px);
+    --network-count-left: var(--network-inline-gutter);
+    --network-count-size: clamp(11.132px, 3.0923vw, 14.843px);
+    --network-globe-top: clamp(235.38px, 65.3846vw, 313.85px);
     --network-globe-left: 0px;
     --network-globe-size: 100vw;
-    --network-baseline-top: 670px;
-    --network-grid-top: 710px;
-    --network-grid-left: 20px;
-    --network-grid-width: calc(100% - 40px);
+    --network-globe-bottom-gap: clamp(23.08px, 6.4103vw, 30.77px);
+    --network-baseline-top: calc(var(--network-globe-top) + 100vw + var(--network-globe-bottom-gap));
+    --network-grid-gap: clamp(36.92px, 10.2564vw, 49.23px);
+    --network-grid-top: calc(var(--network-baseline-top) + var(--network-grid-gap));
+    --network-grid-left: var(--network-inline-gutter);
+    --network-grid-width: calc(100vw - (var(--network-grid-left) * 2));
     --network-grid-columns: 2;
-    --network-grid-row: 170px;
+    --network-grid-row: clamp(165.303px, calc(108.958px + 15.657vw), 170px);
+    --network-grid-height: clamp(1157.125px, calc(789.394px + 102.1475vw), 1279.702px);
+    --network-height: calc(var(--network-grid-top) + var(--network-grid-height) + 30px);
     --network-item-padding: 18px 7px;
     --network-item-gap: 14px;
   }
@@ -375,13 +449,86 @@
   .network-section__statement { line-height: 1.08; }
 }
 
+@media (min-width: 390px) and (max-width: 599px) {
+  .network-section {
+    --network-inline-gutter: clamp(20px, calc(2.6667px + 4.4444vw), 24px);
+    --network-grid-row: clamp(170px, calc(114.472px + 14.238vw), 182.815px);
+  }
+}
+
+@media (min-width: 360px) and (max-width: 389px) {
+  .network-section { --network-height: calc(799px + 290vw); }
+}
+
+@media (min-width: 390px) and (max-width: 429px) {
+  .network-section { --network-height: calc(818.5px + 285vw); }
+}
+
+@media (min-width: 430px) and (max-width: 480px) {
+  .network-section { --network-height: calc(840px + 280vw); }
+}
+
+/* The lower S range scales toward the approved 768 composition. */
+@media (min-width: 600px) and (max-width: 767px) {
+  .network-section {
+    --network-heading-top: clamp(25px, 4.1667vw, 32px);
+    --network-heading-size: clamp(83.375px, 13.8958vw, 106.72px);
+    --network-heading-width: clamp(312.656px, 52.1094vw, 400.2px);
+    --network-statement-top: clamp(129.688px, 21.6146vw, 166px);
+    --network-statement-width: clamp(271.25px, 45.2083vw, 347.2px);
+    --network-statement-size: clamp(21.313px, 3.5521vw, 27.28px);
+    --network-count-top: clamp(214.844px, 35.8073vw, 275px);
+    --network-count-size: clamp(10.547px, 1.7578vw, 13.5px);
+    --network-globe-top: clamp(25px, 4.1667vw, 32px);
+    --network-globe-left: clamp(250px, 41.6667vw, 320px);
+    --network-globe-size: clamp(350px, 58.3333vw, 448px);
+    --network-baseline-top: clamp(398.438px, 66.4063vw, 510px);
+    --network-grid-top: calc(var(--network-baseline-top) + 50px);
+    --network-grid-bottom: 0px;
+    --network-height: calc(var(--network-grid-top) + 900px);
+  }
+}
+
 @media (max-width: 359px) {
   .network-section {
-    --network-grid-left: 16px;
-    --network-grid-width: calc(100% - 32px);
-    --network-heading-left: 16px;
-    --network-statement-left: 16px;
-    --network-count-left: 16px;
+    --network-inline-gutter: 16px;
+    --network-item-padding: 18px 4px;
+  }
+
+  .network-partners__logo-box { scale: 0.9; }
+  .network-partners__item > span {
+    width: 100%;
+    flex-basis: auto;
+    font-size: 16px;
+  }
+}
+
+/* Wide and ultra-wide keep the 990px globe cap and approved right crop. */
+@media (min-width: 1920px) {
+  .network-section {
+    --network-heading-top: 60px;
+    --network-heading-left: clamp(80px, calc(-160px + 12.5vw), 160px);
+    --network-heading-size: 206.08px;
+    --network-heading-width: 772.8px;
+    --network-statement-top: 330px;
+    --network-statement-left: var(--network-heading-left);
+    --network-statement-width: 560px;
+    --network-statement-size: 44px;
+    --network-count-top: 550px;
+    --network-count-left: var(--network-heading-left);
+    --network-count-size: 18px;
+    --network-globe-top: -20px;
+    --network-globe-left: auto;
+    --network-globe-size: 990px;
+    --network-baseline-top: 970px;
+    --network-grid-top: 1030px;
+    --network-grid-left: var(--network-heading-left);
+    --network-grid-width: calc(100vw - (var(--network-grid-left) * 2));
+  }
+
+  .network-globe {
+    right: auto;
+    left: calc(100vw - 910px);
   }
 }
 

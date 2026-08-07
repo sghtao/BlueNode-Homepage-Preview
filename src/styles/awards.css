@@ -1,67 +1,64 @@
-/* Approved responsive Figma Awards: 388:95, 388:140, 388:185, 388:230. */
+/* Approved responsive Figma Awards: 388:95, 388:140, 388:185, 388:230, 525:55. */
 .awards-archive {
-  --awards-height: 2460px;
   --awards-heading-top: 56px;
-  --awards-heading-left: 52px;
-  --awards-heading-width: calc(100vw - 104px);
-  --awards-heading-size: 248px;
-  --awards-heading-tracking: -12.4px;
-  --awards-content-left: 56px;
-  --awards-content-width: calc(100vw - 112px);
+  --awards-heading-gutter: clamp(52px, calc(-32px + 5.8333vw), 80px);
+  --awards-heading-size: clamp(248px, calc(158.72px + 6.2vw), 277.76px);
   --awards-table-top: 390px;
+  --awards-content-gutter: clamp(56px, calc(-16px + 5vw), 80px);
+  --awards-reading-max: 1760px;
   --awards-table-height: 56px;
   --awards-meta-size: 15px;
-  --awards-year-column: 220px;
-  --awards-column-gap: 68px;
-  --awards-years-top: 486px;
+  --awards-year-column: clamp(220px, calc(-20px + 16.6667vw), 300px);
+  --awards-column-gap: clamp(68px, calc(-28px + 6.6667vw), 100px);
+  --awards-years-gap: 40px;
   --awards-year-size: 72px;
-  --awards-year-tracking: -3.6px;
   --awards-row-size: 30px;
-  --awards-row-tracking: -0.63px;
-  --awards-row-height: 88px;
+  --awards-row-min-height: 88px;
   --awards-row-gap: 16px;
   --awards-row-padding-top: 2px;
   --awards-group-gap: 58px;
-  --awards-footer-top: 2220px;
-  --awards-footer-height: 142px;
+  --awards-footer-gap: 64px;
+  --awards-footer-height: 140px;
+  --awards-section-bottom: 100px;
   --awards-footer-title-top: 36px;
   --awards-footer-title-size: 36px;
   --awards-footer-summary-top: 45px;
   --awards-footer-summary-size: 20px;
   --awards-footer-summary-right: 120px;
-  --awards-footer-summary-width: 520px;
+  --awards-footer-summary-width: clamp(520px, calc(400px + 8.3333vw), 560px);
   --awards-footer-arrow-top: 31px;
   --awards-footer-arrow-size: 42px;
-  --awards-footer-arrow-width: 68px;
+  --awards-footer-arrow-width: max(60px, calc(92px - 1.6667vw));
   position: relative;
   z-index: 5;
   width: 100%;
-  min-height: var(--awards-height);
-  overflow: hidden;
+  padding-top: var(--awards-heading-top);
+  padding-bottom: var(--awards-section-bottom);
   isolation: isolate;
   background: #fff;
   color: #09090a;
 }
 
 .awards-archive__heading {
-  position: absolute;
-  top: var(--awards-heading-top);
-  left: var(--awards-heading-left);
-  width: var(--awards-heading-width);
-  margin: 0;
+  width: min(calc(100vw - (var(--awards-heading-gutter) * 2)), var(--awards-reading-max));
+  margin: 0 0 calc(var(--awards-table-top) - var(--awards-heading-top) - var(--awards-heading-size));
+  margin-left: max(var(--awards-heading-gutter), calc((100vw - var(--awards-reading-max)) / 2));
   font-size: var(--awards-heading-size);
   font-weight: 500;
   line-height: 1;
-  letter-spacing: var(--awards-heading-tracking);
+  letter-spacing: -0.05em;
   white-space: nowrap;
 }
 
+.awards-archive__table-head,
+.awards-archive__years,
+.awards-archive__footer {
+  width: min(calc(100vw - (var(--awards-content-gutter) * 2)), var(--awards-reading-max));
+  margin-left: max(var(--awards-content-gutter), calc((100vw - var(--awards-reading-max)) / 2));
+}
+
 .awards-archive__table-head {
-  position: absolute;
-  top: var(--awards-table-top);
-  left: var(--awards-content-left);
   display: grid;
-  width: var(--awards-content-width);
   height: var(--awards-table-height);
   grid-template-columns: var(--awards-year-column) minmax(0, 1fr);
   column-gap: var(--awards-column-gap);
@@ -73,10 +70,7 @@
 }
 
 .awards-archive__years {
-  position: absolute;
-  top: var(--awards-years-top);
-  left: var(--awards-content-left);
-  width: var(--awards-content-width);
+  margin-top: var(--awards-years-gap);
 }
 
 .awards-archive__year {
@@ -96,7 +90,7 @@
   font-size: var(--awards-year-size);
   font-weight: 400;
   line-height: 1.08;
-  letter-spacing: var(--awards-year-tracking);
+  letter-spacing: -0.05em;
 }
 
 .awards-archive__year ul {
@@ -109,7 +103,7 @@
 .awards-archive__year li {
   display: flex;
   min-width: 0;
-  height: var(--awards-row-height);
+  min-height: var(--awards-row-min-height);
   margin-bottom: var(--awards-row-gap);
   padding-top: var(--awards-row-padding-top);
   align-items: flex-start;
@@ -117,7 +111,7 @@
   font-size: var(--awards-row-size);
   font-weight: 500;
   line-height: 1.08;
-  letter-spacing: var(--awards-row-tracking);
+  letter-spacing: -0.021em;
 }
 
 .awards-archive__year li:last-child {
@@ -127,23 +121,14 @@
 
 .awards-archive__year li > span:first-child {
   min-width: 0;
-}
-
-.awards-archive__xs-line {
-  display: inline;
-}
-
-.awards-archive__xs-line:first-child::after {
-  content: ' ';
+  overflow-wrap: normal;
 }
 
 .awards-archive__footer {
-  position: absolute;
-  top: var(--awards-footer-top);
-  left: var(--awards-content-left);
-  width: var(--awards-content-width);
+  display: block;
+  position: relative;
   height: var(--awards-footer-height);
-  margin: 0;
+  margin-top: var(--awards-footer-gap);
   padding: 0;
   border-top: 2px solid #09090a;
   border-right: 0;
@@ -204,114 +189,101 @@
   transform: translateX(8px);
 }
 
+/* M: interpolate the approved 1024 frame into the 1440 desktop frame. */
 @media (min-width: 64rem) and (max-width: 89.9375rem) {
   .awards-archive {
-    --awards-height: 1840px;
-    --awards-heading-top: 48px;
-    --awards-heading-left: 36px;
-    --awards-heading-width: calc(100vw - 72px);
-    --awards-heading-size: 176.08px;
-    --awards-heading-tracking: -8.804px;
-    --awards-content-left: 40px;
-    --awards-content-width: calc(100vw - 80px);
-    --awards-table-top: 286px;
-    --awards-table-height: 46px;
-    --awards-meta-size: 12px;
-    --awards-year-column: 140px;
-    --awards-column-gap: 40px;
-    --awards-years-top: 360px;
-    --awards-year-size: 51.984px;
-    --awards-year-tracking: -2.5992px;
-    --awards-row-size: 21.99px;
-    --awards-row-tracking: -0.4618px;
-    --awards-row-height: 72px;
-    --awards-row-gap: 0px;
-    --awards-row-padding-top: 5px;
-    --awards-group-gap: 44px;
-    --awards-footer-top: 1620px;
-    --awards-footer-height: 142px;
-    --awards-footer-title-top: 34px;
-    --awards-footer-title-size: 29.988px;
-    --awards-footer-summary-top: 42px;
-    --awards-footer-summary-size: 16px;
-    --awards-footer-summary-right: 104px;
-    --awards-footer-summary-width: 430px;
-    --awards-footer-arrow-top: 28px;
-    --awards-footer-arrow-size: 34.02px;
-    --awards-footer-arrow-width: 58px;
+    --awards-heading-top: clamp(48px, calc(28.3077px + 1.9231vw), 56px);
+    --awards-heading-gutter: clamp(36px, calc(-3.3846px + 3.8462vw), 52px);
+    --awards-heading-size: clamp(176.08px, calc(-0.9538px + 17.2885vw), 248px);
+    --awards-table-top: clamp(286px, calc(30px + 25vw), 390px);
+    --awards-content-gutter: clamp(40px, calc(0.6154px + 3.8462vw), 56px);
+    --awards-table-height: clamp(46px, calc(21.3846px + 2.4038vw), 56px);
+    --awards-meta-size: clamp(12px, calc(4.6154px + 0.7212vw), 15px);
+    --awards-year-column: clamp(140px, calc(-56.9231px + 19.2308vw), 220px);
+    --awards-column-gap: clamp(40px, calc(-28.9231px + 6.7308vw), 68px);
+    --awards-years-gap: clamp(28px, calc(-1.5385px + 2.8846vw), 40px);
+    --awards-year-size: clamp(51.984px, calc(2.7138px + 4.8115vw), 72px);
+    --awards-row-size: clamp(21.99px, calc(2.2731px + 1.9255vw), 30px);
+    --awards-row-min-height: clamp(72px, calc(32.6154px + 3.8462vw), 88px);
+    --awards-row-gap: clamp(0px, calc(-39.3846px + 3.8462vw), 16px);
+    --awards-row-padding-top: clamp(2px, calc(12.3846px - 0.7212vw), 5px);
+    --awards-group-gap: clamp(44px, calc(9.5385px + 3.3654vw), 58px);
+    --awards-footer-gap: clamp(48px, calc(8.6154px + 3.8462vw), 64px);
+    --awards-footer-height: 140px;
+    --awards-section-bottom: clamp(80px, calc(30.7692px + 4.8077vw), 100px);
+    --awards-footer-title-top: clamp(34px, calc(29.0769px + 0.4808vw), 36px);
+    --awards-footer-title-size: clamp(29.988px, calc(15.1892px + 1.4452vw), 36px);
+    --awards-footer-summary-top: clamp(42px, calc(34.6154px + 0.7212vw), 45px);
+    --awards-footer-summary-size: clamp(16px, calc(6.1538px + 0.9615vw), 20px);
+    --awards-footer-summary-right: clamp(104px, calc(64.6154px + 3.8462vw), 120px);
+    --awards-footer-summary-width: clamp(430px, calc(208.4615px + 21.6346vw), 520px);
+    --awards-footer-arrow-top: clamp(28px, calc(20.6154px + 0.7212vw), 31px);
+    --awards-footer-arrow-size: clamp(34.02px, calc(14.3769px + 1.9183vw), 42px);
+    --awards-footer-arrow-width: clamp(58px, calc(33.3846px + 2.4038vw), 68px);
   }
 }
 
+/* S: hold the approved 768 composition, then interpolate 768 → 1024. */
 @media (min-width: 37.5rem) and (max-width: 63.9375rem) {
   .awards-archive {
-    --awards-height: 1700px;
-    --awards-heading-top: 36px;
-    --awards-heading-left: 20px;
-    --awards-heading-width: calc(100vw - 40px);
-    --awards-heading-size: 131.936px;
-    --awards-heading-tracking: -6.5968px;
-    --awards-content-left: 24px;
-    --awards-content-width: calc(100vw - 48px);
-    --awards-table-top: 230px;
-    --awards-table-height: 42px;
+    --awards-heading-top: clamp(36px, 4.6875vw, 48px);
+    --awards-heading-gutter: clamp(20px, calc(-28px + 6.25vw), 36px);
+    --awards-heading-size: clamp(131.936px, calc(-0.496px + 17.2438vw), 176.08px);
+    --awards-table-top: clamp(230px, calc(62px + 21.875vw), 286px);
+    --awards-content-gutter: clamp(24px, calc(-24px + 6.25vw), 40px);
+    --awards-table-height: clamp(42px, calc(30px + 1.5625vw), 46px);
     --awards-meta-size: 12px;
-    --awards-year-column: 100px;
-    --awards-column-gap: 24px;
-    --awards-years-top: 300px;
-    --awards-year-size: 41.976px;
-    --awards-year-tracking: -2.0988px;
-    --awards-row-size: 20.01px;
-    --awards-row-tracking: -0.4202px;
-    --awards-row-height: 68px;
+    --awards-year-column: clamp(100px, calc(-20px + 15.625vw), 140px);
+    --awards-column-gap: clamp(24px, calc(-24px + 6.25vw), 40px);
+    --awards-years-gap: 28px;
+    --awards-year-size: clamp(41.976px, calc(11.952px + 3.9094vw), 51.984px);
+    --awards-row-size: clamp(20.01px, calc(14.07px + 0.7734vw), 21.99px);
+    --awards-row-min-height: clamp(68px, calc(56px + 1.5625vw), 72px);
     --awards-row-gap: 0px;
     --awards-row-padding-top: 5px;
-    --awards-group-gap: 40px;
-    --awards-footer-top: 1480px;
-    --awards-footer-height: 130px;
-    --awards-footer-title-top: 30px;
-    --awards-footer-title-size: 25.992px;
-    --awards-footer-summary-top: 39px;
-    --awards-footer-summary-size: 14px;
-    --awards-footer-summary-right: 76px;
-    --awards-footer-summary-width: 354px;
-    --awards-footer-arrow-top: 25px;
-    --awards-footer-arrow-size: 29.988px;
-    --awards-footer-arrow-width: 52px;
+    --awards-group-gap: clamp(40px, calc(28px + 1.5625vw), 44px);
+    --awards-footer-gap: clamp(40px, calc(16px + 3.125vw), 48px);
+    --awards-footer-height: clamp(128px, calc(92px + 4.6875vw), 140px);
+    --awards-section-bottom: clamp(80px, calc(128px - 4.6875vw), 92px);
+    --awards-footer-title-top: clamp(30px, calc(18px + 1.5625vw), 34px);
+    --awards-footer-title-size: clamp(25.992px, calc(14.004px + 1.5609vw), 29.988px);
+    --awards-footer-summary-top: clamp(39px, calc(30px + 1.1719vw), 42px);
+    --awards-footer-summary-size: clamp(14px, calc(8px + 0.7813vw), 16px);
+    --awards-footer-summary-right: clamp(76px, calc(-8px + 10.9375vw), 104px);
+    --awards-footer-summary-width: clamp(354px, calc(126px + 29.6875vw), 430px);
+    --awards-footer-arrow-top: clamp(25px, calc(16px + 1.1719vw), 28px);
+    --awards-footer-arrow-size: clamp(29.988px, calc(17.892px + 1.575vw), 34.02px);
+    --awards-footer-arrow-width: clamp(52px, calc(34px + 2.3438vw), 58px);
   }
 }
 
+/* XS: single-column reading order; rows grow when live copy wraps. */
 @media (max-width: 37.4375rem) {
   .awards-archive {
-    --awards-height: 1760px;
     --awards-heading-top: 28px;
-    --awards-heading-left: 16px;
-    --awards-heading-width: calc(100vw - 32px);
-    --awards-heading-size: 74.4px;
-    --awards-heading-tracking: -3.72px;
-    --awards-content-left: 20px;
-    --awards-content-width: calc(100vw - 40px);
-    --awards-table-top: 145px;
+    --awards-heading-gutter: 16px;
+    --awards-heading-size: clamp(68.96px, calc(4.2421px + 17.9895vw), 112px);
+    --awards-table-top: calc(var(--awards-heading-top) + var(--awards-heading-size) + 42.6px);
+    --awards-content-gutter: clamp(20px, calc(2.6667px + 4.4444vw), 24px);
     --awards-table-height: 37px;
     --awards-meta-size: 12px;
     --awards-year-column: 72px;
     --awards-column-gap: 18px;
-    --awards-years-top: 210px;
-    --awards-year-size: 31.968px;
-    --awards-year-tracking: -1.5984px;
-    --awards-row-size: 16px;
-    --awards-row-tracking: -0.336px;
-    --awards-row-height: 66px;
+    --awards-years-gap: 28px;
+    --awards-year-size: clamp(31.968px, calc(24.456px + 1.9262vw), 36px);
+    --awards-row-size: clamp(16px, calc(12.268px + 0.9569vw), 18px);
+    --awards-row-min-height: clamp(66px, calc(54.804px + 2.8708vw), 72px);
     --awards-row-gap: 0px;
     --awards-row-padding-top: 7px;
-    --awards-group-gap: 29px;
-    --awards-footer-top: 1524px;
-    --awards-footer-height: 130px;
+    --awards-group-gap: clamp(29px, calc(15.94px + 3.3488vw), 36px);
+    --awards-footer-gap: 41px;
+    --awards-footer-height: 128px;
+    --awards-section-bottom: 108px;
     --awards-footer-title-top: 25px;
-    --awards-footer-title-size: 21.996px;
+    --awards-footer-title-size: clamp(21.996px, calc(14.524px + 1.9159vw), 26px);
     --awards-footer-summary-top: 67px;
     --awards-footer-summary-size: 12px;
-    --awards-footer-summary-right: 50px;
-    --awards-footer-summary-width: 300px;
+    --awards-footer-summary-right: clamp(44px, calc(21.714px + 5.7143vw), 50px);
     --awards-footer-arrow-top: 22px;
     --awards-footer-arrow-size: 28.014px;
     --awards-footer-arrow-width: 44px;
@@ -326,20 +298,26 @@
     margin-bottom: 9px;
   }
 
-  .awards-archive__year li {
-    white-space: normal;
-  }
-
-  .awards-archive__xs-line {
-    display: block;
-  }
-
-  .awards-archive__xs-line:first-child::after {
-    content: none;
-  }
-
   .awards-archive__footer strong {
     max-width: calc(100% - 54px);
+  }
+
+  .awards-archive__summary {
+    right: var(--awards-footer-summary-right);
+    width: calc(100% - var(--awards-footer-summary-right));
+  }
+}
+
+@media (max-width: 22.4375rem) {
+  .awards-archive {
+    --awards-heading-top: 24px;
+    --awards-heading-gutter: 15px;
+    --awards-content-gutter: 16px;
+    --awards-year-size: 30px;
+    --awards-row-size: 15px;
+    --awards-row-min-height: 64px;
+    --awards-group-gap: 27px;
+    --awards-section-bottom: 88px;
   }
 }
 

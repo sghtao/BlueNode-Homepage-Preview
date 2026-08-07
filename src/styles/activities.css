@@ -1,16 +1,24 @@
-/* Approved responsive Figma Activities: 382:20, 382:37, 382:54, 382:71. */
+/*
+ * Continuous responsive Activities: 382:20/37/54/71, F3 fluid checks,
+ * wide 509:149, ultra-wide 532:64, and low-height 556:97/116.
+ */
 .activities-stage {
+  --activities-stage-offset: 0px;
+  --activities-stage-width: 100vw;
   --activities-height: 1200px;
   --activities-heading-top: 28px;
   --activities-heading-left: 52px;
-  --activities-heading-width: calc(100vw - 104px);
+  --activities-heading-left-cap: 9999px;
+  --activities-heading-width: 1336px;
+  --activities-heading-width-cap: 9999px;
   --activities-heading-size: 208px;
-  --activities-heading-tracking: -10.4px;
+  --activities-heading-size-cap: 9999px;
+  --activities-heading-tracking: -0.05em;
   --activities-content-left: 56px;
-  --activities-content-width: calc(100vw - 112px);
+  --activities-content-left-cap: 9999px;
   --activities-title-top: 298px;
   --activities-title-size: 36px;
-  --activities-title-tracking: -0.9px;
+  --activities-title-tracking: -0.025em;
   --activities-title-rule-top: 356px;
   --activities-media-top: 380px;
   --activities-media-height: 600px;
@@ -20,11 +28,17 @@
   --activities-action-padding-bottom: 20px;
   --activities-action-size: 36px;
   --activities-arrow-size: 44px;
+  --activities-heading-inset: min(var(--activities-heading-left), var(--activities-heading-left-cap));
+  --activities-heading-render-width: min(var(--activities-heading-width), var(--activities-heading-width-cap));
+  --activities-heading-render-size: min(var(--activities-heading-size), var(--activities-heading-size-cap));
+  --activities-content-inset: min(var(--activities-content-left), var(--activities-content-left-cap));
+  --activities-content-width: calc(var(--activities-stage-width) - (2 * var(--activities-content-inset)));
   position: relative;
   z-index: 5;
   width: 100%;
+  min-width: 0;
   min-height: var(--activities-height);
-  overflow: hidden;
+  overflow: clip;
   isolation: isolate;
   background: #fff;
   color: #080a10;
@@ -33,10 +47,11 @@
 .activities-stage__heading {
   position: absolute;
   top: var(--activities-heading-top);
-  left: var(--activities-heading-left);
-  width: var(--activities-heading-width);
+  left: calc(var(--activities-stage-offset) + var(--activities-heading-inset));
+  width: var(--activities-heading-render-width);
+  min-width: 0;
   margin: 0;
-  font-size: var(--activities-heading-size);
+  font-size: var(--activities-heading-render-size);
   font-weight: 500;
   line-height: 1;
   letter-spacing: var(--activities-heading-tracking);
@@ -46,7 +61,8 @@
 .activities-stage__title {
   position: absolute;
   top: var(--activities-title-top);
-  left: var(--activities-content-left);
+  left: calc(var(--activities-stage-offset) + var(--activities-content-inset));
+  max-width: var(--activities-content-width);
   margin: 0;
   font-size: var(--activities-title-size);
   font-weight: 600;
@@ -58,7 +74,7 @@
 .activities-stage__title-rule {
   position: absolute;
   top: var(--activities-title-rule-top);
-  left: var(--activities-content-left);
+  left: calc(var(--activities-stage-offset) + var(--activities-content-inset));
   width: var(--activities-content-width);
   height: 1px;
   background: #080a10;
@@ -67,18 +83,19 @@
 .activities-stage__media {
   position: absolute;
   top: var(--activities-media-top);
-  left: var(--activities-content-left);
+  left: calc(var(--activities-stage-offset) + var(--activities-content-inset));
   width: var(--activities-content-width);
   height: var(--activities-media-height);
-  overflow: hidden;
+  overflow: clip;
   background: #f3f3f3;
 }
 
 .activities-stage__photo {
   position: absolute;
-  inset: 0;
+  inset: 0 auto auto 0;
   width: 100%;
   height: 100%;
+  max-width: none;
   object-fit: cover;
   object-position: var(--activity-position, center);
   opacity: 0;
@@ -93,17 +110,18 @@
 .activities-stage__action {
   position: absolute;
   top: var(--activities-action-top);
-  left: var(--activities-content-left);
+  left: calc(var(--activities-stage-offset) + var(--activities-content-inset));
   display: flex;
   width: var(--activities-content-width);
-  height: var(--activities-action-height);
+  min-height: max(44px, var(--activities-action-height));
+  box-sizing: border-box;
   margin: 0;
   padding: var(--activities-action-padding-top) 0 var(--activities-action-padding-bottom);
   align-items: center;
   justify-content: space-between;
   border-top: 1px solid #080a10;
-  border-bottom: 1px solid #080a10;
   border-right: 0;
+  border-bottom: 1px solid #080a10;
   border-left: 0;
   background: transparent;
   color: #080a10;
@@ -117,6 +135,7 @@
 }
 
 .activities-stage__arrow {
+  flex: 0 0 auto;
   color: #0048ff;
   font-size: var(--activities-arrow-size);
   font-weight: 400;
@@ -134,82 +153,191 @@
   outline-offset: 4px;
 }
 
-@media (min-width: 64rem) and (max-width: 89.9375rem) {
+/* 320→767: the approved XS-to-S interpolation also lands on 320×568. */
+@media (max-width: 767.98px) {
   .activities-stage {
-    --activities-height: 1000px;
-    --activities-heading-top: 24px;
-    --activities-heading-left: 32px;
-    --activities-heading-width: calc(100vw - 88.8px);
-    --activities-heading-size: 145.6px;
-    --activities-heading-tracking: -7.28px;
-    --activities-content-left: 32px;
-    --activities-content-width: calc(100vw - 64px);
-    --activities-title-top: 220px;
-    --activities-title-size: 30px;
-    --activities-title-tracking: -0.75px;
-    --activities-title-rule-top: 270px;
-    --activities-media-top: 294px;
-    --activities-media-height: 480px;
-    --activities-action-top: 820px;
-    --activities-action-height: 129px;
-    --activities-action-padding-top: 16px;
-    --activities-action-padding-bottom: 16px;
-    --activities-action-size: 30px;
-    --activities-arrow-size: 36px;
-  }
-}
-
-@media (min-width: 37.5rem) and (max-width: 63.9375rem) {
-  .activities-stage {
-    --activities-height: 900px;
-    --activities-heading-top: 24px;
-    --activities-heading-left: 24px;
-    --activities-heading-width: calc(100vw - 73.28px);
-    --activities-heading-size: 108.16px;
-    --activities-heading-tracking: -5.408px;
-    --activities-content-left: 24px;
-    --activities-content-width: calc(100vw - 48px);
-    --activities-title-top: 180px;
-    --activities-title-size: 28px;
-    --activities-title-tracking: -0.7px;
-    --activities-title-rule-top: 226px;
-    --activities-media-top: 250px;
-    --activities-media-height: 405px;
-    --activities-action-top: 700px;
-    --activities-action-height: 117px;
-    --activities-action-padding-top: 16px;
-    --activities-action-padding-bottom: 16px;
-    --activities-action-size: 28px;
-    --activities-arrow-size: 34px;
-  }
-}
-
-@media (max-width: 37.4375rem) {
-  .activities-stage {
-    --activities-height: 620px;
-    --activities-heading-top: 20px;
-    --activities-heading-left: 20px;
-    --activities-heading-width: calc(100vw - 49.32px);
-    --activities-heading-size: 53.04px;
-    --activities-heading-tracking: -2.652px;
-    --activities-content-left: 20px;
-    --activities-content-width: calc(100vw - 40px);
-    --activities-title-top: 110px;
-    --activities-title-size: 24px;
-    --activities-title-tracking: -0.6px;
-    --activities-title-rule-top: 150px;
-    --activities-media-top: 170px;
-    --activities-media-height: 240px;
-    --activities-action-top: 454px;
-    --activities-action-height: 107px;
+    --activities-height: calc(74.074074vw + 331.111111px);
+    --activities-heading-top: calc(1.058201vw + 15.873016px);
+    --activities-heading-left: calc(1.058201vw + 15.873016px);
+    --activities-heading-width: calc(93.661376vw - 24.599365px);
+    --activities-heading-size: calc(14.582011vw - 3.829841px);
+    --activities-content-left: calc(1.058201vw + 15.873016px);
+    --activities-title-top: calc(18.518519vw + 37.777778px);
+    --activities-title-size: calc(1.058201vw + 19.873016px);
+    --activities-title-rule-top: calc(20.10582vw + 71.587302px);
+    --activities-media-top: calc(21.164021vw + 87.460317px);
+    --activities-media-height: calc(43.650794vw + 69.761905px);
+    --activities-action-top: calc(65.079365vw + 200.190476px);
+    --activities-action-height: calc(2.645503vw + 96.68254px);
     --activities-action-padding-top: 14px;
     --activities-action-padding-bottom: 16px;
-    --activities-action-size: 22px;
-    --activities-arrow-size: 28px;
+    --activities-action-size: calc(1.587302vw + 15.809524px);
+    --activities-arrow-size: calc(1.587302vw + 21.809524px);
   }
 
   .activities-stage__photo {
     object-position: var(--activity-position-xs, var(--activity-position, center));
+  }
+}
+
+/* Compact phones protect the longest approved activity title without truncation. */
+@media (max-width: 359.98px) {
+  .activities-stage {
+    --activities-title-size: calc(2.33125vw + 15.29px);
+  }
+}
+
+/* S 768→1023: connect the approved tablet scene to compact desktop. */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .activities-stage {
+    --activities-height: calc(39.0625vw + 600px);
+    --activities-heading-top: 24px;
+    --activities-heading-left: 3.125vw;
+    --activities-heading-width: calc(93.9375vw - 26.72px);
+    --activities-heading-size: calc(14.625vw - 4.16px);
+    --activities-content-left: 3.125vw;
+    --activities-title-top: calc(15.625vw + 60px);
+    --activities-title-size: calc(0.78125vw + 22px);
+    --activities-title-rule-top: calc(17.1875vw + 94px);
+    --activities-media-top: calc(17.1875vw + 118px);
+    --activities-media-height: calc(29.296875vw + 180px);
+    --activities-action-top: calc(46.875vw + 340px);
+    --activities-action-height: calc(4.6875vw + 81px);
+    --activities-action-padding-top: 16px;
+    --activities-action-padding-bottom: 16px;
+    --activities-action-size: calc(0.78125vw + 22px);
+    --activities-arrow-size: calc(0.78125vw + 28px);
+  }
+}
+
+/* M 1024→1439: F3 1200/1280 are the exact linear checks in this range. */
+@media (min-width: 1024px) and (max-width: 1439.98px) {
+  .activities-stage {
+    --activities-height: calc(48.076923vw + 507.692308px);
+    --activities-heading-top: calc(0.961538vw + 14.153846px);
+    --activities-heading-left: calc(4.807692vw - 17.230769px);
+    --activities-heading-width: calc(96.346154vw - 51.384615px);
+    --activities-heading-size: calc(15vw - 8px);
+    --activities-content-left: calc(5.769231vw - 27.076923px);
+    --activities-title-top: calc(18.75vw + 28px);
+    --activities-title-size: calc(1.442308vw + 15.230769px);
+    --activities-title-rule-top: calc(20.673077vw + 58.307692px);
+    --activities-media-top: calc(20.673077vw + 82.307692px);
+    --activities-media-height: calc(28.846154vw + 184.615385px);
+    --activities-action-top: calc(50.961538vw + 298.153846px);
+    --activities-action-height: calc(2.884615vw + 99.461538px);
+    --activities-action-padding-top: 16px;
+    --activities-action-padding-bottom: calc(0.961538vw + 6.153846px);
+    --activities-action-size: calc(1.442308vw + 15.230769px);
+    --activities-arrow-size: calc(1.923077vw + 16.307692px);
+  }
+}
+
+/* L 1440→1919: grow the stage to the wide reference while display type approaches its cap. */
+@media (min-width: 1440px) and (max-width: 1919.98px) {
+  .activities-stage {
+    --activities-height: calc(25vw + 840px);
+    --activities-heading-top: calc(0.833333vw + 16px);
+    --activities-heading-left: calc(5.833333vw - 32px);
+    --activities-heading-width: calc(33.4vw + 855.04px);
+    --activities-heading-size: calc(5.2vw + 133.12px);
+    --activities-content-left: calc(5vw - 16px);
+    --activities-title-top: calc(4.583333vw + 232px);
+    --activities-title-size: 36px;
+    --activities-title-rule-top: calc(4.583333vw + 290px);
+    --activities-media-top: calc(4.583333vw + 314px);
+    --activities-media-height: calc(20.833333vw + 300px);
+    --activities-action-top: calc(25.416667vw + 666px);
+    --activities-action-height: 141px;
+    --activities-action-padding-top: 16px;
+    --activities-action-padding-bottom: 20px;
+    --activities-action-size: 36px;
+    --activities-arrow-size: 44px;
+  }
+}
+
+/* 1920→2560: cap display type; only the stage, rules and outer gutter expand. */
+@media (min-width: 1920px) {
+  .activities-stage {
+    --activities-stage-offset: max(0px, calc((100vw - 2560px) / 2));
+    --activities-stage-width: min(100vw, 2560px);
+    --activities-height: max(1320px, 100vh);
+    --activities-heading-top: 32px;
+    --activities-heading-left: clamp(80px, calc(12.5vw - 160px), 160px);
+    --activities-heading-width: 1496.32px;
+    --activities-heading-size: 232.96px;
+    --activities-content-left: clamp(80px, calc(12.5vw - 160px), 160px);
+    --activities-title-top: 320px;
+    --activities-title-size: 36px;
+    --activities-title-rule-top: 378px;
+    --activities-media-top: 402px;
+    --activities-media-height: 700px;
+    --activities-action-top: 1154px;
+    --activities-action-height: 141px;
+    --activities-action-padding-top: 16px;
+    --activities-action-padding-bottom: 20px;
+    --activities-action-size: 36px;
+    --activities-arrow-size: 44px;
+  }
+}
+
+@supports (height: 100svh) {
+  @media (min-width: 1920px) {
+    .activities-stage {
+      --activities-height: max(1320px, 100svh);
+    }
+  }
+}
+
+/*
+ * Desktop low-height mode: preserve title and CTA bands, reduce display and
+ * expose a shallow window onto the approved 600px photo layer.
+ */
+@media (min-width: 1024px) and (max-height: 700px) {
+  .activities-stage {
+    --activities-height: 100vh;
+    --activities-heading-top: clamp(20px, calc(4.878049vh - 10.146341px), 24px);
+    --activities-heading-left-cap: clamp(45px, calc(8.536585vh - 7.756098px), 52px);
+    --activities-heading-width-cap: clamp(694.72px, calc(293.268293vh - 1117.678049px), 935.2px);
+    --activities-heading-size-cap: clamp(108.16px, calc(45.658537vh - 174.009756px), 145.6px);
+    --activities-content-left-cap: clamp(45px, calc(13.414634vh - 37.902439px), 56px);
+    --activities-title-top: clamp(142px, calc(36.585366vh - 84.097561px), 172px);
+    --activities-title-size: clamp(30px, calc(1.754386vw + 12.035088px), 36px);
+    --activities-title-rule-top: clamp(180px, calc(39.02439vh - 61.170732px), 212px);
+    --activities-media-top: clamp(198px, calc(41.463415vh - 58.243902px), 232px);
+    --activities-media-height: clamp(230px, calc(48.780488vh - 71.463415px), 270px);
+    --activities-action-top: clamp(450px, calc(92.682927vh - 122.780488px), 526px);
+    --activities-action-height: clamp(117px, calc(4.878049vh + 86.853659px), 121px);
+    --activities-action-padding-top: 16px;
+    --activities-action-padding-bottom: 16px;
+    --activities-action-size: clamp(30px, calc(1.754386vw + 12.035088px), 36px);
+    --activities-arrow-size: clamp(36px, calc(2.339181vw + 12.046784px), 44px);
+  }
+}
+
+@supports (height: 100svh) {
+  @media (min-width: 1024px) and (max-height: 700px) {
+    .activities-stage {
+      --activities-height: 100svh;
+      --activities-heading-top: clamp(20px, calc(4.878049svh - 10.146341px), 24px);
+      --activities-heading-left-cap: clamp(45px, calc(8.536585svh - 7.756098px), 52px);
+      --activities-heading-width-cap: clamp(694.72px, calc(293.268293svh - 1117.678049px), 935.2px);
+      --activities-heading-size-cap: clamp(108.16px, calc(45.658537svh - 174.009756px), 145.6px);
+      --activities-content-left-cap: clamp(45px, calc(13.414634svh - 37.902439px), 56px);
+      --activities-title-top: clamp(142px, calc(36.585366svh - 84.097561px), 172px);
+      --activities-title-rule-top: clamp(180px, calc(39.02439svh - 61.170732px), 212px);
+      --activities-media-top: clamp(198px, calc(41.463415svh - 58.243902px), 232px);
+      --activities-media-height: clamp(230px, calc(48.780488svh - 71.463415px), 270px);
+      --activities-action-top: clamp(450px, calc(92.682927svh - 122.780488px), 526px);
+      --activities-action-height: clamp(117px, calc(4.878049svh + 86.853659px), 121px);
+    }
+  }
+}
+
+@media (min-width: 1200px) and (max-height: 700px) {
+  .activities-stage__photo {
+    width: max(100%, 1328px);
+    height: 600px;
   }
 }
 

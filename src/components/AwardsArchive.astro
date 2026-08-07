@@ -28,13 +28,7 @@ const awardRange = `${Math.min(...years)}—${Math.max(...years)}`
         <ul>
           {item.records.map((record) => (
             <li>
-              <span>
-                {record.xsLines ? (
-                  record.xsLines.map((line) => (
-                    <span class="awards-archive__xs-line">{line}</span>
-                  ))
-                ) : record.displayTitle}
-              </span>
+              <span>{record.displayTitle}</span>
               <span class="sr-only">원문 기록: {record.title}, {record.rank}</span>
             </li>
           ))}
@@ -63,9 +57,9 @@ const awardRange = `${Math.min(...years)}—${Math.max(...years)}`
 
   if (awardsArchive) {
     awardsTopButton?.addEventListener('click', () => {
-      awardsArchive.scrollIntoView({
+      window.scrollTo({
+        top: awardsArchive.offsetTop,
         behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
-        block: 'start',
       })
     })
 

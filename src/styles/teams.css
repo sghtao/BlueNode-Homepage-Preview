@@ -1,49 +1,62 @@
-/* Approved responsive Figma Teams: 377:20, 377:34, 377:48, 377:62. */
+/*
+ * Continuous responsive Teams: 377:20/34/48/62 and wide reference 524:55.
+ * The editorial list contributes real height. Desktop columns interpolate only
+ * inside their approved ranges; stacked layouts keep the statement before the list.
+ */
 .teams-index {
+  --teams-stage-offset: 0px;
+  --teams-stage-width: 100vw;
   --teams-gutter: 52px;
-  --teams-height: 900px;
-  --teams-statement-top: 104px;
-  --teams-statement-left: 52px;
+  --teams-content-top: 84px;
+  --teams-content-bottom: 84px;
   --teams-statement-width: 330px;
   --teams-statement-size: 40px;
   --teams-statement-leading: 1.1;
   --teams-statement-tracking: -0.6px;
-  --teams-divider-top: 84px;
-  --teams-divider-left: calc(25vw + 72px);
-  --teams-divider-height: 732px;
-  --teams-list-top: 84px;
-  --teams-list-left: calc(33.333333vw + 20px);
-  --teams-list-width: calc(100vw - var(--teams-list-left) - var(--teams-gutter));
+  --teams-statement-offset: 20px;
+  --teams-divider-gap: 50px;
+  --teams-list-gap: 67px;
   --teams-list-height: 732px;
-  --teams-row-height: 244px;
   --teams-name-size: 112px;
   --teams-name-tracking: -3.36px;
+  --teams-rule-max: 888px;
   position: relative;
   z-index: 5;
+  display: grid;
   width: 100%;
-  min-height: var(--teams-height);
-  overflow: hidden;
+  min-width: 0;
+  box-sizing: border-box;
+  grid-template-columns:
+    var(--teams-statement-width)
+    var(--teams-divider-gap)
+    1px
+    var(--teams-list-gap)
+    minmax(0, 1fr);
+  align-items: start;
+  padding:
+    var(--teams-content-top)
+    calc(var(--teams-stage-offset) + var(--teams-gutter))
+    var(--teams-content-bottom);
+  overflow: clip;
   isolation: isolate;
   background: #fff;
   color: #080a10;
 }
 
 .teams-index__statement {
-  position: absolute;
-  top: var(--teams-statement-top);
-  left: var(--teams-statement-left);
   display: flex;
   width: var(--teams-statement-width);
-  margin: 0;
+  min-width: 0;
+  grid-column: 1;
+  grid-row: 1;
   flex-direction: column;
   align-items: flex-start;
-  overflow: hidden;
+  margin: var(--teams-statement-offset) 0 0;
   background: #fff;
   font-size: var(--teams-statement-size);
   font-weight: 500;
   line-height: var(--teams-statement-leading);
   letter-spacing: var(--teams-statement-tracking);
-  white-space: nowrap;
 }
 
 .teams-index__statement span,
@@ -57,37 +70,51 @@
 }
 
 .teams-index__divider {
-  position: absolute;
-  top: var(--teams-divider-top);
-  left: var(--teams-divider-left);
   width: 1px;
-  height: var(--teams-divider-height);
+  height: var(--teams-list-height);
+  grid-column: 3;
+  grid-row: 1;
   background: #dad4c9;
 }
 
 .teams-index__list {
-  position: absolute;
-  top: var(--teams-list-top);
-  left: var(--teams-list-left);
-  width: var(--teams-list-width);
+  display: grid;
+  width: calc(
+    var(--teams-stage-width)
+    - (2 * var(--teams-gutter))
+    - var(--teams-statement-width)
+    - var(--teams-divider-gap)
+    - 1px
+    - var(--teams-list-gap)
+  );
+  min-width: 0;
   height: var(--teams-list-height);
+  grid-column: 5;
+  grid-row: 1;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow: clip;
   list-style: none;
 }
 
 .teams-index__item {
+  position: relative;
   display: flex;
-  width: 100%;
-  height: var(--teams-row-height);
+  min-width: 0;
   align-items: center;
-  overflow: hidden;
-  border-bottom: 1px solid #dad4c9;
+  overflow: clip;
 }
 
-.teams-index__item:last-child {
-  border-bottom: 0;
+.teams-index__item:not(:last-child)::after {
+  position: absolute;
+  right: auto;
+  bottom: 0;
+  left: 0;
+  width: min(100%, var(--teams-rule-max));
+  height: 1px;
+  background: #dad4c9;
+  content: '';
 }
 
 .teams-index__item h3 {
@@ -100,63 +127,135 @@
   white-space: nowrap;
 }
 
-@media (min-width: 64rem) and (max-width: 89.9375rem) {
+/* M 1024→1439: keep two columns and connect the compact desktop to L. */
+@media (min-width: 1024px) and (max-width: 1439.98px) {
   .teams-index {
-    --teams-gutter: 32px;
-    --teams-statement-top: 96px;
-    --teams-statement-left: 32px;
-    --teams-statement-width: 264px;
-    --teams-statement-size: 32px;
-    --teams-statement-tracking: -0.48px;
-    --teams-divider-left: calc(25vw + 56px);
-    --teams-list-left: calc(33.333333vw + 3.667px);
-    --teams-name-size: 104px;
-    --teams-name-tracking: -3.12px;
+    --teams-gutter: calc(4.807692vw - 17.230769px);
+    --teams-statement-width: calc(15.865385vw + 101.538462px);
+    --teams-statement-size: calc(1.923077vw + 12.307692px);
+    --teams-statement-tracking: -0.015em;
+    --teams-statement-offset: calc(1.923077vw - 7.692308px);
+    --teams-divider-gap: calc(8.173077vw - 67.692308px);
+    --teams-list-gap: calc(8.413462vw - 54.153846px);
+    --teams-name-size: calc(1.923077vw + 84.307692px);
+    --teams-name-tracking: -0.03em;
   }
 }
 
-@media (min-width: 37.5rem) and (max-width: 63.9375rem) {
+/* L 1440→1919: grow toward the approved wide reference, then stop. */
+@media (min-width: 1440px) and (max-width: 1919.98px) {
+  .teams-index {
+    --teams-gutter: calc(5.833333vw - 32px);
+    --teams-content-top: calc(1.25vw + 66px);
+    --teams-content-bottom: calc(1.25vw + 66px);
+    --teams-statement-width: calc(6.875vw + 231px);
+    --teams-statement-size: calc(0.833333vw + 28px);
+    --teams-statement-tracking: -0.015em;
+    --teams-statement-offset: calc(2.083333vw - 10px);
+    --teams-divider-gap: calc(13.958333vw - 151px);
+    --teams-list-gap: calc(2.5vw + 31px);
+    --teams-list-height: calc(18.333333vw + 468px);
+    --teams-name-size: calc(3.266667vw + 64.96px);
+    --teams-name-tracking: -0.03em;
+  }
+}
+
+/* >1920: cap the approved composition and center that 1920 stage. */
+@media (min-width: 1920px) {
+  .teams-index {
+    --teams-stage-offset: calc((100vw - 1920px) / 2);
+    --teams-stage-width: 1920px;
+    --teams-gutter: 80px;
+    --teams-content-top: 90px;
+    --teams-content-bottom: 90px;
+    --teams-statement-width: 363px;
+    --teams-statement-size: 44px;
+    --teams-statement-tracking: -0.66px;
+    --teams-statement-offset: 30px;
+    --teams-divider-gap: 117px;
+    --teams-list-gap: 79px;
+    --teams-list-height: 820px;
+    --teams-name-size: 127.68px;
+    --teams-name-tracking: -3.8304px;
+  }
+}
+
+/* S 600→1023: the list follows the statement and stretches between 24px gutters. */
+@media (min-width: 600px) and (max-width: 1023.98px) {
   .teams-index {
     --teams-gutter: 24px;
-    --teams-statement-top: 72px;
-    --teams-statement-left: 24px;
+    --teams-content-top: 72px;
+    --teams-content-bottom: 50px;
     --teams-statement-width: 280.5px;
     --teams-statement-size: 34px;
     --teams-statement-tracking: -0.51px;
-    --teams-list-top: 250px;
-    --teams-list-left: 24px;
-    --teams-list-width: calc(100vw - 48px);
+    --teams-statement-offset: 0px;
     --teams-list-height: 600px;
-    --teams-row-height: 200px;
     --teams-name-size: clamp(75px, 12.5vw, 96px);
     --teams-name-tracking: -0.03em;
+    display: block;
+    padding-inline: var(--teams-gutter);
+  }
+
+  .teams-index__statement {
+    min-height: 112.2px;
+    margin-bottom: 65.8px;
   }
 
   .teams-index__divider {
     display: none;
+  }
+
+  .teams-index__list {
+    width: calc(var(--teams-stage-width) - (2 * var(--teams-gutter)));
   }
 }
 
-@media (max-width: 37.4375rem) {
+/* XS 360→599: preserve the 390 rhythm while allowing type and gutters to breathe. */
+@media (max-width: 599.98px) {
   .teams-index {
-    --teams-gutter: 20px;
-    --teams-height: 720px;
-    --teams-statement-top: 56px;
-    --teams-statement-left: 20px;
+    --teams-gutter: clamp(20px, 5.128205vw, 24px);
+    --teams-content-top: 56px;
+    --teams-content-bottom: 150px;
     --teams-statement-width: 231px;
     --teams-statement-size: clamp(26px, 7.179487vw, 28px);
     --teams-statement-tracking: -0.015em;
-    --teams-list-top: 210px;
-    --teams-list-left: 20px;
-    --teams-list-width: calc(100vw - 40px);
+    --teams-statement-offset: 0px;
     --teams-list-height: 360px;
-    --teams-row-height: 120px;
     --teams-name-size: clamp(48px, 14.358974vw, 72px);
     --teams-name-tracking: -0.03em;
+    display: block;
+    padding-inline: var(--teams-gutter);
+  }
+
+  .teams-index__statement {
+    min-height: 92.4px;
+    margin-bottom: 61.6px;
   }
 
   .teams-index__divider {
     display: none;
+  }
+
+  .teams-index__list {
+    width: calc(var(--teams-stage-width) - (2 * var(--teams-gutter)));
+  }
+}
+
+/* Compact phones use the shared 16px edge and keep Development fully readable. */
+@media (max-width: 359.98px) {
+  .teams-index {
+    --teams-gutter: 16px;
+    --teams-content-top: 52px;
+    --teams-content-bottom: 112px;
+    --teams-statement-size: 26px;
+    --teams-list-height: 348px;
+    --teams-name-size: 48px;
+  }
+
+  .teams-index__statement {
+    min-height: 85.8px;
+    margin-bottom: 58.2px;
   }
 }
 

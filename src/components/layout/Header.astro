@@ -59,19 +59,144 @@ const homeAnchor = (id: string) => isHome ? `#${id}` : `${homeHref}#${id}`
           <span class="roll-window"><span class="roll-track" data-label="합류">합류</span></span>
         </a>
 
-        <details class="hmenu">
-          <summary>메뉴</summary>
-          <div class="hmenu__panel">
-            <a href={homeAnchor('teams')}>팀</a>
-            <a href={homeAnchor('activities')}>활동</a>
-            <a href={homeAnchor('awards')}>기록</a>
-            <a href={researchHref} aria-current={isResearchIndex ? 'page' : undefined}>리서치</a>
-            <a href={homeAnchor('connections')}>커넥션</a>
-            <a href={homeAnchor('join')}>합류</a>
-          </div>
-        </details>
       </nav>
+    </div>
+  </div>
+
+  <div
+    class="global-nav"
+    data-global-navigation
+    data-state="closed"
+    data-node-id="451:157"
+  >
+    <div class="global-nav__bar">
+      <a class="global-nav__brand" href={homeHref} aria-label="BlueNode 홈">BlueNode</a>
+      <span class="global-nav__spacer" aria-hidden="true"></span>
+      <a class="global-nav__quick-join" href={homeAnchor('join')}>Join ↗</a>
+      <button
+        class="global-nav__toggle"
+        type="button"
+        aria-label="메뉴 열기"
+        aria-expanded="false"
+        aria-controls="global-navigation-panel"
+        data-navigation-toggle
+      >
+        <img
+          class="global-nav__toggle-icon global-nav__toggle-icon--closed"
+          src={withBase('images/navigation-toggle-closed.svg')}
+          width="24"
+          height="24"
+          alt=""
+        />
+        <img
+          class="global-nav__toggle-icon global-nav__toggle-icon--open"
+          src={withBase('images/navigation-toggle-open.svg')}
+          width="24"
+          height="24"
+          alt=""
+        />
+      </button>
+    </div>
+
+    <div
+      class="global-nav__panel"
+      id="global-navigation-panel"
+      data-navigation-panel
+      hidden
+    >
+      <nav class="global-nav__links" aria-label="모바일 주요 메뉴">
+        <a href={homeAnchor('about')}>About</a>
+        <a href={homeAnchor('teams')}>Teams</a>
+        <a href={homeAnchor('activities')}>Activities</a>
+        <a href={homeAnchor('awards')}>Awards</a>
+        <a href={researchHref} aria-current={isResearchIndex ? 'page' : undefined}>Research</a>
+        <a href={homeAnchor('connections')}>Network</a>
+        <a class="global-nav__join-link" href={homeAnchor('join')}>Join ↗</a>
+      </nav>
+
+      <div class="global-nav__secondary" aria-label="BlueNode 소개">
+        <p>INHA UNIVERSITY<br />BLOCKCHAIN CLUB</p>
+        <span aria-hidden="true"></span>
+        <p>Read the change.<br />Build what comes next.</p>
+      </div>
+
+      <p class="global-nav__compact-context">
+        INHA UNIVERSITY BLOCKCHAIN CLUB · EST. 2023
+      </p>
     </div>
   </div>
   {depthAware && <div class="scroll-progress" aria-hidden="true"></div>}
 </header>
+
+<script>
+  const navigation = document.querySelector<HTMLElement>('[data-global-navigation]')
+  const navigationToggle = navigation?.querySelector<HTMLButtonElement>('[data-navigation-toggle]')
+  const navigationPanel = navigation?.querySelector<HTMLElement>('[data-navigation-panel]')
+  const navigationLinks = navigationPanel
+    ? [...navigationPanel.querySelectorAll<HTMLAnchorElement>('a[href]')]
+    : []
+  const navigationDesktop = matchMedia('(min-width: 1024px)')
+  let navigationScrollY = 0
+
+  const focusableNavigationItems = () => navigation
+    ? [...navigation.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')]
+      .filter((element) => element.offsetParent !== null)
+    : []
+
+  const setNavigationOpen = (open: boolean, returnFocus = true) => {
+    if (!navigation || !navigationToggle || !navigationPanel) return
+
+    navigation.dataset.state = open ? 'open' : 'closed'
+    navigationToggle.setAttribute('aria-expanded', String(open))
+    navigationToggle.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기')
+    navigationPanel.hidden = !open
+
+    if (open) {
+      navigationScrollY = scrollY
+      document.documentElement.style.setProperty('--navigation-scroll-lock', `-${navigationScrollY}px`)
+      document.documentElement.classList.add('navigation-open')
+      requestAnimationFrame(() => navigationLinks[0]?.focus())
+      return
+    }
+
+    document.documentElement.classList.remove('navigation-open')
+    document.documentElement.style.removeProperty('--navigation-scroll-lock')
+    scrollTo({ top: navigationScrollY, left: 0, behavior: 'instant' })
+    if (returnFocus) navigationToggle.focus()
+  }
+
+  navigationToggle?.addEventListener('click', () => {
+    setNavigationOpen(navigationToggle.getAttribute('aria-expanded') !== 'true')
+  })
+
+  navigationLinks.forEach((link) => {
+    link.addEventListener('click', () => setNavigationOpen(false, false))
+  })
+
+  addEventListener('keydown', (event) => {
+    if (navigationToggle?.getAttribute('aria-expanded') !== 'true') return
+    if (event.key === 'Escape') {
+      event.preventDefault()
+      setNavigationOpen(false)
+      return
+    }
+    if (event.key !== 'Tab') return
+
+    const items = focusableNavigationItems()
+    const first = items[0]
+    const last = items.at(-1)
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault()
+      last?.focus()
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault()
+      first?.focus()
+    }
+  })
+
+  navigationDesktop.addEventListener('change', (event) => {
+    if (event.matches && navigationToggle?.getAttribute('aria-expanded') === 'true') {
+      setNavigationOpen(false, false)
+    }
+  })
+</script>

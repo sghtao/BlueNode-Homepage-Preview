@@ -11,29 +11,31 @@ import { withBase } from '../lib/paths'
 >
   <h2 class="sr-only" id="about-facts-heading">About BlueNode</h2>
 
-  <img
-    class="about-facts__mascot"
-    src={withBase('images/about-bluenode-female-mascot.jpg')}
-    width="1024"
-    height="1024"
-    alt="BlueNode mascot"
-  />
+  <div class="about-facts__body">
+    <img
+      class="about-facts__mascot"
+      src={withBase('images/about-bluenode-female-mascot.jpg')}
+      width="1024"
+      height="1024"
+      alt="BlueNode mascot"
+    />
 
-  <div class="about-facts__divider" aria-hidden="true"></div>
+    <div class="about-facts__divider" aria-hidden="true"></div>
 
-  <div class="about-facts__copy">
-    <p>
-      <strong>BlueNode</strong> was founded in{' '}
-      <strong>{orgProfile.foundedMonth} {orgProfile.foundedYear}</strong> by students at Inha University.
-    </p>
-    <p>
-      We are a <strong>student-led</strong> blockchain research club and a community of nearly
-      {' '}<strong>{orgProfile.approximateMemberCount} members</strong>.
-    </p>
-    <p>
-      From Inha University in Incheon, we look outward to the
-      {' '}<strong>wider Web3 ecosystem</strong>.
-    </p>
+    <div class="about-facts__copy">
+      <p>
+        <strong>BlueNode</strong> was founded in{' '}
+        <strong>{orgProfile.foundedMonth} {orgProfile.foundedYear}</strong> by students at Inha University.
+      </p>
+      <p>
+        We are a <strong>student-led</strong> blockchain research club and a community of nearly
+        {' '}<strong>{orgProfile.approximateMemberCount} members</strong>.
+      </p>
+      <p>
+        From Inha University in Incheon, we look outward to the
+        {' '}<strong>wider Web3 ecosystem</strong>.
+      </p>
+    </div>
   </div>
 
   <a class="about-facts__action" href="#teams">
