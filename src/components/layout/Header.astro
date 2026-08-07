@@ -170,7 +170,24 @@ const homeAnchor = (id: string) => isHome ? `#${id}` : `${homeHref}#${id}`
   })
 
   navigationLinks.forEach((link) => {
-    link.addEventListener('click', () => setNavigationOpen(false, false))
+    link.addEventListener('click', () => {
+      const href = link.getAttribute('href')
+      setNavigationOpen(false, false)
+      if (!href?.startsWith('#')) return
+
+      const target = document.getElementById(decodeURIComponent(href.slice(1)))
+      const focusTarget = target?.querySelector<HTMLElement>('h1, h2, h3') ?? target
+      if (!focusTarget) return
+
+      const restoreTabIndex = !focusTarget.hasAttribute('tabindex')
+      if (restoreTabIndex) focusTarget.setAttribute('tabindex', '-1')
+      requestAnimationFrame(() => {
+        focusTarget.focus({ preventScroll: true })
+        if (restoreTabIndex) {
+          focusTarget.addEventListener('blur', () => focusTarget.removeAttribute('tabindex'), { once: true })
+        }
+      })
+    })
   })
 
   addEventListener('keydown', (event) => {

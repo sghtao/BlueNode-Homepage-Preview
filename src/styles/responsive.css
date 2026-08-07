@@ -68,6 +68,9 @@
   }
 
   .global-nav__brand {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
     color: #080a10;
     font-size: 22px;
     font-weight: 500;
@@ -82,6 +85,9 @@
   }
 
   .global-nav__quick-join {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
     color: #164cf5;
     font-size: 16px;
     font-weight: 500;
@@ -247,6 +253,12 @@
     gap: 4px;
     font-size: 32px;
     line-height: 36px;
+  }
+
+  .global-nav__links a {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
   }
 
   .global-nav__secondary {

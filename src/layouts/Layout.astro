@@ -20,6 +20,9 @@ const socialDescription = description ?? defaultSocialDescription
 const siteUrl = Astro.site ?? new URL('https://www.web3bluenode.xyz')
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl)
 const socialImageUrl = new URL(withBase('og-image.png'), siteUrl)
+const isGitHubPreview = import.meta.env.BASE_URL.includes('BlueNode-Homepage-Preview')
+const previewBuildId = process.env.GITHUB_SHA ?? 'local'
+const previewVersionUrl = withBase('version.json')
 ---
 
 <!doctype html>
@@ -36,6 +39,13 @@ const socialImageUrl = new URL(withBase('og-image.png'), siteUrl)
     <title>{title}</title>
     <meta name="description" content={pageDescription} />
     <link rel="canonical" href={canonicalUrl} />
+    {isGitHubPreview && (
+      <meta
+        name="bluenode-preview-build"
+        content={previewBuildId}
+        data-version-url={previewVersionUrl}
+      />
+    )}
 
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
@@ -50,6 +60,32 @@ const socialImageUrl = new URL(withBase('og-image.png'), siteUrl)
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={socialDescription} />
     <meta name="twitter:image" content={socialImageUrl} />
+    {isGitHubPreview && (
+      <script is:inline>
+        const previewBuild = document.querySelector('meta[name="bluenode-preview-build"]')
+
+        if (previewBuild instanceof HTMLMetaElement) {
+          const currentBuildId = previewBuild.content
+          const versionUrl = previewBuild.dataset.versionUrl
+
+          if (versionUrl) {
+            fetch(`${versionUrl}?checked=${Date.now()}`, { cache: 'no-store' })
+              .then((response) => response.ok ? response.json() : undefined)
+              .then((version) => {
+                const latestBuildId = version?.buildId
+                if (!latestBuildId || latestBuildId === currentBuildId) return
+
+                const url = new URL(location.href)
+                const versionKey = latestBuildId.slice(0, 12)
+                if (url.searchParams.get('version') === versionKey) return
+                url.searchParams.set('version', versionKey)
+                location.replace(url)
+              })
+              .catch(() => {})
+          }
+        }
+      </script>
+    )}
   </head>
   <body class:list={{ 'home-page': home }}>
     <a class="skip" href="#main">본문으로 건너뛰기</a>

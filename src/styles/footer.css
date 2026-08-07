@@ -162,7 +162,7 @@
     --footer-copyright-size: var(--footer-descriptor-size);
   }
 
-  .ftr__nav a { min-height: calc(var(--footer-nav-size) * 1.5); }
+  .ftr__nav a { min-height: 44px; }
 }
 
 @media (min-width: 1440px) and (max-width: 1919px) {
@@ -231,7 +231,7 @@
   }
 
   .ftr__identity { left: clamp(28px, calc(4.6875vw - 8px), 40px); }
-  .ftr__nav a { min-height: calc(var(--footer-nav-size) * 1.5); }
+  .ftr__nav a { min-height: 44px; }
 }
 
 @media (max-width: 599px) {
@@ -264,7 +264,7 @@
   .ftr__nav--external { left: 50vw; }
   .ftr__nav--content { width: 136px; }
   .ftr__nav--external { top: 440px; }
-  .ftr__nav a { min-height: 24px; }
+  .ftr__nav a { min-height: 44px; }
 }
 
 @media (min-width: 391px) and (max-width: 430px) {

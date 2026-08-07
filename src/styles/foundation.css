@@ -210,10 +210,6 @@ svg {
   padding-block: var(--band-xl);
 }
 
-main section[id] {
-  scroll-margin-top: calc(var(--header-height) + 1rem);
-}
-
 .home-page main,
 .home-page .ftr {
   position: relative;
