@@ -1,5 +1,7 @@
 ---
 import type { FeedArticle } from '../lib/medium'
+import { getMembersByHandles } from '../data/members'
+import { formatResearchDate } from '../data/research'
 import { withBase } from '../lib/paths'
 
 interface Props {
@@ -9,8 +11,20 @@ interface Props {
 const { articles } = Astro.props
 const featuredArticles = articles.slice(0, 3)
 const mediumChannelUrl = 'https://medium.com/bluenode'
-const rowLabels = ['LATEST · RESEARCH', 'MEDIUM · INSIGHT', 'MEDIUM · REPORT']
 const initialArticle = featuredArticles[0]
+const getArticleAuthors = (article: FeedArticle) => {
+  if (article.authorNames?.length) return article.authorNames
+  return getMembersByHandles(article.authorHandles).map((author) => author.displayName)
+}
+const getArticleMetadata = (article: FeedArticle) => {
+  const authors = getArticleAuthors(article)
+  return [formatResearchDate(article.publishedAt), authors.join(', ')]
+    .filter(Boolean)
+    .join(' · ')
+}
+const getArticleTags = (article: FeedArticle) => article.tags.slice(0, 2).join(' · ')
+const initialArticleMetadata = initialArticle ? getArticleMetadata(initialArticle) : ''
+const initialArticleTags = initialArticle ? getArticleTags(initialArticle) : ''
 ---
 
 <section
@@ -23,25 +37,33 @@ const initialArticle = featuredArticles[0]
 
   <div class="research-index__content">
     <ol class="research-index__list" aria-label="BlueNode Medium 최신 리서치">
-      {featuredArticles.map((article, index) => (
-        <li class="research-index__item">
-          <a
-            class="research-index__article"
-            href={article.externalUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-research-article
-            data-research-active={index === 0 ? 'true' : 'false'}
-            data-article-title={article.title}
-            data-article-url={article.externalUrl}
-            aria-current={index === 0 ? 'true' : undefined}
-          >
-            <span class="research-index__divider" aria-hidden="true"></span>
-            <span class="research-index__meta">{rowLabels[index]}</span>
-            <span class="research-index__title">{article.title}</span>
-          </a>
-        </li>
-      ))}
+      {featuredArticles.map((article, index) => {
+        const metadata = getArticleMetadata(article)
+        const tags = getArticleTags(article)
+
+        return (
+          <li class="research-index__item">
+            <a
+              class="research-index__article"
+              href={article.externalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-research-article
+              data-research-active={index === 0 ? 'true' : 'false'}
+              data-article-title={article.title}
+              data-article-url={article.externalUrl}
+              data-article-meta={metadata}
+              data-article-summary={article.snippet}
+              data-article-tags={tags}
+              aria-current={index === 0 ? 'true' : undefined}
+            >
+              <span class="research-index__divider" aria-hidden="true"></span>
+              <span class="research-index__meta">{metadata}</span>
+              <span class="research-index__title">{article.title}</span>
+            </a>
+          </li>
+        )
+      })}
     </ol>
 
     {initialArticle && (
@@ -57,7 +79,32 @@ const initialArticle = featuredArticles[0]
         <span class="research-index__symbol" aria-hidden="true">
           <img src={withBase('images/bluenode-symbol-entry.svg')} alt="" width="360" height="332" />
         </span>
-        <span class="research-index__preview-source">BlueNode / Medium</span>
+        <span class="research-index__preview-body">
+          <span class="research-index__preview-meta" data-research-preview-meta>
+            {initialArticleMetadata}
+          </span>
+          <strong class="research-index__preview-title" data-research-preview-title>
+            {initialArticle.title}
+          </strong>
+          <span
+            class="research-index__preview-summary"
+            data-research-preview-summary
+            hidden={!initialArticle.snippet}
+          >
+            {initialArticle.snippet}
+          </span>
+          <span
+            class="research-index__preview-tags"
+            data-research-preview-tags
+            hidden={!initialArticleTags}
+          >
+            {initialArticleTags}
+          </span>
+        </span>
+        <span class="research-index__preview-source">
+          <span>Read on Medium</span>
+          <span class="research-index__preview-arrow" aria-hidden="true">↗</span>
+        </span>
       </a>
     )}
   </div>
@@ -76,6 +123,10 @@ const initialArticle = featuredArticles[0]
 <script>
   const researchIndex = document.querySelector<HTMLElement>('[data-research-index]')
   const researchPreview = researchIndex?.querySelector<HTMLAnchorElement>('[data-research-preview]')
+  const researchPreviewMeta = researchPreview?.querySelector<HTMLElement>('[data-research-preview-meta]')
+  const researchPreviewTitle = researchPreview?.querySelector<HTMLElement>('[data-research-preview-title]')
+  const researchPreviewSummary = researchPreview?.querySelector<HTMLElement>('[data-research-preview-summary]')
+  const researchPreviewTags = researchPreview?.querySelector<HTMLElement>('[data-research-preview-tags]')
   const researchArticles = researchIndex
     ? [...researchIndex.querySelectorAll<HTMLAnchorElement>('[data-research-article]')]
     : []
@@ -93,8 +144,21 @@ const initialArticle = featuredArticles[0]
     if (!researchPreview) return
     const title = article.dataset.articleTitle
     const url = article.dataset.articleUrl
+    const metadata = article.dataset.articleMeta ?? ''
+    const summary = article.dataset.articleSummary ?? ''
+    const tags = article.dataset.articleTags ?? ''
     if (title) researchPreview.setAttribute('aria-label', `선택된 글: ${title}`)
     if (url) researchPreview.href = url
+    if (researchPreviewMeta) researchPreviewMeta.textContent = metadata
+    if (researchPreviewTitle) researchPreviewTitle.textContent = title ?? ''
+    if (researchPreviewSummary) {
+      researchPreviewSummary.textContent = summary
+      researchPreviewSummary.hidden = !summary
+    }
+    if (researchPreviewTags) {
+      researchPreviewTags.textContent = tags
+      researchPreviewTags.hidden = !tags
+    }
   }
 
   researchArticles.forEach((article) => {

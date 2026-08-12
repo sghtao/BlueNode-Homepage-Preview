@@ -33,6 +33,27 @@ export const members: Member[] = [
     displayName: "Hangil Lee",
     aliases: ["Hangil", "hangil lee"],
   },
+  {
+    handle: "arkstar",
+    displayName: "arkstar",
+    aliases: ["0xarkstar"],
+    links: {
+      medium: "https://medium.com/@0xarkstar",
+    },
+  },
+  {
+    handle: "seungzookim",
+    displayName: "김승주",
+    aliases: ["Seungzookim", "seungzookim"],
+    links: {
+      medium: "https://medium.com/@seungzookim",
+    },
+  },
+  {
+    handle: "yusemin",
+    displayName: "유세민",
+    aliases: ["Yusemin", "yusemin"],
+  },
 ];
 
 const membersByHandle = new Map(members.map((member) => [member.handle, member]));

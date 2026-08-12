@@ -13,6 +13,42 @@ export type ResearchArticle = {
 
 export const researchArticles: ResearchArticle[] = [
   {
+    recordId: "R/oracle-and-external-prices",
+    slug: "oracle-and-external-prices",
+    title: "블록체인은 어떻게 ‘블록체인 바깥의 가격’을 신뢰하게 되는가",
+    authorHandles: ["arkstar"],
+    publishedAt: "2026-05-12",
+    tags: ["oracle", "DeFi"],
+    snippet:
+      "결정론적 블록체인이 외부 가격을 받아들이는 오라클 문제와 Chainlink, Pyth, RedStone, UMA 등 주요 설계를 살펴봅니다.",
+    externalUrl:
+      "https://medium.com/bluenode/%EB%B8%94%EB%A1%9D%EC%B2%B4%EC%9D%B8%EC%9D%80-%EC%96%B4%EB%96%BB%EA%B2%8C-%EB%B8%94%EB%A1%9D%EC%B2%B4%EC%9D%B8-%EB%B0%94%EA%B9%A5%EC%9D%98-%EA%B0%80%EA%B2%A9-%EC%9D%84-%EC%8B%A0%EB%A2%B0%ED%95%98%EA%B2%8C-%EB%90%98%EB%8A%94%EA%B0%80-cf08c8f033ab",
+  },
+  {
+    recordId: "R/stablecoin-history-and-characteristics",
+    slug: "stablecoin-history-and-characteristics",
+    title: "Part 1. 스테이블코인의 역사와 특징",
+    authorHandles: ["seungzookim", "yusemin"],
+    publishedAt: "2026-04-28",
+    tags: ["stablecoin", "payments"],
+    snippet:
+      "스테이블코인의 등장 배경과 역사, 결제·송금·DeFi에서의 기능, 담보 구조와 디페깅·규제 위험을 살펴봅니다.",
+    externalUrl:
+      "https://medium.com/bluenode/%EC%8A%A4%ED%85%8C%EC%9D%B4%EB%B8%94%EC%BD%94%EC%9D%B8%EC%9D%98-%EA%B8%B0%EB%8A%A5%EA%B3%BC-%ED%98%84%ED%99%A9-a15ef4fc3cd5",
+  },
+  {
+    recordId: "R/mastering-ethereum-chapter-1",
+    slug: "mastering-ethereum-chapter-1",
+    title: "이더리움이란? (마스터링 이더리움 1장)(1)",
+    authorHandles: ["seungzookim"],
+    publishedAt: "2026-03-18",
+    tags: ["ethereum", "EVM"],
+    snippet:
+      "마스터링 이더리움 1장을 바탕으로 이더리움을 상태 기계, 스마트 컨트랙트, EVM, 비트코인과의 차이 관점에서 정리합니다.",
+    externalUrl:
+      "https://medium.com/bluenode/%EC%9D%B4%EB%8D%94%EB%A6%AC%EC%9B%80%EC%9D%B4%EB%9E%80-%EB%A7%88%EC%8A%A4%ED%84%B0%EB%A7%81-%EC%9D%B4%EB%8D%94%EB%A6%AC%EC%9B%80-1%EC%9E%A5-1-e90fab1579cd",
+  },
+  {
     recordId: "R/memecoin-guide",
     slug: "memecoin-guide",
     title: "밈코인이란?",

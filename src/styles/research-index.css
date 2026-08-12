@@ -1,4 +1,5 @@
-/* Approved responsive Figma Research: 394:20, 394:42, 394:73, 394:104, 526:55. */
+/* Approved responsive Figma Research: 394:20, 394:42, 394:73, 394:104, 526:55.
+   The selected-article card adds real editorial content without changing the scene grid. */
 .research-index {
   --research-reading-max: 1760px;
   --research-heading-top: 28px;
@@ -17,13 +18,15 @@
   --research-stack-gap: 0px;
   --research-preview-width: clamp(528px, calc(192px + 23.3333vw), 640px);
   --research-preview-height: clamp(680px, calc(440px + 16.6667vw), 760px);
-  --research-preview-label-left: clamp(32px, calc(8px + 1.6667vw), 40px);
-  --research-preview-label-top: clamp(30px, calc(12px + 1.25vw), 36px);
-  --research-preview-source-top: clamp(626px, calc(404px + 15.4167vw), 700px);
-  --research-preview-label-size: 24px;
-  --research-symbol-top: clamp(158px, calc(98px + 4.1667vw), 178px);
+  --research-preview-padding-x: clamp(32px, calc(8px + 1.6667vw), 40px);
+  --research-preview-padding-y: clamp(30px, calc(12px + 1.25vw), 36px);
+  --research-preview-body-top: clamp(68px, calc(20px + 3.3333vw), 84px);
+  --research-preview-label-size: clamp(18px, calc(12px + 0.4167vw), 20px);
+  --research-preview-meta-size: clamp(16px, calc(10px + 0.4167vw), 18px);
+  --research-preview-title-size: clamp(44px, calc(8px + 2.5vw), 56px);
+  --research-preview-summary-size: clamp(16px, calc(10px + 0.4167vw), 18px);
+  --research-preview-tag-size: clamp(13px, calc(7px + 0.4167vw), 15px);
   --research-symbol-width: clamp(360px, calc(252px + 7.5vw), 396px);
-  --research-symbol-height: clamp(332.182px, calc(232.528px + 6.9204vw), 365.4px);
   --research-footer-gap: clamp(80px, calc(50px + 2.0833vw), 90px);
   --research-footer-height: 113px;
   --research-footer-size: 36px;
@@ -136,12 +139,19 @@
 
 .research-index__preview {
   position: relative;
-  display: block;
+  display: flex;
   width: 100%;
   height: var(--research-preview-height);
+  padding: var(--research-preview-padding-y) var(--research-preview-padding-x);
   overflow: hidden;
+  flex-direction: column;
   background: #164cf5;
   color: #fff;
+  transition: background-color 180ms ease;
+}
+
+.research-index__preview:hover {
+  background: #1044e8;
 }
 
 .research-index__preview:focus-visible {
@@ -149,10 +159,10 @@
   outline-offset: -7px;
 }
 
-.research-index__preview-label,
-.research-index__preview-source {
-  position: absolute;
-  left: var(--research-preview-label-left);
+.research-index__preview-label {
+  position: relative;
+  z-index: 2;
+  flex: 0 0 auto;
   margin: 0;
   font-size: var(--research-preview-label-size);
   font-weight: 500;
@@ -161,31 +171,110 @@
   white-space: nowrap;
 }
 
-.research-index__preview-label {
-  top: var(--research-preview-label-top);
+.research-index__preview-body {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  min-width: 0;
+  margin-top: var(--research-preview-body-top);
+  flex: 0 1 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(14px, 1.25vw, 18px);
+}
+
+.research-index__preview-meta {
+  font-size: var(--research-preview-meta-size);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  opacity: 0.72;
+}
+
+.research-index__preview-title {
+  display: -webkit-box;
+  overflow: hidden;
+  max-width: 100%;
+  color: inherit;
+  font-size: var(--research-preview-title-size);
+  font-weight: 550;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+}
+
+.research-index__preview-summary {
+  display: -webkit-box;
+  overflow: hidden;
+  max-width: 42ch;
+  font-size: var(--research-preview-summary-size);
+  font-weight: 450;
+  line-height: 1.45;
+  letter-spacing: -0.015em;
+  opacity: 0.82;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
+
+.research-index__preview-summary[hidden],
+.research-index__preview-tags[hidden] {
+  display: none;
+}
+
+.research-index__preview-tags {
+  font-size: var(--research-preview-tag-size);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  opacity: 0.7;
 }
 
 .research-index__preview-source {
-  top: var(--research-preview-source-top);
+  position: relative;
+  z-index: 2;
+  display: flex;
+  width: 100%;
+  margin-top: auto;
+  padding-top: clamp(18px, 1.6667vw, 24px);
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgb(255 255 255 / 42%);
+  font-size: var(--research-preview-label-size);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.015em;
+}
+
+.research-index__preview-arrow {
+  font-size: 1.35em;
+  font-weight: 400;
+  transition: transform 180ms ease;
+}
+
+.research-index__preview:hover .research-index__preview-arrow,
+.research-index__preview:focus-visible .research-index__preview-arrow {
+  transform: translate(4px, -4px);
 }
 
 .research-index__symbol {
   position: absolute;
-  top: var(--research-symbol-top);
-  left: 50%;
+  right: calc(var(--research-symbol-width) * -0.16);
+  bottom: clamp(74px, 6vw, 110px);
+  z-index: 1;
   display: block;
   width: var(--research-symbol-width);
-  height: var(--research-symbol-height);
-  translate: -50% 0;
-  transform-origin: 50% 50%;
-  animation:
-    research-symbol-opacity 2s linear infinite,
-    research-symbol-scale 2s linear infinite;
+  height: auto;
+  opacity: 0.11;
+  pointer-events: none;
 }
 
 .research-index__symbol img {
   width: 100%;
-  height: 100%;
+  height: auto;
   filter: brightness(0) invert(1);
 }
 
@@ -237,13 +326,15 @@
     --research-title-size: clamp(13.31px, calc(-62.2346px + 7.3774vw), 44px);
     --research-preview-width: clamp(384px, calc(29.5385px + 34.6154vw), 528px);
     --research-preview-height: clamp(494px, calc(36.1538px + 44.7115vw), 680px);
-    --research-preview-label-left: clamp(23.26px, calc(1.7462px + 2.101vw), 32px);
-    --research-preview-label-top: clamp(21.81px, calc(1.65px + 1.9688vw), 30px);
-    --research-preview-source-top: clamp(455.1px, calc(34.4231px + 41.0817vw), 626px);
-    --research-preview-label-size: clamp(17.448px, calc(1.32px + 1.575vw), 24px);
-    --research-symbol-top: clamp(114.87px, calc(8.7038px + 10.3678vw), 158px);
-    --research-symbol-width: clamp(261.72px, calc(19.8px + 23.625vw), 360px);
-    --research-symbol-height: clamp(241.496px, calc(18.2689px + 21.7995vw), 332.182px);
+    --research-preview-padding-x: clamp(24px, 2.25vw, 32px);
+    --research-preview-padding-y: clamp(22px, 2.1vw, 30px);
+    --research-preview-body-top: clamp(40px, 4.7vw, 68px);
+    --research-preview-label-size: clamp(14px, 1.25vw, 18px);
+    --research-preview-meta-size: clamp(12px, 1.05vw, 16px);
+    --research-preview-title-size: clamp(32px, 3.06vw, 44px);
+    --research-preview-summary-size: clamp(13px, 1.12vw, 16px);
+    --research-preview-tag-size: clamp(11px, 0.91vw, 13px);
+    --research-symbol-width: clamp(256px, 25vw, 360px);
     --research-footer-gap: clamp(71px, calc(48.8462px + 2.1635vw), 80px);
     --research-footer-height: clamp(85px, calc(16.0769px + 6.7308vw), 113px);
     --research-footer-size: clamp(27px, calc(4.8462px + 2.1635vw), 36px);
@@ -267,13 +358,15 @@
     --research-article-min-height: clamp(61px, calc(185px - 12.1094vw), 92px);
     --research-stack-gap: clamp(40px, calc(196px - 15.2344vw), 79px);
     --research-preview-height: 400px;
-    --research-preview-label-left: 24px;
-    --research-preview-label-top: 22px;
-    --research-preview-source-top: 356px;
-    --research-preview-label-size: 19.992px;
-    --research-symbol-top: 72px;
-    --research-symbol-width: 280.08px;
-    --research-symbol-height: 258.437px;
+    --research-preview-padding-x: 24px;
+    --research-preview-padding-y: 22px;
+    --research-preview-body-top: clamp(26px, 4.5vw, 40px);
+    --research-preview-label-size: 16px;
+    --research-preview-meta-size: 14px;
+    --research-preview-title-size: clamp(31px, 4.5vw, 40px);
+    --research-preview-summary-size: 15px;
+    --research-preview-tag-size: 12px;
+    --research-symbol-width: 260px;
     --research-footer-gap: 40px;
     --research-footer-height: 91px;
     --research-footer-size: 25.92px;
@@ -308,15 +401,7 @@
     --research-title-size: clamp(20px, calc(11.1786px + 2.2619vw), 24.75px);
     --research-title-line: 1.2;
     --research-article-min-height: 92px;
-    --research-stack-gap: clamp(20px, calc(-89.5714px + 28.0952vw), 79px);
-    --research-preview-height: clamp(320px, calc(171.4286px + 38.0952vw), 400px);
-    --research-preview-label-left: clamp(20px, calc(12.5714px + 1.9048vw), 24px);
-    --research-preview-label-top: clamp(20px, calc(16.2857px + 0.9524vw), 22px);
-    --research-preview-source-top: clamp(285px, calc(153.1429px + 33.8095vw), 356px);
-    --research-preview-label-size: clamp(15px, calc(5.7291px + 2.3771vw), 19.992px);
-    --research-symbol-top: clamp(70px, calc(66.2857px + 0.9524vw), 72px);
-    --research-symbol-width: clamp(209.88px, calc(79.5086px + 33.4286vw), 280.08px);
-    --research-symbol-height: clamp(193.662px, calc(73.3656px + 30.8452vw), 258.437px);
+    --research-stack-gap: 0px;
     --research-footer-gap: 40px;
     --research-footer-height: clamp(85px, calc(73.8571px + 2.8571vw), 91px);
     --research-footer-size: clamp(20.88px, calc(11.52px + 2.4vw), 25.92px);
@@ -332,7 +417,7 @@
   }
 
   .research-index__preview {
-    flex: 0 0 auto;
+    display: none;
   }
 }
 
@@ -348,52 +433,12 @@
     --research-meta-size: 11px;
     --research-title-size: 18px;
     --research-article-min-height: 84px;
-    --research-stack-gap: 16px;
-    --research-preview-height: 280px;
-    --research-preview-label-left: 18px;
-    --research-preview-label-top: 18px;
-    --research-preview-source-top: 250px;
-    --research-preview-label-size: 14px;
-    --research-symbol-top: 62px;
-    --research-symbol-width: 184px;
-    --research-symbol-height: 170px;
+    --research-stack-gap: 0px;
     --research-footer-gap: 32px;
     --research-footer-height: 80px;
     --research-footer-size: 18px;
     --research-arrow-size: 24px;
     --research-section-bottom: 48px;
-  }
-}
-
-@keyframes research-symbol-opacity {
-  0%,
-  14% {
-    opacity: 0;
-  }
-
-  14% {
-    animation-timing-function: ease-out;
-  }
-
-  38%,
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes research-symbol-scale {
-  0%,
-  14% {
-    scale: 0.9 0.9;
-  }
-
-  14% {
-    animation-timing-function: ease-out;
-  }
-
-  38%,
-  100% {
-    scale: 1 1;
   }
 }
 
@@ -416,12 +461,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .research-index__symbol {
-    opacity: 1;
-    scale: 1;
-    animation: none;
-  }
-
+  .research-index__preview,
+  .research-index__preview-arrow,
   .research-index__arrow {
     transition: none;
   }
