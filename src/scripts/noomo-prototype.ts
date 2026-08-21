@@ -162,10 +162,11 @@ function initialisePrototype() {
   const domesticLabels = qa<HTMLElement>(network, '[data-network-domestic] .network-label')
   const farLabels = qa<HTMLElement>(network, '[data-network-far] .network-label')
   const networkCta = q<HTMLElement>(network, '[data-network-cta]')
-  const joinDisplay = q<HTMLElement>(join, '[data-join-display]')
-  const joinSymbol = q<HTMLElement>(join, '[data-join-symbol]')
-  const joinStatement = q<HTMLElement>(join, '[data-join-statement]')
-  const joinAction = q<HTMLElement>(join, '[data-join-action]')
+  const joinTitle = q<HTMLElement>(join, '[data-join-title]')
+  const joinFields = qa<HTMLElement>(join, '[data-join-field]')
+  const joinInterests = q<HTMLElement>(join, '[data-join-interests]')
+  const joinSubmit = q<HTMLElement>(join, '[data-join-submit]')
+  const joinFooter = q<HTMLElement>(join, '[data-join-footer]')
   const navigationButtons = qa<HTMLButtonElement>(header, '[data-jump-vh]')
   const backgroundOrbs = Object.fromEntries(
     backgroundOrbNames.map((name) => [
@@ -226,6 +227,18 @@ function initialisePrototype() {
     lastActivityIndex = index
     activityTitles.forEach((title, titleIndex) => {
       title.setAttribute('aria-hidden', String(titleIndex !== index))
+    })
+  }
+
+  const bindFormControls = () => {
+    qa<HTMLButtonElement>(join, '.join-interests button').forEach((button) => {
+      button.addEventListener('click', () => {
+        const active = button.classList.toggle('is-active')
+        button.setAttribute('aria-pressed', String(active))
+      })
+    })
+    q<HTMLFormElement>(join, '[data-join-form]')?.addEventListener('submit', (event) => {
+      event.preventDefault()
     })
   }
 
@@ -372,6 +385,8 @@ function initialisePrototype() {
     }
   }
 
+  bindFormControls()
+
   const media = gsap.matchMedia()
   media.add(
     {
@@ -444,7 +459,7 @@ function initialisePrototype() {
       gsap.set(activityImages[0], { scaleY: 1 })
       gsap.set(activityTitles, { autoAlpha: 0, y: 12 })
       gsap.set(activityTitles[0], { autoAlpha: 1, y: 0 })
-      gsap.set([awardsTitle, researchTitle, researchAll, researchSource, networkTitle, networkOrigin, joinDisplay, joinStatement], {
+      gsap.set([awardsTitle, researchTitle, researchAll, researchSource, networkTitle, networkOrigin, joinTitle], {
         autoAlpha: 0,
         y: 26,
       })
@@ -453,8 +468,8 @@ function initialisePrototype() {
       gsap.set(networkCta, { xPercent: -50 })
       gsap.set(domesticLabels, { autoAlpha: 0, y: 10 })
       gsap.set(farLabels, { autoAlpha: 0, y: 10 })
-      gsap.set(joinSymbol, { autoAlpha: 0, scale: 0.9, transformOrigin: '50% 50%' })
-      gsap.set(joinAction, { autoAlpha: 0, y: 16 })
+      gsap.set([...joinFields, joinInterests, joinSubmit], { autoAlpha: 0, y: 16 })
+      gsap.set(joinFooter, { autoAlpha: 0 })
 
       const railX = (index: number) => () => {
         const card = activityCards[0]
@@ -686,18 +701,24 @@ function initialisePrototype() {
       timeline.to([networkHub, networkDomesticRoutes, networkFarRoutes, ...domesticLabels, ...farLabels, networkCta], { autoAlpha: 0, y: -10, duration: 40 }, 1340)
       timeline.to(network, { autoAlpha: 0, scale: 0.985, duration: 40 }, 1340)
       timeline.to(join, { autoAlpha: 1, duration: 40 }, 1340)
-      timeline.to(header, { autoAlpha: 0, y: -8, duration: 40 }, 1340)
+      timeline.to(header, { autoAlpha: 1, y: 0, duration: 40 }, 1340)
 
-      // 08 Join / 1380–1540vh — Figma-authored final CTA with a measured logo reveal.
-      timeline.to(joinDisplay, { autoAlpha: 1, y: 0, duration: 40, ease: 'power2.out' }, 1380)
-      timeline.to(joinSymbol, {
+      // 08 Join / 1380–1540vh — BlueNode Original Direction editorial form.
+      timeline.to(joinTitle, { autoAlpha: 1, y: 0, duration: 40, ease: 'power2.out' }, 1380)
+      timeline.to(joinFields, {
         autoAlpha: 1,
-        scale: 1,
-        duration: 38,
-        ease: 'power1.out',
-      }, 1392)
-      timeline.to(joinStatement, { autoAlpha: 1, y: 0, duration: 40, ease: 'power2.out' }, 1400)
-      timeline.to(joinAction, { autoAlpha: 1, y: 0, duration: 40, ease: 'power2.out' }, 1450)
+        y: 0,
+        duration: 40,
+        stagger: 8,
+        ease: 'power2.out',
+      }, 1420)
+      timeline.to([joinInterests, joinSubmit], {
+        autoAlpha: 1,
+        y: 0,
+        duration: 40,
+        ease: 'power2.out',
+      }, 1460)
+      timeline.to(joinFooter, { autoAlpha: 1, duration: 40, ease: 'power2.out' }, 1500)
 
       setActiveScene(0)
       setActiveActivity(0)

@@ -2,8 +2,6 @@
 import { activities } from '../../data/activities'
 import { researchArticles } from '../../data/research'
 import { withBase } from '../../lib/paths'
-import '@fontsource/instrument-sans/latin-500.css'
-import '@fontsource/instrument-sans/latin-600.css'
 import '@fontsource/instrument-sans/latin-700.css'
 import '@fontsource/inter/latin-400.css'
 import '@fontsource/inter/latin-500.css'
@@ -436,42 +434,43 @@ const researchMotifs = [
       aria-hidden="true"
       inert
     >
-      <h2 class="join-display" id="prototype-join-heading" data-join-display>
-        join
+      <h2 class="join-title display-type" id="prototype-join-heading" data-join-title>
+        <span>IF WEB3 KEEPS YOU CURIOUS,</span>
+        <span>WE WOULD LIKE TO MEET YOU.</span>
       </h2>
 
-      <div class="join-symbol" data-join-symbol aria-hidden="true">
-        <img
-          src={withBase('/images/noomo-prototype/join/join-symbol-ghost.svg')}
-          width="650"
-          height="600"
-          alt=""
-        />
-      </div>
+      <form class="join-form" data-join-form>
+        <label class="join-field join-field--name" data-join-field>
+          <span>YOUR NAME</span>
+          <input type="text" name="name" autocomplete="name" aria-label="Your name" />
+        </label>
 
-      <p class="join-statement" data-join-statement>
-        <span>Read what’s <em>changing</em>.</span>
-        <span>Build what comes <em>next</em>.</span>
-      </p>
+        <label class="join-field join-field--email" data-join-field>
+          <span>YOUR EMAIL</span>
+          <input type="email" name="email" autocomplete="email" aria-label="Your email" />
+        </label>
 
-      <button class="join-action" type="button" data-join-action>
-        <img
-          class="join-action__rule join-action__rule--top"
-          src={withBase('/images/noomo-prototype/join/join-action-rule.svg')}
-          width="1324"
-          height="1"
-          alt=""
-        />
-        <span class="join-action__label">Apply to BlueNode</span>
-        <span class="join-action__arrow" aria-hidden="true">→</span>
-        <img
-          class="join-action__rule join-action__rule--bottom"
-          src={withBase('/images/noomo-prototype/join/join-action-rule.svg')}
-          width="1324"
-          height="1"
-          alt=""
-        />
-      </button>
+        <label class="join-field join-field--curiosity" data-join-field>
+          <span>WHAT KEEPS YOU CURIOUS?</span>
+          <textarea name="curiosity" rows="1" aria-label="What keeps you curious?"></textarea>
+        </label>
+
+        <fieldset class="join-interests" data-join-interests>
+          <legend>I’M INTERESTED IN</legend>
+          <button type="button" aria-pressed="false">RESEARCH</button>
+          <button type="button" aria-pressed="false">DEVELOPMENT</button>
+          <button type="button" aria-pressed="false">DEGEN</button>
+        </fieldset>
+
+        <button class="join-submit" type="submit" data-join-submit>
+          <span>MEET BLUENODE</span>
+          <span aria-hidden="true">→</span>
+        </button>
+      </form>
+
+      <footer class="join-footer" data-join-footer>
+        INHA UNIVERSITY&nbsp; · &nbsp;INCHEON&nbsp; · &nbsp;SINCE 2023
+      </footer>
     </section>
   </div>
 </main>

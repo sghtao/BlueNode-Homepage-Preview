@@ -1140,141 +1140,196 @@ html::-webkit-scrollbar {
 /* 08 — Join */
 .scene-join {
   z-index: 2;
-  background: #fff;
+  background: transparent;
   color: #080a10;
 }
 
-.join-display {
+.join-title {
   position: absolute;
-  top: 38px;
-  left: 52px;
-  width: 820px;
+  top: 125px;
+  left: 40px;
+  width: 1120px;
   margin: 0;
-  font-family: var(--prototype-brand);
-  font-size: 184px;
-  font-weight: 600;
+  font-family: var(--prototype-display);
+  font-size: 71px;
+  font-weight: 400;
   letter-spacing: -0.04em;
-  line-height: 0.88;
-  text-transform: lowercase;
+  line-height: 0.95;
   white-space: nowrap;
   will-change: transform, opacity;
 }
 
-.join-symbol {
+.join-title > span {
+  display: block;
+}
+
+.join-form {
   position: absolute;
-  top: 66px;
-  left: 910px;
-  width: 650px;
-  height: 600px;
-  pointer-events: none;
+  inset: 0;
+  margin: 0;
+}
+
+.join-form::before {
+  content: '';
+  position: absolute;
+  top: 476px;
+  left: calc(25% + 96px);
+  width: 1px;
+  height: 348px;
+  background: rgba(9, 9, 12, 0.22);
+}
+
+.join-field {
+  position: absolute;
+  left: calc(33.3333% + 24px);
+  right: 80px;
+  height: 45px;
+  border-bottom: 1px solid rgba(9, 9, 12, 0.22);
+  color: #080a10;
+  font-family: var(--prototype-sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 15.6px;
   will-change: transform, opacity;
 }
 
-.join-symbol img {
-  display: block;
+.join-field--name { top: 480px; }
+.join-field--email { top: 568px; }
+.join-field--curiosity { top: 656px; }
+
+.join-field > span {
+  position: relative;
+  z-index: 1;
+}
+
+.join-field input,
+.join-field textarea {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: 100%;
-}
-
-.join-statement {
-  position: absolute;
-  top: 360px;
-  left: 58px;
-  width: 980px;
+  height: 44px;
   margin: 0;
-  font-family: var(--prototype-brand);
-  font-size: 64px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
-  will-change: transform, opacity;
-}
-
-.join-statement > span {
-  display: block;
-}
-
-.join-statement em {
-  color: #164cf5;
-  font-style: normal;
-}
-
-.join-action {
-  position: absolute;
-  top: 730px;
-  left: 58px;
-  width: 1324px;
-  height: 112px;
-  margin: 0;
-  padding: 0;
-  overflow: visible;
+  padding: 0 0 0 230px;
+  resize: none;
+  border: 0;
+  outline: 0;
   background: transparent;
-  color: #164cf5;
-  cursor: pointer;
-  font-family: var(--prototype-brand);
-  text-align: left;
+  color: #080a10;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: 15.6px;
+  appearance: none;
+}
+
+.join-field textarea {
+  padding-top: 0;
+}
+
+.join-field:focus-within {
+  border-bottom-color: rgba(9, 9, 12, 0.78);
+}
+
+.join-interests {
+  position: absolute;
+  top: 752px;
+  left: calc(33.3333% + 24px);
+  display: flex;
+  gap: 12px;
+  width: 330px;
+  height: 67px;
+  margin: 0;
+  padding: 32px 0 0;
+  border: 0;
   will-change: transform, opacity;
 }
 
-.join-action__rule {
+.join-interests legend {
   position: absolute;
-  left: 0;
-  display: block;
-  width: 1324px;
-  height: 1px;
-  pointer-events: none;
-}
-
-.join-action__rule--top {
   top: 0;
-}
-
-.join-action__rule--bottom {
-  top: 111px;
-}
-
-.join-action__label {
-  position: absolute;
-  top: 29px;
   left: 0;
-  width: 700px;
-  font-size: 40px;
-  font-weight: 500;
-  letter-spacing: -0.015em;
-  line-height: 1.1;
+  padding: 0;
+  font-family: var(--prototype-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 14.4px;
 }
 
-.join-action__arrow {
-  position: absolute;
-  top: 30px;
-  right: 0;
-  width: 80px;
-  font-size: 44px;
+.join-interests button {
+  display: grid;
+  height: 35px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid rgba(20, 20, 24, 0.85);
+  border-radius: 18px;
+  background: transparent;
+  color: #080a10;
+  cursor: pointer;
+  font-family: var(--prototype-sans);
+  font-size: 11px;
   font-weight: 500;
   letter-spacing: -0.02em;
-  line-height: 1;
-  text-align: right;
-  transition: transform 220ms ease-out;
+  line-height: 13.2px;
+  transition: background-color 180ms ease-out, color 180ms ease-out;
 }
 
-.join-action:hover .join-action__arrow,
-.join-action:focus-visible .join-action__arrow {
-  transform: translateX(8px);
+.join-interests button:nth-of-type(1) { width: 98px; }
+.join-interests button:nth-of-type(2) { width: 126px; }
+.join-interests button:nth-of-type(3) { width: 82px; }
+
+.join-interests button:hover,
+.join-interests button:focus-visible,
+.join-interests button.is-active {
+  background: #0c0c10;
+  color: #fff;
 }
 
-@media (max-height: 760px) and (min-width: 1024px) {
-  .join-display {
-    top: 32px;
-  }
+.join-submit {
+  position: absolute;
+  top: 776px;
+  right: 80px;
+  display: flex;
+  width: 168px;
+  height: 45px;
+  padding: 0 21px;
+  align-items: center;
+  justify-content: space-between;
+  border: 0;
+  border-radius: 24px;
+  background: #0c0c10;
+  color: #fff;
+  cursor: pointer;
+  font-family: var(--prototype-display);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 13px;
+  will-change: transform, opacity;
+}
 
-  .join-statement {
-    top: 320px;
-  }
+.join-submit > span:last-child {
+  font-family: var(--prototype-sans);
+  font-size: 16px;
+  transition: transform 180ms ease-out;
+}
 
-  .join-action {
-    top: auto;
-    bottom: 58px;
-  }
+.join-submit:hover > span:last-child,
+.join-submit:focus-visible > span:last-child {
+  transform: translateX(3px);
+}
+
+.join-footer {
+  position: absolute;
+  top: 864px;
+  left: 40px;
+  margin: 0;
+  font-family: var(--prototype-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 13.2px;
+  will-change: opacity;
 }
 
 .prototype-shell.is-reduced .prototype-viewport {
@@ -1332,10 +1387,11 @@ html::-webkit-scrollbar {
 .prototype-shell.is-reduced [data-network-domestic] .network-label,
 .prototype-shell.is-reduced [data-network-far] .network-label,
 .prototype-shell.is-reduced [data-network-cta],
-.prototype-shell.is-reduced [data-join-display],
-.prototype-shell.is-reduced [data-join-symbol],
-.prototype-shell.is-reduced [data-join-statement],
-.prototype-shell.is-reduced [data-join-action] {
+.prototype-shell.is-reduced [data-join-title],
+.prototype-shell.is-reduced [data-join-field],
+.prototype-shell.is-reduced [data-join-interests],
+.prototype-shell.is-reduced [data-join-submit],
+.prototype-shell.is-reduced [data-join-footer] {
   visibility: visible !important;
   opacity: 1 !important;
   transform: none !important;
