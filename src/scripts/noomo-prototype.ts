@@ -216,9 +216,9 @@ function initialisePrototype() {
 
   const setActiveActivity = (time: number) => {
     let index = 0
-    if (time >= 690) index = 3
-    else if (time >= 600) index = 2
-    else if (time >= 525) index = 1
+    if (time >= 675) index = 3
+    else if (time >= 603) index = 2
+    else if (time >= 518) index = 1
     if (index === lastActivityIndex) return
     lastActivityIndex = index
     activityTitles.forEach((title, titleIndex) => {
@@ -448,9 +448,21 @@ function initialisePrototype() {
       gsap.set(aboutCta, { autoAlpha: 0, y: 18, scale: 0.96 })
       gsap.set(activitiesWord, { autoAlpha: 0, y: 30 })
       gsap.set(activitiesCta, { autoAlpha: 0, y: 16, scale: 0.96 })
-      gsap.set(activityCards, { autoAlpha: 0.72, scaleX: 0.7544, scaleY: 0.64775, y: 8 })
+      gsap.set(activityCards, {
+        autoAlpha: 1,
+        scaleX: 0.7544,
+        scaleY: 0.64775,
+        y: 8,
+        '--activity-active-border': 0,
+      })
       gsap.set(activityImages, { scaleY: 1.16465 })
-      gsap.set(activityCards[0], { autoAlpha: 1, scaleX: 1, scaleY: 1, y: 0 })
+      gsap.set(activityCards[0], {
+        autoAlpha: 1,
+        scaleX: 1,
+        scaleY: 1,
+        y: 0,
+        '--activity-active-border': 1,
+      })
       gsap.set(activityImages[0], { scaleY: 1 })
       gsap.set(activityTitles, { autoAlpha: 0, y: 12 })
       gsap.set(activityTitles[0], { autoAlpha: 1, y: 0 })
@@ -468,7 +480,9 @@ function initialisePrototype() {
       const railX = (index: number) => () => {
         const card = activityCards[0]
         if (!card || !activitiesRail) return 0
-        const cardWidth = card.getBoundingClientRect().width
+        // Use the untransformed layout width so later stops stay centered after
+        // the first card has already become a scaled side preview.
+        const cardWidth = card.offsetWidth
         const gap = Number.parseFloat(getComputedStyle(activitiesRail).columnGap || '0')
         return innerWidth / 2 - cardWidth / 2 - index * (cardWidth + gap)
       }
@@ -557,28 +571,79 @@ function initialisePrototype() {
       timeline.to(about, { yPercent: -100, duration: 45 }, 450)
       timeline.to(activities, { yPercent: 0, duration: 45 }, 450)
       timeline.to(activitiesWord, { autoAlpha: 1, y: 0, duration: 45, ease: 'power2.out' }, 450)
-      timeline.to(activitiesRail, { x: railX(1), duration: 60 }, 495)
-      timeline.to(activityCards[0], { autoAlpha: 0.72, scaleX: 0.7544, scaleY: 0.64775, y: 8, duration: 60 }, 495)
-      timeline.to(activityImages[0], { scaleY: 1.16465, duration: 60 }, 495)
-      timeline.to(activityCards[1], { autoAlpha: 1, scaleX: 1, scaleY: 1, y: 0, duration: 60 }, 495)
-      timeline.to(activityImages[1], { scaleY: 1, duration: 60 }, 495)
-      timeline.to(activityTitles[0], { autoAlpha: 0, y: -12, duration: 24 }, 495)
-      timeline.to(activityTitles[1], { autoAlpha: 1, y: 0, duration: 32 }, 519)
-      timeline.to(activitiesRail, { x: railX(2), duration: 90 }, 555)
-      timeline.to(activityCards[1], { autoAlpha: 0.72, scaleX: 0.7544, scaleY: 0.64775, y: 8, duration: 90 }, 555)
-      timeline.to(activityImages[1], { scaleY: 1.16465, duration: 90 }, 555)
-      timeline.to(activityCards[2], { autoAlpha: 1, scaleX: 1, scaleY: 1, y: 0, duration: 90 }, 555)
-      timeline.to(activityImages[2], { scaleY: 1, duration: 90 }, 555)
-      timeline.to(activityTitles[1], { autoAlpha: 0, y: -12, duration: 28 }, 555)
-      timeline.to(activityTitles[2], { autoAlpha: 1, y: 0, duration: 40 }, 583)
-      timeline.to(activitiesCta, { autoAlpha: 1, y: 0, scale: 1, duration: 45, ease: 'power2.out' }, 600)
-      timeline.to(activitiesRail, { x: railX(3), duration: 75 }, 645)
-      timeline.to(activityCards[2], { autoAlpha: 0.72, scaleX: 0.7544, scaleY: 0.64775, y: 8, duration: 75 }, 645)
-      timeline.to(activityImages[2], { scaleY: 1.16465, duration: 75 }, 645)
-      timeline.to(activityCards[3], { autoAlpha: 1, scaleX: 1, scaleY: 1, y: 0, duration: 75 }, 645)
-      timeline.to(activityImages[3], { scaleY: 1, duration: 75 }, 645)
-      timeline.to(activityTitles[2], { autoAlpha: 0, y: -12, duration: 30 }, 645)
-      timeline.to(activityTitles[3], { autoAlpha: 1, y: 0, duration: 40 }, 675)
+      timeline.to(activitiesRail, { x: railX(1), duration: 45 }, 495)
+      timeline.to(activityCards[0], {
+        autoAlpha: 1,
+        scaleX: 0.7544,
+        scaleY: 0.64775,
+        y: 8,
+        '--activity-active-border': 0,
+        duration: 45,
+      }, 495)
+      timeline.to(activityImages[0], { scaleY: 1.16465, duration: 45 }, 495)
+      timeline.to(activityCards[1], {
+        autoAlpha: 1,
+        scaleX: 1,
+        scaleY: 1,
+        y: 0,
+        '--activity-active-border': 1,
+        duration: 45,
+      }, 495)
+      timeline.to(activityImages[1], { scaleY: 1, duration: 45 }, 495)
+      timeline.to(activityTitles[0], { autoAlpha: 0, y: -12, duration: 20 }, 495)
+      timeline.to(activityTitles[1], { autoAlpha: 1, y: 0, duration: 25 }, 515)
+      timeline.to(activitiesCta, {
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
+        duration: 30,
+        ease: 'power2.out',
+      }, 510)
+
+      // Hold the Figma-authored BUIDLHACK composition before advancing the reel.
+      timeline.to(activitiesRail, { x: railX(2), duration: 55 }, 575)
+      timeline.to(activityCards[1], {
+        autoAlpha: 1,
+        scaleX: 0.7544,
+        scaleY: 0.64775,
+        y: 8,
+        '--activity-active-border': 0,
+        duration: 55,
+      }, 575)
+      timeline.to(activityImages[1], { scaleY: 1.16465, duration: 55 }, 575)
+      timeline.to(activityCards[2], {
+        autoAlpha: 1,
+        scaleX: 1,
+        scaleY: 1,
+        y: 0,
+        '--activity-active-border': 1,
+        duration: 55,
+      }, 575)
+      timeline.to(activityImages[2], { scaleY: 1, duration: 55 }, 575)
+      timeline.to(activityTitles[1], { autoAlpha: 0, y: -12, duration: 20 }, 575)
+      timeline.to(activityTitles[2], { autoAlpha: 1, y: 0, duration: 30 }, 595)
+
+      timeline.to(activitiesRail, { x: railX(3), duration: 50 }, 650)
+      timeline.to(activityCards[2], {
+        autoAlpha: 1,
+        scaleX: 0.7544,
+        scaleY: 0.64775,
+        y: 8,
+        '--activity-active-border': 0,
+        duration: 50,
+      }, 650)
+      timeline.to(activityImages[2], { scaleY: 1.16465, duration: 50 }, 650)
+      timeline.to(activityCards[3], {
+        autoAlpha: 1,
+        scaleX: 1,
+        scaleY: 1,
+        y: 0,
+        '--activity-active-border': 1,
+        duration: 50,
+      }, 650)
+      timeline.to(activityImages[3], { scaleY: 1, duration: 50 }, 650)
+      timeline.to(activityTitles[2], { autoAlpha: 0, y: -12, duration: 20 }, 650)
+      timeline.to(activityTitles[3], { autoAlpha: 1, y: 0, duration: 30 }, 670)
       timeline.to(activities, { autoAlpha: 0, scale: 0.985, duration: 30 }, 720)
       timeline.to(awards, { autoAlpha: 1, duration: 30 }, 720)
       timeline.to(header, { autoAlpha: 0, y: -8, duration: 30 }, 720)

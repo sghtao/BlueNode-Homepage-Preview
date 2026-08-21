@@ -515,15 +515,28 @@ html::-webkit-scrollbar {
 }
 
 .activities-card {
+  position: relative;
   width: min(39.58vw, 570px);
   height: 511px;
   overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 78%);
+  border-radius: 2px;
   background: rgb(248 248 243 / 56%);
-  box-shadow: 0 24px 48px rgb(35 52 75 / 12%);
-  opacity: 0.72;
+  opacity: 1;
   transform: translateY(8px) scaleX(0.7544) scaleY(0.64775);
   transform-origin: center;
   will-change: transform, opacity;
+}
+
+.activities-card::after {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  border: 0.5px solid rgb(255 255 255 / 78%);
+  border-radius: 2px;
+  content: "";
+  opacity: var(--activity-active-border, 0);
+  pointer-events: none;
 }
 
 .activities-card figure {
@@ -537,6 +550,7 @@ html::-webkit-scrollbar {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 1px;
   transform: scaleY(1.16465);
   transform-origin: center;
   will-change: transform;
@@ -569,7 +583,10 @@ html::-webkit-scrollbar {
   z-index: 5;
   top: 817px;
   left: calc(83.33% - 2px);
-  min-width: 170px;
+  width: 172px;
+  min-width: 172px;
+  min-height: 43px;
+  height: 43px;
   padding: 0 22px;
   will-change: transform, opacity;
 }
