@@ -704,6 +704,9 @@ html::-webkit-scrollbar {
   position: absolute;
   top: 126px;
   left: 34px;
+  width: 1130px;
+  height: 112px;
+  margin: 0;
   font-size: clamp(84px, 8.34vw, 120px);
   letter-spacing: -0.03em;
   line-height: 112px;
@@ -717,39 +720,91 @@ html::-webkit-scrollbar {
   left: 40px;
   margin: 0;
   padding: 0;
-  border-top: 1px solid rgb(9 10 14 / 34%);
   list-style: none;
 }
 
+.research-list::before,
+.research-list li::after {
+  position: absolute;
+  right: 0;
+  left: 0;
+  height: 1px;
+  content: "";
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 1px;
+  pointer-events: none;
+}
+
+.research-list::before {
+  top: 0;
+  background-image: var(--research-divider-top);
+}
+
 .research-list li {
-  border-bottom: 1px solid rgb(9 10 14 / 34%);
+  position: relative;
+  height: 181px;
   opacity: 0;
   transform: translateY(20px);
   will-change: transform, opacity;
 }
 
+.research-list li:first-child {
+  height: 205px;
+}
+
+.research-list li::after {
+  bottom: 0;
+  background-image: var(--research-divider-row);
+}
+
 .research-list a {
   position: relative;
-  display: grid;
-  min-height: 181px;
-  grid-template-columns: 360px minmax(0, 1fr) 24px;
-  align-items: start;
-  gap: 24px;
-  padding: 18px 0;
+  display: block;
+  width: 100%;
+  height: 100%;
   color: inherit;
   text-decoration: none;
 }
 
 .research-card {
-  display: grid;
+  position: absolute;
+  top: 18px;
+  left: 0;
+  display: block;
   width: 360px;
   height: 145px;
-  place-items: center;
   overflow: hidden;
-  border: 1px solid rgb(9 10 14 / 8%);
-  background:
-    radial-gradient(circle at 72% 36%, rgb(255 255 255 / 90%) 0 8%, transparent 9%),
-    linear-gradient(135deg, #edf2f2, #d8e5e5);
+  background: #f7f8fa;
+}
+
+.research-list li:first-child .research-card {
+  top: 42px;
+}
+
+.research-card__motif {
+  position: absolute;
+  top: var(--motif-top);
+  left: var(--motif-left);
+  display: block;
+  width: var(--motif-size);
+  height: var(--motif-size);
+  background: rgb(222 231 241 / 90%);
+  transform: rotate(var(--motif-rotate));
+}
+
+.research-card__keyword,
+.research-card__sub {
+  position: absolute;
+  z-index: 1;
+  left: 22px;
+  display: block;
+  width: 316px;
+}
+
+.research-card__keyword {
+  top: 24px;
+  height: 40px;
   font-family: var(--prototype-sans);
   font-size: 40px;
   font-weight: 700;
@@ -757,22 +812,42 @@ html::-webkit-scrollbar {
   line-height: 38px;
 }
 
+.research-card__sub {
+  top: 109px;
+  height: 16px;
+  font-family: var(--prototype-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 16px;
+}
+
 .research-card--2 {
-  background:
-    radial-gradient(circle at 18% 72%, rgb(255 255 255 / 70%) 0 12%, transparent 13%),
-    linear-gradient(135deg, #111017, #383744);
+  background: #13151b;
   color: white;
 }
 
+.research-card--2 .research-card__motif {
+  background: rgb(224 231 241 / 24%);
+}
+
+.research-card--2 .research-card__sub {
+  color: #e6eaf0;
+}
+
 .research-card--3 {
-  background:
-    linear-gradient(28deg, transparent 42%, rgb(9 10 14 / 12%) 43% 46%, transparent 47%),
-    linear-gradient(135deg, #f7f0d8, #e5ebf1);
+  background: #f2eee8;
 }
 
 .research-list strong {
+  position: absolute;
+  top: 20px;
+  left: 384px;
+  display: block;
   overflow: hidden;
-  margin-top: 2px;
+  width: 880px;
+  height: 38px;
+  margin: 0;
   font-family: var(--prototype-korean);
   font-size: 28px;
   font-weight: 500;
@@ -782,28 +857,45 @@ html::-webkit-scrollbar {
   white-space: nowrap;
 }
 
+.research-list li:first-child strong {
+  top: 44px;
+}
+
 .research-meta {
   position: absolute;
-  bottom: 31px;
+  top: 132px;
   left: 384px;
+  display: block;
+  width: 520px;
+  height: 18px;
+  font-family: var(--prototype-sans);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.01em;
   line-height: 18px;
 }
 
+.research-list li:first-child .research-meta {
+  top: 156px;
+}
+
 .research-arrow {
-  align-self: center;
-  justify-self: end;
+  position: absolute;
+  top: 68px;
+  right: 0;
+  display: block;
+  width: 24px;
+  height: 24px;
   font-size: 20px;
   font-family: var(--prototype-sans);
   font-weight: 400;
   line-height: 24px;
+  text-align: right;
+  opacity: 0.8;
 }
 
-.research-list li:first-child a {
-  min-height: 205px;
-  padding-top: 42px;
+.research-list li:first-child .research-arrow {
+  top: 92px;
 }
 
 .research-all {
@@ -811,18 +903,40 @@ html::-webkit-scrollbar {
   top: 226px;
   right: 40px;
   display: flex;
-  min-height: 36px;
+  width: 86px;
+  height: 36px;
   align-items: center;
   justify-content: center;
-  padding: 0 12px;
+  padding: 0;
   border: 1px solid rgb(20 20 24 / 80%);
   border-radius: 999px;
+  background: #dee7f1;
   color: inherit;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0;
   line-height: 20px;
   text-decoration: none;
+  opacity: 0;
+  transform: translateY(10px);
+  will-change: transform, opacity;
+}
+
+.research-source {
+  position: absolute;
+  top: 874px;
+  left: 40px;
+  width: 720px;
+  height: 16px;
+  margin: 0;
+  font-family: var(--prototype-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 16px;
+  opacity: 0;
+  transform: translateY(8px);
+  will-change: transform, opacity;
 }
 
 /* 07 — Network */
@@ -1178,6 +1292,8 @@ html::-webkit-scrollbar {
 .prototype-shell.is-reduced [data-awards-count],
 .prototype-shell.is-reduced [data-research-title],
 .prototype-shell.is-reduced [data-research-row],
+.prototype-shell.is-reduced [data-research-all],
+.prototype-shell.is-reduced [data-research-source],
 .prototype-shell.is-reduced [data-network-title],
 .prototype-shell.is-reduced [data-network-origin],
 .prototype-shell.is-reduced [data-network-globe-stage],
@@ -1193,6 +1309,10 @@ html::-webkit-scrollbar {
   visibility: visible !important;
   opacity: 1 !important;
   transform: none !important;
+}
+
+.prototype-shell.is-reduced [data-research-source] {
+  opacity: 0.62 !important;
 }
 
 .prototype-shell.is-reduced .activities-rail {

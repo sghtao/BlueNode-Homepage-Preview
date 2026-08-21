@@ -1,6 +1,6 @@
 ---
 import { activities } from '../../data/activities'
-import { formatResearchDate, researchArticles } from '../../data/research'
+import { researchArticles } from '../../data/research'
 import { withBase } from '../../lib/paths'
 import '@fontsource/instrument-sans/latin-700.css'
 import '@fontsource/inter/latin-400.css'
@@ -32,7 +32,30 @@ const awards = [
 ]
 
 const research = researchArticles.slice(0, 3)
-const researchLabels = ['ORACLE', 'STABLE', 'EVM']
+const formatResearchDisplayDate = (publishedAt: string) =>
+  new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  })
+    .format(new Date(`${publishedAt}T00:00:00Z`))
+    .toUpperCase()
+const researchDisplay = [
+  { keyword: 'ORACLE', sub: 'ORACLE / DEFI', meta: 'ORACLE' },
+  { keyword: 'STABLE', sub: 'STABLECOIN / PAYMENTS', meta: 'STABLECOIN' },
+  { keyword: 'EVM', sub: 'ETHEREUM / EVM', meta: 'ETHEREUM' },
+]
+const researchMotifs = [
+  { left: 18, top: 12, size: 22, rotate: 8 },
+  { left: 61, top: 70, size: 36, rotate: 3 },
+  { left: 104, top: 12, size: 50, rotate: -2 },
+  { left: 147, top: 70, size: 22, rotate: -7 },
+  { left: 190, top: 12, size: 36, rotate: -12 },
+  { left: 233, top: 70, size: 50, rotate: -17 },
+  { left: 276, top: 12, size: 22, rotate: -22 },
+  { left: 319, top: 70, size: 36, rotate: -27 },
+]
 ---
 
 <div class="prototype-desktop-guard" role="status">
@@ -272,22 +295,47 @@ const researchLabels = ['ORACLE', 'STABLE', 'EVM']
         OUR RESEARCH
       </h2>
 
-      <ol class="research-list" aria-label="Latest BlueNode research">
+      <ol
+        class="research-list"
+        aria-label="Latest BlueNode research"
+        style={`--research-divider-top: url("${withBase('/images/noomo-prototype/research/research-divider-top.svg')}"); --research-divider-row: url("${withBase('/images/noomo-prototype/research/research-divider.svg')}")`}
+      >
         {research.map((article, index) => (
           <li data-research-row>
             <a href={article.externalUrl} target="_blank" rel="noopener noreferrer">
-              <span class={`research-card research-card--${index + 1}`}>{researchLabels[index]}</span>
+              <span class={`research-card research-card--${index + 1}`} aria-hidden="true">
+                {researchMotifs.map((motif) => (
+                  <i
+                    class="research-card__motif"
+                    style={`--motif-left: ${motif.left}px; --motif-top: ${motif.top}px; --motif-size: ${motif.size}px; --motif-rotate: ${motif.rotate}deg`}
+                  ></i>
+                ))}
+                <span class="research-card__keyword">{researchDisplay[index].keyword}</span>
+                <span class="research-card__sub">{researchDisplay[index].sub}</span>
+              </span>
               <strong>{article.title}</strong>
-              <span class="research-meta">{formatResearchDate(article.publishedAt)} / BLUENODE</span>
-              <span class="research-arrow" aria-hidden="true">↗</span>
+              <span class="research-meta">
+                {researchDisplay[index].meta}&nbsp;&nbsp;·&nbsp;&nbsp;{formatResearchDisplayDate(article.publishedAt)}
+              </span>
+              <span class="research-arrow" aria-hidden="true">→</span>
             </a>
           </li>
         ))}
       </ol>
 
-      <a class="research-all" href="https://medium.com/bluenode" target="_blank" rel="noopener noreferrer">
+      <a
+        class="research-all"
+        href="https://medium.com/bluenode"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-research-all
+      >
         VIEW ALL
       </a>
+
+      <p class="research-source" data-research-source>
+        SOURCE&nbsp;&nbsp;·&nbsp;&nbsp;BLUENODE MEDIUM&nbsp;&nbsp;/&nbsp;&nbsp;THUMBNAILS TO SYNC FROM PUBLISHED POSTS
+      </p>
     </section>
 
     <section

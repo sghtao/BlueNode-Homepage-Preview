@@ -151,6 +151,8 @@ function initialisePrototype() {
   const awardsCount = q<HTMLElement>(awards, '[data-awards-count]')
   const researchTitle = q<HTMLElement>(research, '[data-research-title]')
   const researchRows = qa<HTMLElement>(research, '[data-research-row]')
+  const researchAll = q<HTMLElement>(research, '[data-research-all]')
+  const researchSource = q<HTMLElement>(research, '[data-research-source]')
   const networkTitle = q<HTMLElement>(network, '[data-network-title]')
   const networkOrigin = q<HTMLElement>(network, '[data-network-origin]')
   const networkStage = q<HTMLElement>(network, '[data-network-globe-stage]')
@@ -466,7 +468,7 @@ function initialisePrototype() {
       gsap.set(activityImages[0], { scaleY: 1 })
       gsap.set(activityTitles, { autoAlpha: 0, y: 12 })
       gsap.set(activityTitles[0], { autoAlpha: 1, y: 0 })
-      gsap.set([awardsTitle, researchTitle, networkTitle, networkOrigin, joinTitle], {
+      gsap.set([awardsTitle, researchTitle, researchAll, researchSource, networkTitle, networkOrigin, joinTitle], {
         autoAlpha: 0,
         y: 26,
       })
@@ -674,11 +676,12 @@ function initialisePrototype() {
       timeline.to(research, { autoAlpha: 1, duration: 40 }, 900)
       timeline.to(header, { autoAlpha: 1, y: 0, duration: 40 }, 900)
 
-      // 06 Research / 940–1160vh — three editorial rows resolve one by one.
-      timeline.to(researchTitle, { autoAlpha: 1, y: 0, duration: 44, ease: 'power2.out' }, 940)
-      timeline.to(researchRows[0], { autoAlpha: 1, y: 0, duration: 44, ease: 'power2.out' }, 940)
-      timeline.to(researchRows[1], { autoAlpha: 1, y: 0, duration: 48, ease: 'power2.out' }, 991)
-      timeline.to(researchRows[2], { autoAlpha: 1, y: 0, duration: 48, ease: 'power2.out' }, 1046)
+      // 06 Research / 940–1160vh — editorial rows build, then hold as one readable page.
+      timeline.to([researchTitle, researchAll], { autoAlpha: 1, y: 0, duration: 36, ease: 'power2.out' }, 940)
+      timeline.to(researchRows[0], { autoAlpha: 1, y: 0, duration: 36, ease: 'power2.out' }, 948)
+      timeline.to(researchRows[1], { autoAlpha: 1, y: 0, duration: 36, ease: 'power2.out' }, 985)
+      timeline.to(researchRows[2], { autoAlpha: 1, y: 0, duration: 36, ease: 'power2.out' }, 1022)
+      timeline.to(researchSource, { autoAlpha: 0.62, y: 0, duration: 28, ease: 'power2.out' }, 1045)
       timeline.to(research, { autoAlpha: 0, yPercent: -7, duration: 40 }, 1120)
       timeline.to(network, { autoAlpha: 1, duration: 40 }, 1120)
       timeline.to(networkStage, { autoAlpha: 1, scale: 1, yPercent: -50, duration: 40, ease: 'power2.out' }, 1120)
