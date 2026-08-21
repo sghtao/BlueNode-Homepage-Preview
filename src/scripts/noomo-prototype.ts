@@ -177,6 +177,17 @@ function initialisePrototype() {
 
   let lastSceneName: SceneName | undefined
   let lastActivityIndex = -1
+  let lastAboutCtaInteractive: boolean | undefined
+
+  const setAboutCtaInteractive = (time: number) => {
+    const interactive = time >= 394 && time < 414
+    if (interactive === lastAboutCtaInteractive || !aboutCta) return
+    lastAboutCtaInteractive = interactive
+    const button = aboutCta as HTMLButtonElement
+    button.tabIndex = interactive ? 0 : -1
+    if (interactive) button.removeAttribute('aria-disabled')
+    else button.setAttribute('aria-disabled', 'true')
+  }
 
   const setActiveScene = (time: number) => {
     const range = sceneRanges.find((candidate, index) => {
@@ -397,6 +408,11 @@ function initialisePrototype() {
 
       if (reduce) {
         root.classList.add('is-reduced')
+        if (aboutCta) {
+          const aboutButton = aboutCta as HTMLButtonElement
+          aboutButton.removeAttribute('aria-disabled')
+          aboutButton.tabIndex = 0
+        }
         scenes.forEach((scene) => {
           scene.removeAttribute('aria-hidden')
           scene.inert = false
@@ -464,6 +480,7 @@ function initialisePrototype() {
           const time = timeline.time()
           setActiveScene(time)
           setActiveActivity(time)
+          setAboutCtaInteractive(time)
           if (time >= 1120 && time <= 1400) globe.render(time)
         },
         scrollTrigger: {
@@ -500,6 +517,7 @@ function initialisePrototype() {
       }
 
       timeline.to(progressFill, { scaleX: 1, duration: TOTAL_VH }, 0)
+      timeline.to(Object.values(activeBackgroundOrbs), { y: 8, duration: 68 }, 0)
 
       addBackgroundTransition('bluenode', 68, 82)
       addBackgroundTransition('about', 192, 78)
@@ -642,6 +660,7 @@ function initialisePrototype() {
 
       setActiveScene(0)
       setActiveActivity(0)
+      setAboutCtaInteractive(0)
 
       const jumpHandlers = new Map<HTMLButtonElement, () => void>()
       navigationButtons.forEach((button) => {

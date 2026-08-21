@@ -109,7 +109,12 @@ const researchLabels = ['ORACLE', 'STABLE', 'EVM']
       </h1>
       <div class="scroll-cue" aria-hidden="true" data-entry-scroll-cue>
         <span>SCROLL</span>
-        <i></i>
+        <img
+          src={withBase('/images/noomo-prototype/scroll-chevron.svg')}
+          width="12"
+          height="7"
+          alt=""
+        />
       </div>
     </section>
 
@@ -158,14 +163,19 @@ const researchLabels = ['ORACLE', 'STABLE', 'EVM']
         <span aria-hidden="true">→</span>
       </button>
 
-      <img
+      <div
         class="about-pengu"
-        src={withBase('/images/noomo-prototype/pengu.png')}
-        width="1254"
-        height="1254"
-        alt="BlueNode mascot Pengu"
         data-about-pengu
-      />
+        style={`--pengu-mask: url("${withBase('/images/noomo-prototype/pengu-3d-mask.svg')}")`}
+      >
+        <img
+          class="about-pengu__image"
+          src={withBase('/images/noomo-prototype/pengu-3d-front.png')}
+          width="2048"
+          height="2048"
+          alt="BlueNode mascot Pengu"
+        />
+      </div>
     </section>
 
     <section
