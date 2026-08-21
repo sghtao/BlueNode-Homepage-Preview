@@ -653,18 +653,18 @@ function initialisePrototype() {
       timeline.to(awardRows.slice(0, 4), {
         autoAlpha: 1,
         y: 0,
-        duration: 44,
-        stagger: 7,
+        duration: 32,
+        stagger: 6,
         ease: 'power2.out',
-      }, 780)
+      }, 770)
       timeline.to(awardRows.slice(4), {
         autoAlpha: 1,
         y: 0,
-        duration: 40,
-        stagger: 8,
+        duration: 32,
+        stagger: 6,
         ease: 'power2.out',
-      }, 836)
-      timeline.to(awardsCount, { autoAlpha: 1, y: 0, duration: 28, ease: 'power2.out' }, 855)
+      }, 812)
+      timeline.to(awardsCount, { autoAlpha: 1, y: 0, duration: 25, ease: 'power2.out' }, 825)
       timeline.to([awardsTitle, ...awardRows, awardsCount], {
         autoAlpha: 0,
         y: -22,

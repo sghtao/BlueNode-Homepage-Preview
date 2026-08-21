@@ -243,11 +243,15 @@ const researchLabels = ['ORACLE', 'STABLE', 'EVM']
         <span>INTO TANGIBLE OUTCOMES.</span>
       </h2>
 
-      <ol class="awards-list" aria-label="Selected BlueNode awards">
+      <ol
+        class="awards-list"
+        aria-label="Selected BlueNode awards"
+        style={`--awards-divider: url("${withBase('/images/noomo-prototype/awards/award-divider.svg')}")`}
+      >
         {awards.map((award) => (
           <li data-award-row>
             <span>{award}</span>
-            <span aria-hidden="true">↗</span>
+            <span aria-hidden="true">→</span>
           </li>
         ))}
       </ol>
