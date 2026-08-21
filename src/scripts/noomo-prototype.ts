@@ -157,6 +157,8 @@ function initialisePrototype() {
   const networkOrigin = q<HTMLElement>(network, '[data-network-origin]')
   const networkStage = q<HTMLElement>(network, '[data-network-globe-stage]')
   const networkHub = q<HTMLElement>(network, '[data-network-hub]')
+  const networkDomesticRoutes = q<HTMLImageElement>(network, '[data-network-domestic-routes]')
+  const networkFarRoutes = q<HTMLImageElement>(network, '[data-network-far-routes]')
   const domesticLabels = qa<HTMLElement>(network, '[data-network-domestic] .network-label')
   const farLabels = qa<HTMLElement>(network, '[data-network-far] .network-label')
   const networkCta = q<HTMLElement>(network, '[data-network-cta]')
@@ -267,8 +269,6 @@ function initialisePrototype() {
     )
 
     const INCHEON: [number, number] = [37.4563, 126.7052]
-    const TOKYO: [number, number] = [35.6895, 139.6917]
-    const SINGAPORE: [number, number] = [1.3521, 103.8198]
     const INITIAL_PHI = Math.PI / 2 - (INCHEON[1] * Math.PI) / 180 + Math.PI
     const INITIAL_THETA = (INCHEON[0] * Math.PI) / 180
 
@@ -318,26 +318,19 @@ function initialisePrototype() {
         phi,
         theta,
         dark: 0,
-        diffuse: 1.18,
-        scale: 1.04,
-        mapSamples: 16000,
-        mapBrightness: 5.7,
-        baseColor: [1, 1, 1],
+        diffuse: 1,
+        scale: 1.24,
+        mapSamples: 6000,
+        mapBrightness: 0.5,
+        baseColor: [0.94, 0.97, 0.99],
         markerColor: [0.035, 0.04, 0.055],
-        glowColor: [0.93, 0.96, 0.99],
+        glowColor: [0.72, 0.82, 0.9],
         arcColor: [0.035, 0.04, 0.055],
         arcWidth: 0.68,
         arcHeight: 0.16,
         markerElevation: 0.02,
-        markers: [
-          { location: INCHEON, size: 0.072, id: 'incheon' },
-          { location: TOKYO, size: 0.034, id: 'tokyo' },
-          { location: SINGAPORE, size: 0.034, id: 'singapore' },
-        ],
-        arcs: [
-          { from: INCHEON, to: TOKYO, id: 'incheon-tokyo' },
-          { from: INCHEON, to: SINGAPORE, id: 'incheon-singapore' },
-        ],
+        markers: [],
+        arcs: [],
       })
       stage.classList.add('is-cobe-ready')
       fallback?.setAttribute('aria-hidden', 'true')
@@ -472,7 +465,7 @@ function initialisePrototype() {
         autoAlpha: 0,
         y: 26,
       })
-      gsap.set([networkStage, networkHub, networkCta], { autoAlpha: 0 })
+      gsap.set([networkStage, networkHub, networkDomesticRoutes, networkFarRoutes, networkCta], { autoAlpha: 0 })
       gsap.set(networkStage, { scale: 0.93, xPercent: -50, yPercent: -45 })
       gsap.set(networkCta, { xPercent: -50 })
       gsap.set(domesticLabels, { autoAlpha: 0, y: 10 })
@@ -689,22 +682,24 @@ function initialisePrototype() {
 
       // 07 Network / 1160–1380vh — Korea first, distant nodes second.
       timeline.to(networkHub, { autoAlpha: 1, y: 0, duration: 44, ease: 'power2.out' }, 1160)
+      timeline.to(networkDomesticRoutes, { autoAlpha: 1, duration: 45, ease: 'power2.out' }, 1170)
       timeline.to(domesticLabels, {
         autoAlpha: 1,
         y: 0,
         duration: 45,
         stagger: 5,
         ease: 'power2.out',
-      }, 1204)
+      }, 1188)
+      timeline.to(networkFarRoutes, { autoAlpha: 1, duration: 48, ease: 'power2.out' }, 1245)
       timeline.to(farLabels, {
-        autoAlpha: 1,
+        autoAlpha: 0.68,
         y: 0,
         duration: 55,
         stagger: 12,
         ease: 'power2.out',
       }, 1259)
-      timeline.to(networkCta, { autoAlpha: 1, duration: 40, ease: 'power2.out' }, 1278)
-      timeline.to([...domesticLabels, ...farLabels, networkCta], { autoAlpha: 0, y: -10, duration: 40 }, 1340)
+      timeline.to(networkCta, { autoAlpha: 1, duration: 36, ease: 'power2.out' }, 1280)
+      timeline.to([networkHub, networkDomesticRoutes, networkFarRoutes, ...domesticLabels, ...farLabels, networkCta], { autoAlpha: 0, y: -10, duration: 40 }, 1340)
       timeline.to(network, { autoAlpha: 0, scale: 0.985, duration: 40 }, 1340)
       timeline.to(join, { autoAlpha: 1, duration: 40 }, 1340)
 

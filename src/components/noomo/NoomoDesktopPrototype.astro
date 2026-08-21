@@ -357,6 +357,24 @@ const researchMotifs = [
 
       <div class="network-globe-stage" data-network-globe-stage>
         <div class="network-globe-fallback" data-network-fallback aria-hidden="true"></div>
+        <div class="network-globe-reference" aria-hidden="true">
+          <img
+            class="network-globe-reference__outline"
+            src={withBase('/images/noomo-prototype/network/network-globe-outline.svg')}
+            width="1158"
+            height="1158"
+            alt=""
+          />
+          <span class="network-globe-reference__clip">
+            <img
+              class="network-globe-reference__grid"
+              src={withBase('/images/noomo-prototype/network/network-globe-grid.svg')}
+              width="1158"
+              height="1158"
+              alt=""
+            />
+          </span>
+        </div>
         <canvas
           class="network-globe-canvas"
           width="1160"
@@ -365,22 +383,40 @@ const researchMotifs = [
           aria-label="인천을 중심으로 국내외 Web3 생태계와 연결된 BlueNode 네트워크"
           data-network-canvas
         ></canvas>
-        <div class="network-hub" data-network-hub>
-          <strong>INCHEON</strong>
-          <span>BLUENODE</span>
-        </div>
-        <div class="network-labels network-labels--domestic" data-network-domestic aria-hidden="true">
-          <span class="network-label label-dsrv">DSRV</span>
-          <span class="network-label label-catalyze">CATALYZE RESEARCH</span>
-          <span class="network-label label-four-pillars">FOUR PILLARS</span>
-          <span class="network-label label-tiger">TIGER RESEARCH</span>
-          <span class="network-label label-xangle">XANGLE</span>
-          <span class="network-label label-altus">ALTUS</span>
-        </div>
-        <div class="network-labels network-labels--far" data-network-far aria-hidden="true">
-          <span class="network-label label-tokyo">TOKYO / WEB3 JAPAN</span>
-          <span class="network-label label-singapore">SINGAPORE / BLOCKCHAIN@NTU</span>
-        </div>
+      </div>
+
+      <div class="network-connections" aria-hidden="true">
+        <img
+          class="network-route-layer network-route-layer--far"
+          src={withBase('/images/noomo-prototype/network/network-global-routes.svg')}
+          width="1440"
+          height="900"
+          alt=""
+          data-network-far-routes
+        />
+        <img
+          class="network-route-layer network-route-layer--domestic"
+          src={withBase('/images/noomo-prototype/network/network-korea-routes.svg')}
+          width="1440"
+          height="900"
+          alt=""
+          data-network-domestic-routes
+        />
+      </div>
+
+      <p class="network-hub" data-network-hub>INCHEON / BLUENODE HUB</p>
+
+      <div class="network-labels network-labels--domestic" data-network-domestic aria-hidden="true">
+        <span class="network-label label-dsrv">DSRV</span>
+        <span class="network-label label-catalyze">CATALYZE RESEARCH</span>
+        <span class="network-label label-four-pillars">FOUR PILLARS</span>
+        <span class="network-label label-tiger">TIGER RESEARCH</span>
+        <span class="network-label label-xangle">XANGLE</span>
+        <span class="network-label label-altus">ALTUS</span>
+      </div>
+      <div class="network-labels network-labels--far" data-network-far aria-hidden="true">
+        <span class="network-label label-tokyo">TOKYO / WEB3 JAPAN</span>
+        <span class="network-label label-singapore">SINGAPORE / BLOCKCHAIN@NTU</span>
       </div>
 
       <button class="prototype-pill-button network-cta" type="button" data-jump-vh="1160" data-network-cta>
