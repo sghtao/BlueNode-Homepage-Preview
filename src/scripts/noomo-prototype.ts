@@ -254,7 +254,7 @@ function initialisePrototype() {
   let lastActivityIndex = -1
   let lastAboutCtaInteractive: boolean | undefined
 
-  const setAboutCtaInteractive = (time: number, start = 394, end = 414) => {
+  const setAboutCtaInteractive = (time: number, start = 366, end = 420) => {
     const interactive = time >= start && time < end
     if (interactive === lastAboutCtaInteractive || !aboutCta) return
     lastAboutCtaInteractive = interactive
@@ -600,6 +600,7 @@ function initialisePrototype() {
         }
         gsap.set(activitiesRail, { autoAlpha: 0, x: responsiveActivityRailX(0) })
         gsap.set(activitiesCta, { autoAlpha: 0 })
+        gsap.set(activityImages[0], { rotation: 180 })
         gsap.set(activityCards, {
           autoAlpha: 0.42,
           scale: 0.76,
@@ -651,27 +652,30 @@ function initialisePrototype() {
         const bluenodeEnd = responsiveState('bluenode', 1)
         const aboutTypeLock = responsiveState('about', 0.25)
         const aboutPenguLock = responsiveState('about', 0.55)
-        const aboutCtaHold = responsiveState('about', 0.8)
+        const aboutCtaReveal = responsiveState('about', 0.68)
+        const aboutCtaHold = responsiveState('about', 0.82)
         const aboutEnd = responsiveState('about', 1)
         const activitiesTitleLock = responsiveState('activities', 0.15)
         const activitiesReelTwo = responsiveState('activities', 0.35)
         const activitiesReelThree = responsiveState('activities', 0.49)
         const activitiesReelFour = responsiveState('activities', 0.61)
-        const activitiesCtaHold = responsiveState('activities', 0.65)
-        const activitiesLift = responsiveState('activities', 0.82)
+        const activitiesCtaReveal = responsiveState('activities', 0.61)
+        const activitiesCtaHold = responsiveState('activities', 0.75)
+        const activitiesLift = responsiveState('activities', 0.86)
         const activitiesEnd = responsiveState('activities', 1)
-        const awardsStatement = responsiveState('awards', 0.2)
-        const awardsEvidence = responsiveState('awards', 0.45)
-        const awardsCountLock = responsiveState('awards', 0.7)
+        const awardsStatement = responsiveState('awards', 0.15)
+        const awardsEvidence = responsiveState('awards', 0.38)
+        const awardsCountLock = responsiveState('awards', 0.6)
         const awardsEnd = responsiveState('awards', 1)
-        const researchArticleOne = responsiveState('research', 0.2)
-        const researchArticleTwo = responsiveState('research', 0.45)
-        const researchArticleThree = responsiveState('research', 0.7)
+        const researchArticleOne = responsiveState('research', 0.15)
+        const researchArticleTwo = responsiveState('research', 0.35)
+        const researchArticleThree = responsiveState('research', 0.55)
         const researchEnd = responsiveState('research', 1)
         const networkStart = responsiveState('network', 0)
-        const networkDomestic = responsiveState('network', 0.2)
-        const networkSettle = responsiveState('network', 0.45)
-        const networkContext = responsiveState('network', 0.7)
+        const networkDomestic = responsiveState('network', 0.16)
+        const networkSettle = responsiveState('network', 0.36)
+        const networkContext = responsiveState('network', 0.56)
+        const networkCtaReveal = responsiveState('network', 0.68)
         const networkEnd = responsiveState('network', 1)
         const joinStart = responsiveState('join', 0)
         const joinStatement = responsiveState('join', 0.25)
@@ -684,7 +688,7 @@ function initialisePrototype() {
           onUpdate: () => {
             const time = timeline.time()
             setActiveScene(time, responsiveSceneRanges)
-            setAboutCtaInteractive(time, aboutCtaHold - 17, aboutCtaHold)
+            setAboutCtaInteractive(time, aboutCtaReveal, aboutCtaHold)
             if (time >= researchEnd - 30 && time <= networkEnd + 10) {
               globe.render(time, networkStart, networkEnd - networkStart)
             }
@@ -693,10 +697,10 @@ function initialisePrototype() {
             id: 'bluenode-responsive-prototype',
             trigger: root,
             start: 'top top',
-            end: () => `+=${Math.round(innerHeight * 11.6)}`,
+            end: () => `+=${Math.round(innerHeight * 9.4)}`,
             pin: viewport,
             pinSpacing: true,
-            scrub: 0.75,
+            scrub: 0.55,
             anticipatePin: 1,
             invalidateOnRefresh: true,
           },
@@ -751,14 +755,19 @@ function initialisePrototype() {
           duration: entryLift - entryHold,
         }, entryHold)
         timeline.to(entryType, {
-          autoAlpha: 0.82,
+          autoAlpha: 0,
           y: -10,
           duration: entryLift - entryHold,
         }, entryHold)
         timeline.to(entry, { yPercent: -45, duration: entryLift - entryHold }, entryHold)
-        timeline.to(bluenode, { yPercent: 55, duration: entryLift - entryHold }, entryHold)
+        timeline.to(bluenode, { yPercent: 36, duration: entryLift - entryHold }, entryHold)
         timeline.to(entry, { yPercent: -100, duration: entryEnd - entryLift }, entryLift)
         timeline.to(bluenode, { yPercent: 0, duration: entryEnd - entryLift }, entryLift)
+        timeline.to(entryType, {
+          autoAlpha: 0,
+          y: -18,
+          duration: entryEnd - entryLift,
+        }, entryLift)
         timeline.to(header, {
           autoAlpha: 0,
           y: -8,
@@ -821,7 +830,7 @@ function initialisePrototype() {
           autoAlpha: 1,
           y: 0,
           scale: 1,
-          duration: aboutCtaHold - (aboutPenguLock + 5),
+          duration: aboutCtaReveal - (aboutPenguLock + 5),
           ease: 'power2.out',
         }, aboutPenguLock + 5)
         timeline.to(about, {
@@ -842,20 +851,20 @@ function initialisePrototype() {
         }, aboutEnd)
         timeline.to(activitiesWord, {
           autoAlpha: 1,
-          duration: activitiesTitleLock - aboutEnd,
+          duration: activitiesTitleLock - aboutCtaHold,
           ease: 'power2.out',
-        }, aboutEnd)
+        }, aboutCtaHold)
         timeline.to(activitiesRail, {
           autoAlpha: 1,
-          duration: activitiesTitleLock - aboutEnd,
+          duration: activitiesTitleLock - aboutCtaHold,
           ease: 'power2.out',
-        }, aboutEnd)
+        }, aboutCtaHold)
         addResponsiveActivityStop(0, 1, activitiesTitleLock, activitiesReelTwo)
         addResponsiveActivityStop(1, 2, activitiesReelTwo, activitiesReelThree)
         addResponsiveActivityStop(2, 3, activitiesReelThree, activitiesReelFour)
         timeline.to(activitiesCta, {
           autoAlpha: 1,
-          duration: activitiesCtaHold - activitiesReelThree,
+          duration: activitiesCtaReveal - activitiesReelThree,
           ease: 'power2.out',
         }, activitiesReelThree)
 
@@ -879,14 +888,14 @@ function initialisePrototype() {
         timeline.to(header, {
           autoAlpha: 0,
           y: -8,
-          duration: activitiesEnd - activitiesLift,
-        }, activitiesLift)
+          duration: activitiesLift - activitiesCtaHold,
+        }, activitiesCtaHold)
         timeline.to(awardsTitle, {
           autoAlpha: 1,
           y: 0,
-          duration: awardsStatement - activitiesLift,
+          duration: awardsStatement - activitiesCtaHold,
           ease: 'power2.out',
-        }, activitiesLift)
+        }, activitiesCtaHold)
         timeline.to(awardRows.slice(0, 4), {
           autoAlpha: 1,
           y: 0,
@@ -904,7 +913,7 @@ function initialisePrototype() {
         timeline.to(awardsCount, {
           autoAlpha: 1,
           y: 0,
-          duration: Math.min(24, awardsEnd - awardsCountLock),
+          duration: Math.min(18, awardsEnd - 30 - awardsCountLock),
           ease: 'power2.out',
         }, awardsCountLock)
 
@@ -912,7 +921,7 @@ function initialisePrototype() {
         timeline.to([awardsTitle, ...awardRows, awardsCount], {
           autoAlpha: 0,
           y: -14,
-          duration: awardsEnd - (awardsEnd - 30),
+          duration: 18,
         }, awardsEnd - 30)
         timeline.to(awards, { yPercent: -100, duration: 30 }, awardsEnd - 30)
         timeline.to(research, { yPercent: 0, duration: 30 }, awardsEnd - 30)
@@ -975,6 +984,11 @@ function initialisePrototype() {
           ease: 'power2.out',
         }, researchArticleTwo)
         // 06 Research → 07 Network — globe first, Korea next, distant touchpoints last.
+        timeline.to([researchTitle, ...researchRows, researchAll], {
+          autoAlpha: 0,
+          y: -14,
+          duration: 18,
+        }, researchEnd - 30)
         timeline.to(research, { yPercent: -100, duration: 30 }, researchEnd - 30)
         timeline.to(network, { yPercent: 0, duration: 30 }, researchEnd - 30)
         timeline.to([networkTitle, networkOrigin], {
@@ -1013,7 +1027,7 @@ function initialisePrototype() {
           ease: 'power2.out',
         }, networkSettle)
         timeline.to(farLabels, {
-          autoAlpha: 0.34,
+          autoAlpha: 0.52,
           y: 0,
           duration: networkContext - networkSettle - 12,
           stagger: 6,
@@ -1021,19 +1035,22 @@ function initialisePrototype() {
         }, networkSettle + 6)
         timeline.to(networkCta, {
           autoAlpha: 1,
-          duration: networkEnd - 28 - networkContext,
+          duration: networkCtaReveal - networkContext,
           ease: 'power2.out',
         }, networkContext)
 
         // 07 Network → 08 Join — relationship marks quiet down before the invitation takes over.
         timeline.to([
+          networkTitle,
+          networkOrigin,
+          networkStage,
           networkHub,
           networkDomesticRoutes,
           networkFarRoutes,
           ...domesticLabels,
           ...farLabels,
           networkCta,
-        ], { autoAlpha: 0, duration: 28 }, networkEnd - 28)
+        ], { autoAlpha: 0, duration: 18 }, networkEnd - 28)
         timeline.to(network, { yPercent: -100, duration: 28 }, networkEnd - 28)
         timeline.to(join, { yPercent: 0, duration: 28 }, networkEnd - 28)
         timeline.to(joinTitle, {
@@ -1063,7 +1080,7 @@ function initialisePrototype() {
 
         lastSceneName = undefined
         setActiveScene(0, responsiveSceneRanges)
-        setAboutCtaInteractive(0, aboutCtaHold - 17, aboutCtaHold)
+        setAboutCtaInteractive(0, aboutCtaReveal, aboutCtaHold)
 
         const jumpToEntry = () => jumpToVh(0, timeline, RESPONSIVE_TOTAL_VH, responsiveSceneRanges)
         const jumpToJoin = () => jumpToVh(joinStart + 1, timeline, RESPONSIVE_TOTAL_VH, responsiveSceneRanges)
@@ -1170,7 +1187,7 @@ function initialisePrototype() {
         y: 0,
         '--activity-active-border': 1,
       })
-      gsap.set(activityImages[0], { scaleY: 1 })
+      gsap.set(activityImages[0], { scaleY: 1, rotation: 180 })
       gsap.set(activityTitles, { autoAlpha: 0, y: 12 })
       gsap.set(activityTitles[0], { autoAlpha: 1, y: 0 })
       gsap.set([awardsTitle, researchTitle, researchAll, networkTitle, networkOrigin, joinTitle], {
@@ -1209,10 +1226,10 @@ function initialisePrototype() {
           id: 'bluenode-desktop-prototype',
           trigger: root,
           start: 'top top',
-          end: () => `+=${Math.round(innerHeight * 15.4)}`,
+          end: () => `+=${Math.round(innerHeight * 12.4)}`,
           pin: viewport,
           pinSpacing: true,
-          scrub: 1,
+          scrub: 0.65,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
@@ -1232,7 +1249,7 @@ function initialisePrototype() {
         entryMotionEnd - entryMotionStart,
       )
       addBackgroundTransition(timeline, 'about', 192, 78)
-      addBackgroundTransition(timeline, 'activities', 414, 81)
+      addBackgroundTransition(timeline, 'activities', 420, 75)
       addBackgroundTransition(timeline, 'awards', 720, 30)
       addBackgroundTransition(timeline, 'research', 900, 40)
       addBackgroundTransition(timeline, 'network', 1120, 40)
@@ -1251,11 +1268,11 @@ function initialisePrototype() {
         duration: entryMotionMid - entryMotionStart,
       }, entryMotionStart)
       timeline.to(bluenode, {
-        yPercent: 55,
+        yPercent: 36,
         duration: entryMotionMid - entryMotionStart,
       }, entryMotionStart)
       timeline.to(entryType, {
-        autoAlpha: 0.82,
+        autoAlpha: 0,
         y: -12,
         duration: entryMotionMid - entryMotionStart,
       }, entryMotionStart)
@@ -1265,6 +1282,11 @@ function initialisePrototype() {
       }, entryMotionMid)
       timeline.to(bluenode, {
         yPercent: 0,
+        duration: entryMotionEnd - entryMotionMid,
+      }, entryMotionMid)
+      timeline.to(entryType, {
+        autoAlpha: 0,
+        y: -22,
         duration: entryMotionEnd - entryMotionMid,
       }, entryMotionMid)
       timeline.to(header, {
@@ -1283,17 +1305,17 @@ function initialisePrototype() {
       timeline.to(header, { autoAlpha: 1, y: 0, duration: 34 }, 236)
 
       // 03 About / 270–450vh — type, Pengu, metadata, then CTA.
-      timeline.to(aboutType, { autoAlpha: 1, x: 0, duration: 45, ease: 'power2.out' }, 270)
-      timeline.to(aboutPengu, { autoAlpha: 1, x: 0, scale: 1, duration: 65, ease: 'power3.out' }, 310)
-      timeline.to(aboutMeta, { autoAlpha: 1, y: 0, duration: 50, ease: 'power2.out' }, 338)
-      timeline.to(aboutCta, { autoAlpha: 1, y: 0, scale: 1, duration: 44, ease: 'power2.out' }, 350)
-      timeline.to(about, { yPercent: -45, duration: 36 }, 414)
-      timeline.to(activities, { yPercent: 55, duration: 36 }, 414)
+      timeline.to(aboutType, { autoAlpha: 1, x: 0, duration: 34, ease: 'power2.out' }, 270)
+      timeline.to(aboutPengu, { autoAlpha: 1, x: 0, scale: 1, duration: 54, ease: 'power3.out' }, 294)
+      timeline.to(aboutMeta, { autoAlpha: 1, y: 0, duration: 34, ease: 'power2.out' }, 310)
+      timeline.to(aboutCta, { autoAlpha: 1, y: 0, scale: 1, duration: 28, ease: 'power2.out' }, 338)
+      timeline.to(about, { yPercent: -45, duration: 30 }, 420)
+      timeline.to(activities, { yPercent: 55, duration: 30 }, 420)
 
       // 04 Activities / 450–750vh — vertical scroll drives a four-stop horizontal reel.
       timeline.to(about, { yPercent: -100, duration: 45 }, 450)
       timeline.to(activities, { yPercent: 0, duration: 45 }, 450)
-      timeline.to(activitiesWord, { autoAlpha: 1, y: 0, duration: 45, ease: 'power2.out' }, 450)
+      timeline.to(activitiesWord, { autoAlpha: 1, y: 0, duration: 75, ease: 'power2.out' }, 420)
       timeline.to(activitiesRail, { x: railX(1), duration: 45 }, 495)
       timeline.to(activityCards[0], {
         autoAlpha: 1,
@@ -1372,27 +1394,27 @@ function initialisePrototype() {
       timeline.to(header, { autoAlpha: 0, y: -8, duration: 30 }, 720)
 
       // 05 Awards / 750–940vh — evidence rows build in two measured groups.
-      timeline.to(awardsTitle, { autoAlpha: 1, y: 0, duration: 38, ease: 'power2.out' }, 750)
+      timeline.to(awardsTitle, { autoAlpha: 1, y: 0, duration: 58, ease: 'power2.out' }, 720)
       timeline.to(awardRows.slice(0, 4), {
         autoAlpha: 1,
         y: 0,
-        duration: 30,
-        stagger: 6,
+        duration: 24,
+        stagger: 4,
         ease: 'power2.out',
-      }, 788)
+      }, 770)
       timeline.to(awardRows.slice(4), {
         autoAlpha: 1,
         y: 0,
-        duration: 35,
-        stagger: 6,
+        duration: 26,
+        stagger: 4,
         ease: 'power2.out',
-      }, 836)
+      }, 805)
       timeline.to(awardsCount, {
         autoAlpha: 1,
         y: 0,
-        duration: 17,
+        duration: 18,
         ease: 'power2.out',
-      }, 883)
+      }, 838)
       timeline.to([awardsTitle, ...awardRows, awardsCount], {
         autoAlpha: 0,
         y: -22,
@@ -1406,72 +1428,72 @@ function initialisePrototype() {
       timeline.to(researchTitle, {
         autoAlpha: 1,
         y: 0,
-        duration: 44,
+        duration: 70,
         ease: 'power2.out',
-      }, 940)
+      }, 900)
       timeline.to(researchRows[0], {
         autoAlpha: 1,
         y: 0,
-        duration: 44,
+        duration: 30,
         ease: 'power2.out',
       }, 940)
       timeline.to(researchRows[1], {
         autoAlpha: 1,
         y: 0,
-        duration: 55,
+        duration: 34,
         ease: 'power2.out',
-      }, 984)
+      }, 968)
       timeline.to(researchRows[2], {
         autoAlpha: 1,
         y: 0,
-        duration: 55,
+        duration: 36,
         ease: 'power2.out',
-      }, 1039)
+      }, 1004)
       timeline.to(researchAll, {
         autoAlpha: 1,
         y: 0,
-        duration: 55,
+        duration: 36,
         ease: 'power2.out',
-      }, 1039)
+      }, 1004)
       timeline.to(research, { autoAlpha: 0, yPercent: -7, duration: 40 }, 1120)
       timeline.to(network, { autoAlpha: 1, duration: 40 }, 1120)
       timeline.to(networkStage, { autoAlpha: 1, scale: 1, yPercent: 0, duration: 40, ease: 'power2.out' }, 1120)
       timeline.to([networkTitle, networkOrigin], { autoAlpha: 1, y: 0, duration: 40, ease: 'power2.out' }, 1120)
 
       // 07 Network / 1160–1380vh — Korea first, distant nodes second.
-      timeline.to(networkHub, { autoAlpha: 1, y: 0, duration: 44, ease: 'power2.out' }, 1160)
+      timeline.to(networkHub, { autoAlpha: 1, y: 0, duration: 30, ease: 'power2.out' }, 1160)
       timeline.to(networkDomesticRoutes, {
         autoAlpha: 1,
-        duration: 55,
+        duration: 32,
         ease: 'power2.out',
-      }, 1204)
+      }, 1190)
       timeline.to(domesticLabels, {
         autoAlpha: 1,
         y: 0,
-        duration: 35,
+        duration: 24,
         stagger: 5,
         ease: 'power2.out',
-      }, 1214)
+      }, 1198)
       timeline.to(networkFarRoutes, {
         autoAlpha: 1,
-        duration: 55,
+        duration: 30,
         ease: 'power2.out',
-      }, 1259)
+      }, 1235)
       timeline.to(farLabels, {
-        autoAlpha: 0.34,
+        autoAlpha: 0.52,
         y: 0,
-        duration: 32,
+        duration: 22,
         stagger: 6,
         ease: 'power2.out',
-      }, 1270)
-      timeline.to(networkCta, { autoAlpha: 1, duration: 26, ease: 'power2.out' }, 1314)
+      }, 1242)
+      timeline.to(networkCta, { autoAlpha: 1, duration: 20, ease: 'power2.out' }, 1275)
       timeline.to([networkHub, networkDomesticRoutes, networkFarRoutes, ...domesticLabels, ...farLabels, networkCta], { autoAlpha: 0, y: -10, duration: 40 }, 1340)
       timeline.to(network, { autoAlpha: 0, scale: 0.985, duration: 40 }, 1340)
       timeline.to(join, { autoAlpha: 1, duration: 40 }, 1340)
       timeline.to(header, { autoAlpha: 1, y: 0, duration: 40 }, 1340)
 
       // 08 Join / 1380–1540vh — BlueNode Original Direction editorial form.
-      timeline.to(joinTitle, { autoAlpha: 1, y: 0, duration: 40, ease: 'power2.out' }, 1380)
+      timeline.to(joinTitle, { autoAlpha: 1, y: 0, duration: 70, ease: 'power2.out' }, 1340)
       timeline.to(joinFields, {
         autoAlpha: 1,
         y: 0,

@@ -115,7 +115,11 @@ html::-webkit-scrollbar {
   z-index: 0;
   inset: 0;
   overflow: hidden;
-  background: var(--prototype-blue);
+  background:
+    radial-gradient(ellipse at 13% 18%, rgb(247 250 248 / 34%) 0%, transparent 43%),
+    radial-gradient(ellipse at 78% 14%, rgb(231 242 250 / 34%) 0%, transparent 38%),
+    radial-gradient(ellipse at 62% 82%, rgb(250 246 235 / 26%) 0%, transparent 44%),
+    var(--prototype-blue);
   pointer-events: none;
 }
 
@@ -123,6 +127,8 @@ html::-webkit-scrollbar {
   position: absolute;
   display: block;
   max-width: none;
+  filter: saturate(0.9) opacity(0.76);
+  mix-blend-mode: screen;
   transform-origin: 0 0;
   will-change: transform, opacity;
 }
@@ -472,6 +478,7 @@ html.has-prototype-navigator {
   /* GSAP owns the percentage translation while motion is active. Keeping the
      same translation here would apply it twice after GSAP parses the node. */
   transform: none;
+  mix-blend-mode: screen;
   will-change: transform, opacity;
 }
 
@@ -670,6 +677,10 @@ html.has-prototype-navigator {
   will-change: transform;
 }
 
+.activities-card[data-card-index="0"] img {
+  transform: rotate(180deg) scaleY(1.16465);
+}
+
 .activities-titles {
   position: absolute;
   z-index: 4;
@@ -695,7 +706,8 @@ html.has-prototype-navigator {
 .activities-cta {
   position: absolute;
   z-index: 5;
-  top: 817px;
+  top: auto;
+  bottom: 64px;
   left: calc(83.33% - 2px);
   width: 172px;
   min-width: 172px;
@@ -714,7 +726,7 @@ html.has-prototype-navigator {
 /* 05 — Awards */
 .awards-title {
   position: absolute;
-  top: 10px;
+  top: 24px;
   left: 36px;
   display: flex;
   width: 1030px;
@@ -1211,6 +1223,7 @@ html.has-prototype-navigator {
   display: block;
   width: 1440px;
   height: 900px;
+  filter: opacity(0.72);
   opacity: 0;
   will-change: opacity;
 }
@@ -1235,6 +1248,9 @@ html.has-prototype-navigator {
   font-weight: 500;
   letter-spacing: 0.25px;
   line-height: 16px;
+  text-shadow:
+    0 1px 10px rgb(185 215 237 / 94%),
+    0 0 3px rgb(248 248 243 / 85%);
   opacity: 0;
   transform: translateY(10px);
   will-change: transform, opacity;
@@ -1257,7 +1273,8 @@ html.has-prototype-navigator {
 .network-cta {
   position: absolute;
   z-index: 8;
-  top: 817px;
+  top: auto;
+  bottom: 64px;
   left: 50%;
   width: 167px;
   height: 43px;
@@ -1318,10 +1335,10 @@ html.has-prototype-navigator {
   border-bottom: 1px solid rgba(9, 9, 12, 0.22);
   color: #080a10;
   font-family: var(--prototype-sans);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   letter-spacing: -0.03em;
-  line-height: 15.6px;
+  line-height: 18px;
   will-change: transform, opacity;
 }
 
@@ -1675,13 +1692,14 @@ html.has-prototype-navigator {
   }
 
   .activities-cta {
-    top: clamp(816px, calc(813.538px + 0.2404vw), 817px);
+    top: auto;
+    bottom: clamp(48px, calc(3.8462vw + 8.615px), 64px);
     right: clamp(24px, calc(11.0577vw - 89.231px), 70px);
     left: auto;
   }
 
   .awards-title {
-    top: clamp(10px, calc(37.692px - 1.9231vw), 18px);
+    top: clamp(18px, calc(3.8462vw - 21.385px), 24px);
     left: clamp(24px, calc(2.8846vw - 5.538px), 36px);
     width: clamp(814px, calc(51.9231vw + 282.308px), 1030px);
     font-size: clamp(45.82px, calc(2.9279vw + 15.837px), 58px);
@@ -1958,9 +1976,10 @@ html.has-prototype-navigator {
   }
 
   .activities-cta {
-    top: calc(
+    top: auto;
+    bottom: calc(
       var(--prototype-core-offset-y) +
-      clamp(817px, calc(100svh - 83px), 997px)
+      clamp(64px, calc(2.916667vw + 22px), 78px)
     );
     right: calc(
       var(--prototype-core-offset-x) +
@@ -1972,7 +1991,7 @@ html.has-prototype-navigator {
   .awards-title {
     top: calc(
       var(--prototype-core-offset-y) +
-      clamp(10px, calc(8.888889svh - 70px), 26px)
+      clamp(24px, calc(4.444444svh - 16px), 32px)
     );
     left: calc(
       var(--prototype-core-offset-x) +
@@ -2221,9 +2240,10 @@ html.has-prototype-navigator {
   }
 
   .network-cta {
-    top: calc(
+    top: auto;
+    bottom: calc(
       var(--prototype-core-offset-y) +
-      clamp(817px, calc(100svh - 83px), 997px)
+      clamp(64px, calc(2.916667vw + 22px), 78px)
     );
   }
 
@@ -2789,6 +2809,10 @@ html.has-prototype-navigator {
 
   .activities-card img {
     transform: none;
+  }
+
+  .activities-card:nth-child(1) img {
+    transform: rotate(180deg);
   }
 
   .activities-titles {
@@ -4489,6 +4513,7 @@ html.has-prototype-navigator {
     left: -180px;
     width: 720px;
     height: 450px;
+    filter: opacity(0.58);
   }
 
   .network-hub {
@@ -4929,6 +4954,103 @@ html.has-prototype-navigator {
   .prototype-shell.is-responsive-motion .join-footer {
     top: auto;
     bottom: 8px;
+  }
+}
+
+/* Final compact-phone composition pass. The motion viewport is shorter than
+   the original 844px mobile artboard, so related elements are compressed as
+   groups instead of simply clipping the taller layout. */
+@media (max-width: 599px) and (max-height: 700px) {
+  .prototype-shell.is-responsive-motion .about-title {
+    top: 82px;
+  }
+
+  .prototype-shell.is-responsive-motion .about-pengu {
+    top: 180px;
+    left: calc(50% - 128px);
+    width: 300px;
+  }
+
+  .prototype-shell.is-responsive-motion .about-meta {
+    z-index: 5;
+    bottom: 116px;
+    gap: 6px;
+  }
+
+  .prototype-shell.is-responsive-motion .about-meta .meta-pill {
+    min-width: 92px;
+    height: 26px;
+    font-size: 12px;
+  }
+
+  .prototype-shell.is-responsive-motion .about-meta p {
+    font-size: 12px;
+    line-height: 18px;
+    white-space: nowrap;
+  }
+
+  .prototype-shell.is-responsive-motion .about-cta {
+    z-index: 5;
+    bottom: 54px;
+  }
+
+  .prototype-shell.is-responsive-motion .scene-activities {
+    --responsive-activity-rail-top: 156px;
+  }
+
+  .prototype-shell.is-responsive-motion .activities-word {
+    top: 92px;
+  }
+
+  .prototype-shell.is-responsive-motion .activities-titles {
+    top: 470px;
+  }
+
+  .prototype-shell.is-responsive-motion .activities-cta {
+    bottom: 20px;
+  }
+
+  .prototype-shell.is-responsive-motion .awards-title {
+    top: 12px;
+    width: calc(100% - 40px);
+    font-size: 23px;
+    line-height: 23.5px;
+  }
+
+  .prototype-shell.is-responsive-motion .awards-list {
+    top: 120px;
+  }
+
+  .prototype-shell.is-responsive-motion .awards-list li {
+    height: 52px;
+    min-height: 52px;
+  }
+
+  .prototype-shell.is-responsive-motion .awards-list li span:first-child,
+  .prototype-shell.is-responsive-motion .awards-list li span:last-child {
+    margin-top: 9px;
+  }
+
+  .prototype-shell.is-responsive-motion .research-all {
+    top: 156px;
+  }
+
+  .prototype-shell.is-responsive-motion .research-list {
+    top: 205px;
+  }
+
+  .prototype-shell.is-responsive-motion .network-route-layer {
+    filter: opacity(0.42);
+  }
+
+  .prototype-shell.is-responsive-motion .network-label {
+    font-size: 8px;
+    line-height: 10px;
+  }
+
+  .prototype-shell.is-responsive-motion .network-hub {
+    font-size: 9px;
+    line-height: 11px;
   }
 }
 
