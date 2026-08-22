@@ -46,6 +46,12 @@ const responsiveSceneRanges: SceneRange[] = [
   { name: 'join', start: 1030, end: 1160 },
 ]
 
+const sceneProgressTime = (ranges: SceneRange[], name: SceneName, progress: number) => {
+  const range = ranges.find((candidate) => candidate.name === name)
+  if (!range) return 0
+  return range.start + (range.end - range.start) * progress
+}
+
 const backgroundOrbNames = ['milk', 'ivory', 'cool', 'pearl', 'ice'] as const
 type BackgroundOrbName = (typeof backgroundOrbNames)[number]
 type BackgroundOrbGeometry = {
@@ -165,7 +171,6 @@ function initialisePrototype() {
   const researchList = q<HTMLElement>(research, '.research-list')
   const researchRows = qa<HTMLElement>(research, '[data-research-row]')
   const researchAll = q<HTMLElement>(research, '[data-research-all]')
-  const researchSource = q<HTMLElement>(research, '[data-research-source]')
   const networkTitle = q<HTMLElement>(network, '[data-network-title]')
   const networkOrigin = q<HTMLElement>(network, '[data-network-origin]')
   const networkStage = q<HTMLElement>(network, '[data-network-globe-stage]')
@@ -180,7 +185,13 @@ function initialisePrototype() {
   const joinInterests = q<HTMLElement>(join, '[data-join-interests]')
   const joinSubmit = q<HTMLElement>(join, '[data-join-submit]')
   const joinFooter = q<HTMLElement>(join, '[data-join-footer]')
+  const brandButton = q<HTMLButtonElement>(header, '.prototype-header__brand')
   const navigationButtons = qa<HTMLButtonElement>(header, '[data-jump-vh]')
+  const mobileJoinButton = q<HTMLButtonElement>(header, '[data-mobile-join]')
+  const mobileMenuButton = q<HTMLButtonElement>(header, '[data-mobile-menu]')
+  const navigatorPanel = q<HTMLElement>(root, '[data-prototype-navigator]')
+  const navigatorCloseButton = q<HTMLButtonElement>(root, '[data-navigator-close]')
+  const navigatorSceneButtons = qa<HTMLButtonElement>(root, '[data-navigator-scene]')
   const backgroundOrbs = Object.fromEntries(
     backgroundOrbNames.map((name) => [
       name,
@@ -191,6 +202,43 @@ function initialisePrototype() {
   if (backgroundOrbNames.some((name) => !backgroundOrbs[name])) return
 
   const activeBackgroundOrbs = backgroundOrbs as Record<BackgroundOrbName, HTMLImageElement>
+
+  const resetBackgroundOrbs = () => {
+    backgroundOrbNames.forEach((name) => {
+      gsap.set(activeBackgroundOrbs[name], {
+        opacity: backgroundGeometry.entry[name].opacity ?? 1,
+        x: 0,
+        y: 0,
+        scaleX: 1,
+        scaleY: 1,
+      })
+    })
+  }
+
+  const addBackgroundTransition = (
+    timeline: gsap.core.Timeline,
+    scene: SceneName,
+    start: number,
+    duration: number,
+  ) => {
+    backgroundOrbNames.forEach((name) => {
+      const base = backgroundGeometry.entry[name]
+      const target = backgroundGeometry[scene][name]
+      timeline.to(
+        activeBackgroundOrbs[name],
+        {
+          x: () => ((target.x - base.x) / BACKGROUND_DESIGN_WIDTH) * viewport.clientWidth,
+          y: () => ((target.y - base.y) / BACKGROUND_DESIGN_HEIGHT) * viewport.clientHeight,
+          scaleX: target.width / base.width,
+          scaleY: target.height / base.height,
+          opacity: target.opacity ?? 1,
+          duration,
+          ease: 'none',
+        },
+        start,
+      )
+    })
+  }
 
   let lastSceneName: SceneName | undefined
   let lastActivityIndex = -1
@@ -252,6 +300,9 @@ function initialisePrototype() {
     })
     q<HTMLFormElement>(join, '[data-join-form]')?.addEventListener('submit', (event) => {
       event.preventDefault()
+      const form = event.currentTarget as HTMLFormElement
+      const destination = form.dataset.joinRoute
+      if (destination) window.location.assign(destination)
     })
   }
 
@@ -361,6 +412,11 @@ function initialisePrototype() {
 
     const render = (timelineTime = 1160, rangeStart = 1160, rangeDuration = 220) => {
       if (!globe || !canvas || document.hidden) return
+      const renderMargin = Math.max(24, rangeDuration * 0.18)
+      if (
+        !dragging
+        && (timelineTime < rangeStart - renderMargin || timelineTime > rangeStart + rangeDuration + renderMargin)
+      ) return
       if (!dragging) {
         const localProgress = Math.max(0, Math.min(1, (timelineTime - rangeStart) / rangeDuration))
         phi = INITIAL_PHI + localProgress * 0.24
@@ -406,6 +462,42 @@ function initialisePrototype() {
     }
   }
 
+  let navigatorReturnFocus: HTMLElement | null = null
+  let navigateFromPanel = (sceneName: SceneName) => {
+    sceneByName.get(sceneName)?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  const setNavigatorOpen = (open: boolean) => {
+    if (!navigatorPanel) return
+    if (open) navigatorReturnFocus = document.activeElement as HTMLElement | null
+    navigatorPanel.classList.toggle('is-open', open)
+    navigatorPanel.setAttribute('aria-hidden', String(!open))
+    navigatorPanel.inert = !open
+    viewport.inert = open
+    mobileMenuButton?.setAttribute('aria-expanded', String(open))
+    document.documentElement.classList.toggle('has-prototype-navigator', open)
+    if (open) navigatorCloseButton?.focus()
+    else navigatorReturnFocus?.focus()
+  }
+
+  const openNavigator = () => setNavigatorOpen(true)
+  const closeNavigator = () => setNavigatorOpen(false)
+  const handleNavigatorKeydown = (event: KeyboardEvent) => {
+    if (event.key === 'Escape' && navigatorPanel?.classList.contains('is-open')) closeNavigator()
+  }
+
+  mobileMenuButton?.addEventListener('click', openNavigator)
+  navigatorCloseButton?.addEventListener('click', closeNavigator)
+  navigatorSceneButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const sceneName = button.dataset.navigatorScene as SceneName | undefined
+      if (!sceneName) return
+      closeNavigator()
+      navigateFromPanel(sceneName)
+    })
+  })
+  document.addEventListener('keydown', handleNavigatorKeydown)
+
   bindFormControls()
 
   const media = gsap.matchMedia()
@@ -414,18 +506,23 @@ function initialisePrototype() {
       desktop: '(min-width: 1024px)',
       responsive: '(max-width: 1023px)',
       compact: '(max-height: 700px)',
+      shortLandscape: '(max-width: 1023px) and (max-height: 500px) and (orientation: landscape)',
       reduce: '(prefers-reduced-motion: reduce)',
     },
     (context) => {
-      const { desktop, compact, reduce } = context.conditions as {
+      const { desktop, compact, shortLandscape, reduce } = context.conditions as {
         desktop: boolean
         compact: boolean
+        shortLandscape: boolean
         reduce: boolean
       }
 
-      if (!desktop && reduce) {
+      if (!desktop && (reduce || shortLandscape)) {
         const responsiveStaticScenes = [entry, bluenode, about, activities, awards, research, network, join]
         root.classList.add('is-responsive-static')
+        navigateFromPanel = (sceneName) => {
+          sceneByName.get(sceneName)?.scrollIntoView({ behavior: 'smooth' })
+        }
 
         scenes.forEach((scene) => {
           const visible = responsiveStaticScenes.includes(scene)
@@ -439,13 +536,18 @@ function initialisePrototype() {
           aboutButton.tabIndex = 0
         }
 
-        const mobileBrandButtons = qa<HTMLButtonElement>(root, '.responsive-scene-header__brand')
         const jumpToEntry = () => entry.scrollIntoView({ behavior: 'smooth' })
-        mobileBrandButtons.forEach((button) => button.addEventListener('click', jumpToEntry))
+        const jumpToJoin = () => join.scrollIntoView({ behavior: 'smooth' })
+        brandButton?.addEventListener('click', jumpToEntry)
+        mobileJoinButton?.addEventListener('click', jumpToJoin)
 
         return () => {
           root.classList.remove('is-responsive-static')
-          mobileBrandButtons.forEach((button) => button.removeEventListener('click', jumpToEntry))
+          navigateFromPanel = (sceneName) => {
+            sceneByName.get(sceneName)?.scrollIntoView({ behavior: 'smooth' })
+          }
+          brandButton?.removeEventListener('click', jumpToEntry)
+          mobileJoinButton?.removeEventListener('click', jumpToJoin)
           scenes.forEach((scene, index) => {
             const active = index === 0
             scene.setAttribute('aria-hidden', String(!active))
@@ -465,10 +567,10 @@ function initialisePrototype() {
           aboutButton.tabIndex = 0
         }
 
-        gsap.set(scenes, { autoAlpha: 0, yPercent: 0, scale: 1 })
-        gsap.set(entry, { autoAlpha: 1, yPercent: 0 })
-        gsap.set([bluenode, about, activities], { autoAlpha: 1, yPercent: 100 })
-        gsap.set([awards, research, network, join], { autoAlpha: 0, yPercent: 0 })
+        resetBackgroundOrbs()
+        gsap.set(header, { autoAlpha: 1, y: 0 })
+        gsap.set(scenes, { autoAlpha: 1, yPercent: 100, scale: 1 })
+        gsap.set(entry, { yPercent: 0 })
 
         gsap.set(bluenodeLogo, { autoAlpha: 1, scale: 0.94, xPercent: -50, yPercent: -50 })
         gsap.set(aboutType, { autoAlpha: 0.35, x: -18 })
@@ -476,8 +578,30 @@ function initialisePrototype() {
         gsap.set(aboutMeta, { autoAlpha: 0, y: 14 })
         gsap.set(aboutCta, { autoAlpha: 0, y: 12, scale: 0.97 })
         gsap.set(activitiesWord, { autoAlpha: 0 })
-        gsap.set([activitiesRail, activitiesCta], { autoAlpha: 0 })
-        gsap.set([awardsTitle, awardsCount, researchTitle, researchAll, researchSource], {
+        const responsiveActivityRailX = (index: number) => () => {
+          const card = activityCards[0]
+          if (!card || !activitiesRail) return 0
+          const cardWidth = card.offsetWidth
+          const gap = Number.parseFloat(getComputedStyle(activitiesRail).columnGap || '0')
+          return innerWidth / 2 - cardWidth / 2 - index * (cardWidth + gap)
+        }
+        gsap.set(activitiesRail, { autoAlpha: 0, x: responsiveActivityRailX(0) })
+        gsap.set(activitiesCta, { autoAlpha: 0 })
+        gsap.set(activityCards, {
+          autoAlpha: 0.42,
+          scale: 0.76,
+          y: 0,
+          '--activity-active-border': 0,
+        })
+        gsap.set(activityImages, { scale: 1 })
+        gsap.set(activityCards[0], {
+          autoAlpha: 1,
+          scale: 1,
+          '--activity-active-border': 1,
+        })
+        gsap.set(activityTitles, { autoAlpha: 0, y: 10 })
+        gsap.set(activityTitles[0], { autoAlpha: 1, y: 0 })
+        gsap.set([awardsTitle, awardsCount, researchTitle, researchAll], {
           autoAlpha: 0,
           y: 18,
         })
@@ -495,19 +619,60 @@ function initialisePrototype() {
         gsap.set([networkStage, networkHub, networkDomesticRoutes, networkFarRoutes, networkCta], {
           autoAlpha: 0,
         })
-        gsap.set(networkStage, { scale: 0.94, yPercent: 4 })
+        gsap.set(networkStage, { scale: 0.86, yPercent: 12 })
         gsap.set(domesticLabels, { autoAlpha: 0, y: 8 })
         gsap.set(farLabels, { autoAlpha: 0, y: 8 })
         gsap.set([...joinFields, joinInterests, joinSubmit], { autoAlpha: 0, y: 12 })
         gsap.set(joinFooter, { autoAlpha: 0 })
+
+        const responsiveState = (name: SceneName, progress: number) =>
+          sceneProgressTime(responsiveSceneRanges, name, progress)
+
+        const entryHold = responsiveState('entry', 0.45)
+        const entryLift = responsiveState('entry', 0.72)
+        const entryEnd = responsiveState('entry', 1)
+        const bluenodeLock = responsiveState('bluenode', 0.35)
+        const bluenodeLift = responsiveState('bluenode', 0.72)
+        const bluenodeEnd = responsiveState('bluenode', 1)
+        const aboutTypeLock = responsiveState('about', 0.25)
+        const aboutPenguLock = responsiveState('about', 0.55)
+        const aboutCtaHold = responsiveState('about', 0.8)
+        const aboutEnd = responsiveState('about', 1)
+        const activitiesTitleLock = responsiveState('activities', 0.15)
+        const activitiesReelTwo = responsiveState('activities', 0.35)
+        const activitiesReelThree = responsiveState('activities', 0.49)
+        const activitiesReelFour = responsiveState('activities', 0.61)
+        const activitiesCtaHold = responsiveState('activities', 0.65)
+        const activitiesLift = responsiveState('activities', 0.82)
+        const activitiesEnd = responsiveState('activities', 1)
+        const awardsStatement = responsiveState('awards', 0.2)
+        const awardsEvidence = responsiveState('awards', 0.45)
+        const awardsCountLock = responsiveState('awards', 0.7)
+        const awardsEnd = responsiveState('awards', 1)
+        const researchArticleOne = responsiveState('research', 0.2)
+        const researchArticleTwo = responsiveState('research', 0.45)
+        const researchArticleThree = responsiveState('research', 0.7)
+        const researchEnd = responsiveState('research', 1)
+        const networkStart = responsiveState('network', 0)
+        const networkDomestic = responsiveState('network', 0.2)
+        const networkSettle = responsiveState('network', 0.45)
+        const networkContext = responsiveState('network', 0.7)
+        const networkEnd = responsiveState('network', 1)
+        const joinStart = responsiveState('join', 0)
+        const joinStatement = responsiveState('join', 0.25)
+        const joinForm = responsiveState('join', 0.5)
+        const joinInterest = responsiveState('join', 0.75)
+        const joinEnd = responsiveState('join', 1)
 
         const timeline = gsap.timeline({
           defaults: { ease: 'none' },
           onUpdate: () => {
             const time = timeline.time()
             setActiveScene(time, responsiveSceneRanges)
-            setAboutCtaInteractive(time, 252, 310)
-            if (time >= 845 && time <= 1040) globe.render(time, 875, 155)
+            setAboutCtaInteractive(time, aboutCtaHold - 17, aboutCtaHold)
+            if (time >= researchEnd - 30 && time <= networkEnd + 10) {
+              globe.render(time, networkStart, networkEnd - networkStart)
+            }
           },
           scrollTrigger: {
             id: 'bluenode-responsive-prototype',
@@ -522,109 +687,326 @@ function initialisePrototype() {
           },
         })
 
-        // 01 Entry → 02 BlueNode — the next atmosphere rises with the scene instead of cutting.
-        timeline.to(entryScrollCue, { autoAlpha: 0, y: -6, duration: 24 }, 58)
-        timeline.to(entryType, { autoAlpha: 0.82, y: -10, duration: 40 }, 70)
-        timeline.to(entry, { yPercent: -100, duration: 40 }, 70)
-        timeline.to(bluenode, { yPercent: 0, duration: 40 }, 70)
-        timeline.to(bluenodeLogo, { scale: 1, duration: 38, ease: 'power2.out' }, 110)
+        addBackgroundTransition(timeline, 'bluenode', entryHold, entryEnd - entryHold)
+        addBackgroundTransition(timeline, 'about', bluenodeLock, bluenodeEnd - bluenodeLock)
+        addBackgroundTransition(timeline, 'activities', aboutCtaHold, activitiesTitleLock - aboutCtaHold)
+        addBackgroundTransition(timeline, 'awards', activitiesCtaHold, activitiesEnd - activitiesCtaHold)
+        addBackgroundTransition(timeline, 'research', awardsEnd - 30, 30)
+        addBackgroundTransition(timeline, 'network', researchEnd - 30, 30)
+        addBackgroundTransition(timeline, 'join', networkEnd - 28, 28)
 
-        // 02 BlueNode → 03 About — a short identity pause, then a second full-screen push.
-        timeline.to(bluenode, { yPercent: -100, duration: 35 }, 165)
-        timeline.to(about, { yPercent: 0, duration: 35 }, 165)
-        timeline.to(bluenodeLogo, { scale: 1.025, duration: 35 }, 165)
-        timeline.to(aboutType, { autoAlpha: 1, x: 0, duration: 34, ease: 'power2.out' }, 200)
-        timeline.to(aboutPengu, { autoAlpha: 1, x: 0, scale: 1, duration: 44, ease: 'power3.out' }, 214)
-        timeline.to(aboutMeta, { autoAlpha: 1, y: 0, duration: 30, ease: 'power2.out' }, 236)
-        timeline.to(aboutCta, { autoAlpha: 1, y: 0, scale: 1, duration: 28, ease: 'power2.out' }, 252)
+        const addResponsiveActivityStop = (
+          fromIndex: number,
+          toIndex: number,
+          start: number,
+          end: number,
+        ) => {
+          const duration = end - start
+          timeline.to(activitiesRail, { x: responsiveActivityRailX(toIndex), duration }, start)
+          timeline.to(activityCards[fromIndex], {
+            autoAlpha: 0.42,
+            scale: 0.76,
+            '--activity-active-border': 0,
+            duration,
+          }, start)
+          timeline.to(activityCards[toIndex], {
+            autoAlpha: 1,
+            scale: 1,
+            '--activity-active-border': 1,
+            duration,
+          }, start)
+          timeline.to(activityTitles[fromIndex], {
+            autoAlpha: 0,
+            y: -10,
+            duration: duration * 0.45,
+          }, start)
+          timeline.to(activityTitles[toIndex], {
+            autoAlpha: 1,
+            y: 0,
+            duration: duration * 0.55,
+          }, start + duration * 0.45)
+        }
 
-        // 03 About → 04 Activities — retain the approved responsive compositions during the handoff.
-        timeline.to(about, { yPercent: -100, duration: 40 }, 310)
-        timeline.to(activities, { yPercent: 0, duration: 40 }, 310)
-        timeline.to(activitiesWord, { autoAlpha: 1, duration: 34, ease: 'power2.out' }, 350)
-        timeline.to(activitiesRail, { autoAlpha: 1, duration: 42, ease: 'power2.out' }, 364)
-        timeline.to(activitiesCta, { autoAlpha: 1, duration: 30, ease: 'power2.out' }, 394)
+        // 01 Entry → 02 BlueNode — preserve the authored 45% hold and 72% lift state.
+        timeline.to(entryScrollCue, {
+          autoAlpha: 0,
+          y: -6,
+          duration: entryLift - entryHold,
+        }, entryHold)
+        timeline.to(entryType, {
+          autoAlpha: 0.82,
+          y: -10,
+          duration: entryLift - entryHold,
+        }, entryHold)
+        timeline.to(entry, { yPercent: -45, duration: entryLift - entryHold }, entryHold)
+        timeline.to(bluenode, { yPercent: 55, duration: entryLift - entryHold }, entryHold)
+        timeline.to(entry, { yPercent: -100, duration: entryEnd - entryLift }, entryLift)
+        timeline.to(bluenode, { yPercent: 0, duration: entryEnd - entryLift }, entryLift)
+        timeline.to(header, {
+          autoAlpha: 0,
+          y: -8,
+          duration: entryEnd - entryLift,
+        }, entryLift)
 
-        // 04 Activities → 05 Awards — the reel holds, then dissolves into evidence.
-        timeline.to(activities, { autoAlpha: 0, scale: 0.985, duration: 30 }, 530)
-        timeline.to(awards, { autoAlpha: 1, duration: 30 }, 530)
-        timeline.to(awardsTitle, { autoAlpha: 1, y: 0, duration: 30, ease: 'power2.out' }, 560)
+        // 02 BlueNode → 03 About — logo settle, pause, then the same two-stage vertical push.
+        timeline.to(bluenodeLogo, {
+          scale: 1,
+          duration: bluenodeLock - entryEnd,
+          ease: 'power2.out',
+        }, entryEnd)
+        timeline.to(bluenode, {
+          yPercent: -45,
+          duration: bluenodeLift - bluenodeLock,
+        }, bluenodeLock)
+        timeline.to(about, {
+          yPercent: 55,
+          duration: bluenodeLift - bluenodeLock,
+        }, bluenodeLock)
+        timeline.to(bluenodeLogo, {
+          scale: 1.025,
+          duration: bluenodeLift - bluenodeLock,
+        }, bluenodeLock)
+        timeline.to(bluenode, {
+          yPercent: -100,
+          duration: bluenodeEnd - bluenodeLift,
+        }, bluenodeLift)
+        timeline.to(about, {
+          yPercent: 0,
+          duration: bluenodeEnd - bluenodeLift,
+        }, bluenodeLift)
+        timeline.to(header, {
+          autoAlpha: 1,
+          y: 0,
+          duration: bluenodeEnd - bluenodeLift,
+        }, bluenodeLift)
+
+        // 03 About → 04 Activities — type, PENGU, metadata, CTA hold, then handoff.
+        timeline.to(aboutType, {
+          autoAlpha: 1,
+          x: 0,
+          duration: aboutTypeLock - bluenodeEnd,
+          ease: 'power2.out',
+        }, bluenodeEnd)
+        timeline.to(aboutPengu, {
+          autoAlpha: 1,
+          x: 0,
+          scale: 1,
+          duration: aboutPenguLock - (bluenodeEnd + 12),
+          ease: 'power3.out',
+        }, bluenodeEnd + 12)
+        timeline.to(aboutMeta, {
+          autoAlpha: 1,
+          y: 0,
+          duration: aboutPenguLock - (bluenodeEnd + 28),
+          ease: 'power2.out',
+        }, bluenodeEnd + 28)
+        timeline.to(aboutCta, {
+          autoAlpha: 1,
+          y: 0,
+          scale: 1,
+          duration: aboutCtaHold - (aboutPenguLock + 5),
+          ease: 'power2.out',
+        }, aboutPenguLock + 5)
+        timeline.to(about, {
+          yPercent: -45,
+          duration: aboutEnd - aboutCtaHold,
+        }, aboutCtaHold)
+        timeline.to(activities, {
+          yPercent: 55,
+          duration: aboutEnd - aboutCtaHold,
+        }, aboutCtaHold)
+        timeline.to(about, {
+          yPercent: -100,
+          duration: activitiesTitleLock - aboutEnd,
+        }, aboutEnd)
+        timeline.to(activities, {
+          yPercent: 0,
+          duration: activitiesTitleLock - aboutEnd,
+        }, aboutEnd)
+        timeline.to(activitiesWord, {
+          autoAlpha: 1,
+          duration: activitiesTitleLock - aboutEnd,
+          ease: 'power2.out',
+        }, aboutEnd)
+        timeline.to(activitiesRail, {
+          autoAlpha: 1,
+          duration: activitiesTitleLock - aboutEnd,
+          ease: 'power2.out',
+        }, aboutEnd)
+        addResponsiveActivityStop(0, 1, activitiesTitleLock, activitiesReelTwo)
+        addResponsiveActivityStop(1, 2, activitiesReelTwo, activitiesReelThree)
+        addResponsiveActivityStop(2, 3, activitiesReelThree, activitiesReelFour)
+        timeline.to(activitiesCta, {
+          autoAlpha: 1,
+          duration: activitiesCtaHold - activitiesReelThree,
+          ease: 'power2.out',
+        }, activitiesReelThree)
+
+        // 04 Activities → 05 Awards — the reel holds through 65%, then becomes evidence rules.
+        timeline.to(activities, {
+          yPercent: -45,
+          duration: activitiesLift - activitiesCtaHold,
+        }, activitiesCtaHold)
+        timeline.to(awards, {
+          yPercent: 55,
+          duration: activitiesLift - activitiesCtaHold,
+        }, activitiesCtaHold)
+        timeline.to(activities, {
+          yPercent: -100,
+          duration: activitiesEnd - activitiesLift,
+        }, activitiesLift)
+        timeline.to(awards, {
+          yPercent: 0,
+          duration: activitiesEnd - activitiesLift,
+        }, activitiesLift)
+        timeline.to(header, {
+          autoAlpha: 0,
+          y: -8,
+          duration: activitiesEnd - activitiesLift,
+        }, activitiesLift)
+        timeline.to(awardsTitle, {
+          autoAlpha: 1,
+          y: 0,
+          duration: awardsStatement - activitiesLift,
+          ease: 'power2.out',
+        }, activitiesLift)
         timeline.to(awardRows.slice(0, 4), {
           autoAlpha: 1,
           y: 0,
-          duration: 28,
-          stagger: 4,
+          duration: awardsEvidence - awardsStatement - 9,
+          stagger: 3,
           ease: 'power2.out',
-        }, 574)
+        }, awardsStatement)
         timeline.to(awardRows.slice(4), {
           autoAlpha: 1,
           y: 0,
-          duration: 28,
-          stagger: 4,
+          duration: awardsCountLock - awardsEvidence - 6,
+          stagger: 3,
           ease: 'power2.out',
-        }, 610)
-        timeline.to(awardsCount, { autoAlpha: 1, y: 0, duration: 24, ease: 'power2.out' }, 632)
+        }, awardsEvidence)
+        timeline.to(awardsCount, {
+          autoAlpha: 1,
+          y: 0,
+          duration: Math.min(24, awardsEnd - awardsCountLock),
+          ease: 'power2.out',
+        }, awardsCountLock)
 
         // 05 Awards → 06 Research — a soft editorial crossfade; compact screens scroll the list inside the scene.
-        timeline.to([awardsTitle, ...awardRows, awardsCount], { autoAlpha: 0, y: -14, duration: 30 }, 680)
-        timeline.to(awards, { autoAlpha: 0, duration: 30 }, 680)
-        timeline.to(research, { autoAlpha: 1, duration: 30 }, 680)
-        timeline.to([researchTitle, researchAll], { autoAlpha: 1, y: 0, duration: 30, ease: 'power2.out' }, 710)
+        timeline.to([awardsTitle, ...awardRows, awardsCount], {
+          autoAlpha: 0,
+          y: -14,
+          duration: awardsEnd - (awardsEnd - 30),
+        }, awardsEnd - 30)
+        timeline.to(awards, { yPercent: -100, duration: 30 }, awardsEnd - 30)
+        timeline.to(research, { yPercent: 0, duration: 30 }, awardsEnd - 30)
+        timeline.to(header, { autoAlpha: 1, y: 0, duration: 30 }, awardsEnd - 30)
+        timeline.to(researchTitle, {
+          autoAlpha: 1,
+          y: 0,
+          duration: researchArticleOne - (awardsEnd - 30),
+          ease: 'power2.out',
+        }, awardsEnd - 30)
         if (compact) {
-          timeline.to(researchRows[0], { autoAlpha: 1, y: 0, duration: 26, ease: 'power2.out' }, 720)
-          timeline.to(researchRows[0], { autoAlpha: 0, y: -14, duration: 8 }, 750)
+          timeline.to(researchRows[0], {
+            autoAlpha: 1,
+            y: 0,
+            duration: researchArticleOne - awardsEnd,
+            ease: 'power2.out',
+          }, awardsEnd)
+          timeline.to(researchRows[0], { autoAlpha: 0, y: -14, duration: 8 }, researchArticleOne)
           timeline.to(researchRows[1], {
             autoAlpha: 1,
             y: -compactResearchRowOffset,
-            duration: 22,
+            duration: researchArticleTwo - researchArticleOne,
             ease: 'power2.out',
-          }, 758)
+          }, researchArticleOne)
           timeline.to(researchRows[1], {
             autoAlpha: 0,
             y: -compactResearchRowOffset - 14,
             duration: 8,
-          }, 790)
+          }, researchArticleTwo)
           timeline.to(researchRows[2], {
             autoAlpha: 1,
             y: -compactResearchRowOffset * 2,
-            duration: 24,
+            duration: researchArticleThree - researchArticleTwo,
             ease: 'power2.out',
-          }, 800)
+          }, researchArticleTwo)
         } else {
-          timeline.to(researchRows[0], { autoAlpha: 1, y: 0, duration: 28, ease: 'power2.out' }, 720)
-          timeline.to(researchRows[1], { autoAlpha: 1, y: 0, duration: 28, ease: 'power2.out' }, 748)
-          timeline.to(researchRows[2], { autoAlpha: 1, y: 0, duration: 28, ease: 'power2.out' }, 776)
+          timeline.to(researchRows[0], {
+            autoAlpha: 1,
+            y: 0,
+            duration: researchArticleOne - awardsEnd,
+            ease: 'power2.out',
+          }, awardsEnd)
+          timeline.to(researchRows[1], {
+            autoAlpha: 1,
+            y: 0,
+            duration: researchArticleTwo - researchArticleOne,
+            ease: 'power2.out',
+          }, researchArticleOne)
+          timeline.to(researchRows[2], {
+            autoAlpha: 1,
+            y: 0,
+            duration: researchArticleThree - researchArticleTwo,
+            ease: 'power2.out',
+          }, researchArticleTwo)
         }
-        timeline.to(researchSource, { autoAlpha: 0.62, y: 0, duration: 24, ease: 'power2.out' }, 796)
-
+        timeline.to(researchAll, {
+          autoAlpha: 1,
+          y: 0,
+          duration: researchArticleThree - researchArticleTwo,
+          ease: 'power2.out',
+        }, researchArticleTwo)
         // 06 Research → 07 Network — globe first, Korea next, distant touchpoints last.
-        timeline.to(research, { autoAlpha: 0, yPercent: -5, duration: 30 }, 845)
-        timeline.to(network, { autoAlpha: 1, duration: 30 }, 845)
+        timeline.to(research, { yPercent: -100, duration: 30 }, researchEnd - 30)
+        timeline.to(network, { yPercent: 0, duration: 30 }, researchEnd - 30)
         timeline.to([networkTitle, networkOrigin], {
           autoAlpha: 1,
           y: 0,
-          duration: 30,
+          duration: networkDomestic - (researchEnd - 30),
           ease: 'power2.out',
-        }, 875)
-        timeline.to(networkStage, { autoAlpha: 1, scale: 1, yPercent: 0, duration: 36, ease: 'power2.out' }, 875)
-        timeline.to(networkHub, { autoAlpha: 1, duration: 26, ease: 'power2.out' }, 904)
-        timeline.to(networkDomesticRoutes, { autoAlpha: 1, duration: 30, ease: 'power2.out' }, 910)
+        }, researchEnd - 30)
+        timeline.to(networkStage, {
+          autoAlpha: 1,
+          scale: 1,
+          yPercent: 0,
+          duration: networkDomestic - (researchEnd - 30),
+          ease: 'power2.out',
+        }, researchEnd - 30)
+        timeline.to(networkHub, {
+          autoAlpha: 1,
+          duration: networkDomestic - (researchEnd - 30),
+          ease: 'power2.out',
+        }, researchEnd - 30)
+        timeline.to(networkDomesticRoutes, {
+          autoAlpha: 1,
+          duration: networkSettle - networkDomestic,
+          ease: 'power2.out',
+        }, networkDomestic)
         timeline.to(domesticLabels, {
           autoAlpha: 1,
           y: 0,
-          duration: 30,
+          duration: networkSettle - networkDomestic - 8,
           stagger: 4,
           ease: 'power2.out',
-        }, 918)
-        timeline.to(networkFarRoutes, { autoAlpha: 1, duration: 30, ease: 'power2.out' }, 958)
-        timeline.to(farLabels, {
-          autoAlpha: 0.68,
-          y: 0,
-          duration: 30,
-          stagger: 8,
+        }, networkDomestic + 8)
+        timeline.to(networkFarRoutes, {
+          autoAlpha: 1,
+          duration: networkContext - networkSettle,
           ease: 'power2.out',
-        }, 964)
-        timeline.to(networkCta, { autoAlpha: 1, duration: 26, ease: 'power2.out' }, 988)
+        }, networkSettle)
+        timeline.to(farLabels, {
+          autoAlpha: 0.34,
+          y: 0,
+          duration: networkContext - networkSettle - 12,
+          stagger: 6,
+          ease: 'power2.out',
+        }, networkSettle + 6)
+        timeline.to(networkCta, {
+          autoAlpha: 1,
+          duration: networkEnd - 28 - networkContext,
+          ease: 'power2.out',
+        }, networkContext)
 
         // 07 Network → 08 Join — relationship marks quiet down before the invitation takes over.
         timeline.to([
@@ -634,48 +1016,62 @@ function initialisePrototype() {
           ...domesticLabels,
           ...farLabels,
           networkCta,
-        ], { autoAlpha: 0, duration: 28 }, 1002)
-        timeline.to(network, { autoAlpha: 0, scale: 0.985, duration: 28 }, 1002)
-        timeline.to(join, { autoAlpha: 1, duration: 28 }, 1002)
-        timeline.to(joinTitle, { autoAlpha: 1, y: 0, duration: 32, ease: 'power2.out' }, 1030)
+        ], { autoAlpha: 0, duration: 28 }, networkEnd - 28)
+        timeline.to(network, { yPercent: -100, duration: 28 }, networkEnd - 28)
+        timeline.to(join, { yPercent: 0, duration: 28 }, networkEnd - 28)
+        timeline.to(joinTitle, {
+          autoAlpha: 1,
+          y: 0,
+          duration: joinStatement - (networkEnd - 28),
+          ease: 'power2.out',
+        }, networkEnd - 28)
         timeline.to(joinFields, {
           autoAlpha: 1,
           y: 0,
-          duration: 32,
+          duration: 18.5,
           stagger: 7,
           ease: 'power2.out',
-        }, 1060)
+        }, joinStatement)
         timeline.to([joinInterests, joinSubmit], {
           autoAlpha: 1,
           y: 0,
-          duration: 32,
+          duration: joinInterest - joinForm,
           ease: 'power2.out',
-        }, 1090)
-        timeline.to(joinFooter, { autoAlpha: 1, duration: 28, ease: 'power2.out' }, 1122)
+        }, joinForm)
+        timeline.to(joinFooter, {
+          autoAlpha: 1,
+          duration: joinEnd - joinInterest,
+          ease: 'power2.out',
+        }, joinInterest)
 
         lastSceneName = undefined
         setActiveScene(0, responsiveSceneRanges)
-        setAboutCtaInteractive(0, 252, 310)
+        setAboutCtaInteractive(0, aboutCtaHold - 17, aboutCtaHold)
 
-        const mobileBrandButtons = qa<HTMLButtonElement>(root, '.responsive-scene-header__brand')
-        const mobileJoinButtons = qa<HTMLButtonElement>(root, '.responsive-scene-header__join')
         const jumpToEntry = () => jumpToVh(0, timeline, RESPONSIVE_TOTAL_VH, responsiveSceneRanges)
-        const jumpToJoin = () => jumpToVh(1030, timeline, RESPONSIVE_TOTAL_VH, responsiveSceneRanges)
-        mobileBrandButtons.forEach((button) => button.addEventListener('click', jumpToEntry))
-        mobileJoinButtons.forEach((button) => button.addEventListener('click', jumpToJoin))
+        const jumpToJoin = () => jumpToVh(joinStart + 1, timeline, RESPONSIVE_TOTAL_VH, responsiveSceneRanges)
+        navigateFromPanel = (sceneName) => {
+          const range = responsiveSceneRanges.find((candidate) => candidate.name === sceneName)
+          if (range) jumpToVh(range.start + 1, timeline, RESPONSIVE_TOTAL_VH, responsiveSceneRanges)
+        }
+        brandButton?.addEventListener('click', jumpToEntry)
+        mobileJoinButton?.addEventListener('click', jumpToJoin)
 
         const refresh = () => ScrollTrigger.refresh()
         document.fonts?.ready.then(refresh)
         addEventListener('load', refresh, { once: true })
 
         return () => {
-          mobileBrandButtons.forEach((button) => button.removeEventListener('click', jumpToEntry))
-          mobileJoinButtons.forEach((button) => button.removeEventListener('click', jumpToJoin))
+          brandButton?.removeEventListener('click', jumpToEntry)
+          mobileJoinButton?.removeEventListener('click', jumpToJoin)
           removeEventListener('load', refresh)
           timeline.scrollTrigger?.kill()
           timeline.kill()
           globe.destroy()
           root.classList.remove('is-responsive-motion')
+          navigateFromPanel = (sceneName) => {
+            sceneByName.get(sceneName)?.scrollIntoView({ behavior: 'smooth' })
+          }
           lastSceneName = undefined
           lastAboutCtaInteractive = undefined
         }
@@ -685,6 +1081,9 @@ function initialisePrototype() {
 
       if (reduce) {
         root.classList.add('is-reduced')
+        navigateFromPanel = (sceneName) => {
+          sceneByName.get(sceneName)?.scrollIntoView({ behavior: 'smooth' })
+        }
         if (aboutCta) {
           const aboutButton = aboutCta as HTMLButtonElement
           aboutButton.removeAttribute('aria-disabled')
@@ -694,38 +1093,44 @@ function initialisePrototype() {
           scene.removeAttribute('aria-hidden')
           scene.inert = false
         })
+        const reducedJumpHandlers = new Map<HTMLButtonElement, () => void>()
         navigationButtons.forEach((button) => {
-          button.addEventListener('click', () => jumpToVh(Number(button.dataset.jumpVh ?? 0)))
+          const handler = () => jumpToVh(Number(button.dataset.jumpVh ?? 0))
+          reducedJumpHandlers.set(button, handler)
+          button.addEventListener('click', handler)
         })
         globe.render(1160)
         return () => {
           root.classList.remove('is-reduced')
+          reducedJumpHandlers.forEach((handler, button) => {
+            button.removeEventListener('click', handler)
+          })
+          navigateFromPanel = (sceneName) => {
+            sceneByName.get(sceneName)?.scrollIntoView({ behavior: 'smooth' })
+          }
           globe.destroy()
         }
       }
 
       root.classList.remove('is-reduced')
 
-      const interpolateActivityValue = (medium: number, large: number) => {
-        const progress = Math.max(0, Math.min(1, (innerWidth - 1024) / (1440 - 1024)))
-        return medium + (large - medium) * progress
+      const interpolateActivityValue = (medium: number, large: number, wide = large) => {
+        if (innerWidth <= 1440) {
+          const progress = Math.max(0, Math.min(1, (innerWidth - 1024) / (1440 - 1024)))
+          return medium + (large - medium) * progress
+        }
+
+        const wideProgress = Math.max(0, Math.min(1, (innerWidth - 1440) / (1920 - 1440)))
+        return large + (wide - large) * wideProgress
       }
-      const activitySideScaleX = () => interpolateActivityValue(330 / 460, 430 / 570)
-      const activitySideScaleY = () => interpolateActivityValue(254 / 412, 331 / 511)
-      const activitySideOffsetY = () => interpolateActivityValue(15, 8)
+      const activitySideScaleX = () => interpolateActivityValue(330 / 460, 430 / 570, 500 / 660)
+      const activitySideScaleY = () => interpolateActivityValue(254 / 412, 331 / 511, 385 / 592)
+      const activitySideOffsetY = () => interpolateActivityValue(15, 8, 2)
 
       gsap.set(scenes, { autoAlpha: 1, yPercent: 100 })
       gsap.set(entry, { autoAlpha: 1, yPercent: 0 })
       gsap.set([awards, research, network, join], { autoAlpha: 0, yPercent: 0 })
-      backgroundOrbNames.forEach((name) => {
-        gsap.set(activeBackgroundOrbs[name], {
-          opacity: backgroundGeometry.entry[name].opacity ?? 1,
-          x: 0,
-          y: 0,
-          scaleX: 1,
-          scaleY: 1,
-        })
-      })
+      resetBackgroundOrbs()
       gsap.set(bluenodeLogo, { autoAlpha: 1, scale: 0.96, xPercent: -50, yPercent: -50 })
       gsap.set(aboutType, { autoAlpha: 0.35, x: -32 })
       gsap.set(aboutPengu, { autoAlpha: 0, x: 80, scale: 0.92 })
@@ -751,12 +1156,12 @@ function initialisePrototype() {
       gsap.set(activityImages[0], { scaleY: 1 })
       gsap.set(activityTitles, { autoAlpha: 0, y: 12 })
       gsap.set(activityTitles[0], { autoAlpha: 1, y: 0 })
-      gsap.set([awardsTitle, researchTitle, researchAll, researchSource, networkTitle, networkOrigin, joinTitle], {
+      gsap.set([awardsTitle, researchTitle, researchAll, networkTitle, networkOrigin, joinTitle], {
         autoAlpha: 0,
         y: 26,
       })
       gsap.set([networkStage, networkHub, networkDomesticRoutes, networkFarRoutes, networkCta], { autoAlpha: 0 })
-      gsap.set(networkStage, { scale: 0.93, yPercent: 5 })
+      gsap.set(networkStage, { scale: 0.82, yPercent: 24 })
       gsap.set(networkCta, { xPercent: -50 })
       gsap.set(domesticLabels, { autoAlpha: 0, y: 10 })
       gsap.set(farLabels, { autoAlpha: 0, y: 10 })
@@ -796,36 +1201,16 @@ function initialisePrototype() {
         },
       })
 
-      const addBackgroundTransition = (scene: SceneName, start: number, duration: number) => {
-        backgroundOrbNames.forEach((name) => {
-          const base = backgroundGeometry.entry[name]
-          const target = backgroundGeometry[scene][name]
-          timeline.to(
-            activeBackgroundOrbs[name],
-            {
-              x: () => ((target.x - base.x) / BACKGROUND_DESIGN_WIDTH) * viewport.clientWidth,
-              y: () => ((target.y - base.y) / BACKGROUND_DESIGN_HEIGHT) * viewport.clientHeight,
-              scaleX: target.width / base.width,
-              scaleY: target.height / base.height,
-              opacity: target.opacity ?? 1,
-              duration,
-              ease: 'none',
-            },
-            start,
-          )
-        })
-      }
-
       timeline.to(progressFill, { scaleX: 1, duration: TOTAL_VH }, 0)
       timeline.to(Object.values(activeBackgroundOrbs), { y: 8, duration: 68 }, 0)
 
-      addBackgroundTransition('bluenode', 68, 82)
-      addBackgroundTransition('about', 192, 78)
-      addBackgroundTransition('activities', 414, 81)
-      addBackgroundTransition('awards', 720, 30)
-      addBackgroundTransition('research', 900, 40)
-      addBackgroundTransition('network', 1120, 40)
-      addBackgroundTransition('join', 1340, 40)
+      addBackgroundTransition(timeline, 'bluenode', 68, 82)
+      addBackgroundTransition(timeline, 'about', 192, 78)
+      addBackgroundTransition(timeline, 'activities', 414, 81)
+      addBackgroundTransition(timeline, 'awards', 720, 30)
+      addBackgroundTransition(timeline, 'research', 900, 40)
+      addBackgroundTransition(timeline, 'network', 1120, 40)
+      addBackgroundTransition(timeline, 'join', 1340, 40)
 
       // 01 Entry / 0–150vh — read, micro-hold, then a two-stage vertical handoff.
       timeline.to(entryScrollCue, { autoAlpha: 0, y: -8, duration: 28 }, 68)
@@ -939,18 +1324,23 @@ function initialisePrototype() {
       timeline.to(awardRows.slice(0, 4), {
         autoAlpha: 1,
         y: 0,
-        duration: 32,
+        duration: 30,
         stagger: 6,
         ease: 'power2.out',
-      }, 770)
+      }, 788)
       timeline.to(awardRows.slice(4), {
         autoAlpha: 1,
         y: 0,
-        duration: 32,
+        duration: 35,
         stagger: 6,
         ease: 'power2.out',
-      }, 812)
-      timeline.to(awardsCount, { autoAlpha: 1, y: 0, duration: 25, ease: 'power2.out' }, 825)
+      }, 836)
+      timeline.to(awardsCount, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 17,
+        ease: 'power2.out',
+      }, 883)
       timeline.to([awardsTitle, ...awardRows, awardsCount], {
         autoAlpha: 0,
         y: -22,
@@ -961,11 +1351,36 @@ function initialisePrototype() {
       timeline.to(header, { autoAlpha: 1, y: 0, duration: 40 }, 900)
 
       // 06 Research / 940–1160vh — editorial rows build, then hold as one readable page.
-      timeline.to([researchTitle, researchAll], { autoAlpha: 1, y: 0, duration: 36, ease: 'power2.out' }, 940)
-      timeline.to(researchRows[0], { autoAlpha: 1, y: 0, duration: 36, ease: 'power2.out' }, 948)
-      timeline.to(researchRows[1], { autoAlpha: 1, y: 0, duration: 36, ease: 'power2.out' }, 985)
-      timeline.to(researchRows[2], { autoAlpha: 1, y: 0, duration: 36, ease: 'power2.out' }, 1022)
-      timeline.to(researchSource, { autoAlpha: 0.62, y: 0, duration: 28, ease: 'power2.out' }, 1045)
+      timeline.to(researchTitle, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 44,
+        ease: 'power2.out',
+      }, 940)
+      timeline.to(researchRows[0], {
+        autoAlpha: 1,
+        y: 0,
+        duration: 44,
+        ease: 'power2.out',
+      }, 940)
+      timeline.to(researchRows[1], {
+        autoAlpha: 1,
+        y: 0,
+        duration: 55,
+        ease: 'power2.out',
+      }, 984)
+      timeline.to(researchRows[2], {
+        autoAlpha: 1,
+        y: 0,
+        duration: 55,
+        ease: 'power2.out',
+      }, 1039)
+      timeline.to(researchAll, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 55,
+        ease: 'power2.out',
+      }, 1039)
       timeline.to(research, { autoAlpha: 0, yPercent: -7, duration: 40 }, 1120)
       timeline.to(network, { autoAlpha: 1, duration: 40 }, 1120)
       timeline.to(networkStage, { autoAlpha: 1, scale: 1, yPercent: 0, duration: 40, ease: 'power2.out' }, 1120)
@@ -973,23 +1388,31 @@ function initialisePrototype() {
 
       // 07 Network / 1160–1380vh — Korea first, distant nodes second.
       timeline.to(networkHub, { autoAlpha: 1, y: 0, duration: 44, ease: 'power2.out' }, 1160)
-      timeline.to(networkDomesticRoutes, { autoAlpha: 1, duration: 45, ease: 'power2.out' }, 1170)
+      timeline.to(networkDomesticRoutes, {
+        autoAlpha: 1,
+        duration: 55,
+        ease: 'power2.out',
+      }, 1204)
       timeline.to(domesticLabels, {
         autoAlpha: 1,
         y: 0,
-        duration: 45,
+        duration: 35,
         stagger: 5,
         ease: 'power2.out',
-      }, 1188)
-      timeline.to(networkFarRoutes, { autoAlpha: 1, duration: 48, ease: 'power2.out' }, 1245)
-      timeline.to(farLabels, {
-        autoAlpha: 0.68,
-        y: 0,
+      }, 1214)
+      timeline.to(networkFarRoutes, {
+        autoAlpha: 1,
         duration: 55,
-        stagger: 12,
         ease: 'power2.out',
       }, 1259)
-      timeline.to(networkCta, { autoAlpha: 1, duration: 36, ease: 'power2.out' }, 1280)
+      timeline.to(farLabels, {
+        autoAlpha: 0.34,
+        y: 0,
+        duration: 32,
+        stagger: 6,
+        ease: 'power2.out',
+      }, 1270)
+      timeline.to(networkCta, { autoAlpha: 1, duration: 26, ease: 'power2.out' }, 1314)
       timeline.to([networkHub, networkDomesticRoutes, networkFarRoutes, ...domesticLabels, ...farLabels, networkCta], { autoAlpha: 0, y: -10, duration: 40 }, 1340)
       timeline.to(network, { autoAlpha: 0, scale: 0.985, duration: 40 }, 1340)
       timeline.to(join, { autoAlpha: 1, duration: 40 }, 1340)
@@ -1000,7 +1423,7 @@ function initialisePrototype() {
       timeline.to(joinFields, {
         autoAlpha: 1,
         y: 0,
-        duration: 40,
+        duration: 24,
         stagger: 8,
         ease: 'power2.out',
       }, 1420)
@@ -1017,6 +1440,10 @@ function initialisePrototype() {
       setAboutCtaInteractive(0)
 
       const jumpHandlers = new Map<HTMLButtonElement, () => void>()
+      navigateFromPanel = (sceneName) => {
+        const range = sceneRanges.find((candidate) => candidate.name === sceneName)
+        if (range) jumpToVh(range.start + 1, timeline)
+      }
       navigationButtons.forEach((button) => {
         const handler = () => jumpToVh(Number(button.dataset.jumpVh ?? 0), timeline)
         jumpHandlers.set(button, handler)
@@ -1033,6 +1460,9 @@ function initialisePrototype() {
         globe.destroy()
         timeline.scrollTrigger?.kill()
         timeline.kill()
+        navigateFromPanel = (sceneName) => {
+          sceneByName.get(sceneName)?.scrollIntoView({ behavior: 'smooth' })
+        }
       }
     },
   )

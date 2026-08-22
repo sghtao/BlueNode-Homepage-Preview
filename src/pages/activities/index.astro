@@ -1,0 +1,61 @@
+---
+import NoomoSubpageShell from '../../components/noomo/NoomoSubpageShell.astro'
+import { activityArchive } from '../../data/activityArchive'
+import Layout from '../../layouts/Layout.astro'
+import { withBase } from '../../lib/paths'
+
+const [featured, ...archive] = activityArchive
+const title = 'Activities — BlueNode'
+const description = 'BlueNode의 해커톤, 세션, 스터디와 커뮤니티 활동 기록을 살펴보세요.'
+---
+
+<Layout title={title} description={description}>
+  <NoomoSubpageShell current="activities">
+    <header class="route-intro">
+      <p class="route-eyebrow">INDEX / ACTIVITIES</p>
+      <h1 class="route-title">ACTIVITIES</h1>
+      <p class="route-intro-copy">
+        세션에서 해커톤까지, BlueNode가 배우고 함께 움직인 장면을 하나의 기록으로 모았습니다.
+      </p>
+    </header>
+
+    <a class="activity-feature" href={withBase(`activities/${featured.slug}/`)}>
+      <img
+        src={withBase(featured.src)}
+        width={featured.width}
+        height={featured.height}
+        alt={featured.alt}
+        decoding="async"
+        fetchpriority="high"
+        style={`object-position:${featured.objectPosition}`}
+      />
+      <span class="activity-feature__copy">
+        <span>FEATURED ACTIVITY · {featured.kind}</span>
+        <strong>{featured.title}</strong>
+      </span>
+    </a>
+
+    <p class="activity-index-label">ACTIVITY ARCHIVE</p>
+    <ol class="activity-grid">
+      {archive.map((activity) => (
+        <li>
+          <a class="activity-tile" href={withBase(`activities/${activity.slug}/`)}>
+            <img
+              src={withBase(activity.src)}
+              width={activity.width}
+              height={activity.height}
+              alt={activity.alt}
+              loading="lazy"
+              decoding="async"
+              style={`object-position:${activity.objectPosition}`}
+            />
+            <span class="activity-tile__copy">
+              <span>{activity.kind}</span>
+              <strong>{activity.title}</strong>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </NoomoSubpageShell>
+</Layout>

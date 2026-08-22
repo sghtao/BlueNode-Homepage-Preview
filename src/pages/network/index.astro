@@ -1,0 +1,48 @@
+---
+import NoomoSubpageShell from '../../components/noomo/NoomoSubpageShell.astro'
+import { connections } from '../../data/connections'
+import Layout from '../../layouts/Layout.astro'
+
+const title = 'Network — BlueNode'
+const description = '인천에서 시작해 국내외 Web3 생태계와 이어지는 BlueNode의 관계를 소개합니다.'
+const isOfficialUrl = (source: string) => /^https:\/\//.test(source)
+---
+
+<Layout title={title} description={description}>
+  <NoomoSubpageShell current="network">
+    <section class="network-hero" aria-labelledby="network-route-heading">
+      <p class="route-eyebrow">NETWORK / RELATIONSHIPS</p>
+      <h1 class="route-title" id="network-route-heading">NETWORK</h1>
+      <div class="network-orbit" role="img" aria-label="인천을 중심으로 이어지는 BlueNode 네트워크">
+        <span></span>
+      </div>
+    </section>
+
+    <section class="network-directory" aria-labelledby="network-directory-heading">
+      <p class="route-eyebrow">FROM INCHEON TO A WIDER WEB3 ECOSYSTEM</p>
+      <h2 class="route-section-title" id="network-directory-heading">RELATIONSHIPS</h2>
+      <p class="network-directory__intro">
+        BlueNode의 네트워크는 로고의 수가 아니라 함께 만든 세션, 행사, 프로젝트와 반복되는
+        교류로 설명합니다. 아래에는 현재 프로젝트 자료에서 출처를 확인할 수 있는 조직만
+        기록했습니다.
+      </p>
+      <ul class="network-list">
+        {connections.map((connection) => (
+          <li>
+            {isOfficialUrl(connection.source) ? (
+              <a href={connection.source} target="_blank" rel="noopener noreferrer">
+                <strong>{connection.name}</strong>
+                <small>OFFICIAL SOURCE ↗</small>
+              </a>
+            ) : (
+              <span>
+                <strong>{connection.name}</strong>
+                <small>ARCHIVED SOURCE</small>
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </section>
+  </NoomoSubpageShell>
+</Layout>

@@ -1,0 +1,45 @@
+---
+import NoomoSubpageShell from '../../components/noomo/NoomoSubpageShell.astro'
+import { joinSteps } from '../../data/credentials'
+import Layout from '../../layouts/Layout.astro'
+
+const title = 'Join BlueNode'
+const description = 'If Web3 keeps you curious, we would like to meet you.'
+const recruitmentUrl = 'https://x.com/web3BlueNode'
+---
+
+<Layout title={title} description={description}>
+  <NoomoSubpageShell current="join">
+    <section class="join-route-hero" aria-labelledby="join-route-heading">
+      <div>
+        <p class="route-eyebrow">JOIN / BLUE NODE</p>
+        <h1 class="route-statement" id="join-route-heading">JOIN BLUENODE</h1>
+      </div>
+      <div class="join-status">
+        <p>
+          현재 모집 일정과 지원 링크는 BlueNode 공식 X에서 공지합니다. 실제 지원서가 열리기
+          전에는 지원이 가능한 것처럼 표시하지 않습니다.
+        </p>
+        <a href={recruitmentUrl} target="_blank" rel="noopener noreferrer">
+          CHECK RECRUITMENT <span>↗</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="join-process" aria-labelledby="join-process-heading">
+      <p class="route-eyebrow">JOIN / PROCESS</p>
+      <h2 class="route-section-title" id="join-process-heading">HOW WE MEET</h2>
+      <ol class="join-process-list">
+        {joinSteps.map((item) => (
+          <li>
+            <span>{item.step}</span>
+            <div>
+              <strong>{item.name}</strong>
+              <p>{item.detail}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+  </NoomoSubpageShell>
+</Layout>

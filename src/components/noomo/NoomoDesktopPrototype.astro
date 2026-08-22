@@ -1,5 +1,5 @@
 ---
-import { activities } from '../../data/activities'
+import { activityArchive } from '../../data/activityArchive'
 import { researchArticles } from '../../data/research'
 import { withBase } from '../../lib/paths'
 import '@fontsource/instrument-sans/latin-700.css'
@@ -10,15 +10,12 @@ import '@fontsource/inter/latin-700.css'
 
 const activityReel = [
   {
-    ...activities[0],
-    src: '/images/noomo-prototype/activities/mantle-hackathon.jpeg',
-    width: 4032,
-    height: 3024,
+    ...activityArchive[0],
     displayTitle: 'MANTLE HACKATHON',
   },
-  { ...activities[4], displayTitle: 'BUIDLHACK' },
-  { ...activities[1], displayTitle: 'TIGER RESEARCH' },
-  { ...activities[2], displayTitle: 'NINJA LABS SESSION' },
+  { ...activityArchive[1], displayTitle: 'BUIDLHACK' },
+  { ...activityArchive[2], displayTitle: 'TIGER RESEARCH' },
+  { ...activityArchive[3], displayTitle: 'NINJA LABS SESSION' },
 ]
 
 const awards = [
@@ -46,14 +43,12 @@ const researchDisplay = [
   { meta: 'STABLECOIN' },
   { meta: 'ETHEREUM' },
 ]
+const aboutRoute = withBase('about/')
+const activitiesRoute = withBase('activities/')
+const researchRoute = withBase('research/')
+const networkRoute = withBase('network/')
+const joinRoute = withBase('join/')
 
-const responsiveBackgroundOrbs = [
-  { name: 'milk', src: '/images/noomo-prototype/background/milk-cloud.svg', width: 610, height: 500 },
-  { name: 'ivory', src: '/images/noomo-prototype/background/ivory-patch.svg', width: 540, height: 440 },
-  { name: 'cool', src: '/images/noomo-prototype/background/cool-white.svg', width: 570, height: 650 },
-  { name: 'pearl', src: '/images/noomo-prototype/background/pearl-wash.svg', width: 720, height: 430 },
-  { name: 'ice', src: '/images/noomo-prototype/background/ice-flash.svg', width: 500, height: 360 },
-]
 ---
 
 <main class="prototype-shell" data-prototype-root>
@@ -111,6 +106,10 @@ const responsiveBackgroundOrbs = [
         <button type="button" data-jump-vh="1160">NETWORK</button>
         <button type="button" data-jump-vh="1380">JOIN</button>
       </nav>
+      <nav class="prototype-mobile-nav" aria-label="BlueNode mobile navigation">
+        <button type="button" data-mobile-join>JOIN</button>
+        <button type="button" aria-haspopup="dialog" aria-expanded="false" data-mobile-menu>MENU</button>
+      </nav>
     </header>
 
     <div class="prototype-progress" aria-hidden="true">
@@ -124,26 +123,6 @@ const responsiveBackgroundOrbs = [
       data-scene-index="0"
       aria-labelledby="prototype-entry-heading"
     >
-      <div class="responsive-scene-background responsive-scene-background--entry" aria-hidden="true">
-        {responsiveBackgroundOrbs.map((orb) => (
-          <img
-            class={`responsive-scene-background__orb responsive-scene-background__orb--${orb.name}`}
-            src={withBase(orb.src)}
-            width={orb.width}
-            height={orb.height}
-            alt=""
-          />
-        ))}
-      </div>
-
-      <header class="responsive-scene-header" aria-label="BlueNode mobile navigation">
-        <button class="responsive-scene-header__brand" type="button">BLUENODE</button>
-        <nav class="responsive-scene-header__actions" aria-label="Entry navigation">
-          <button class="responsive-scene-header__join" type="button">JOIN</button>
-          <button class="responsive-scene-header__menu" type="button">MENU</button>
-        </nav>
-      </header>
-
       <h1 class="entry-title display-type" id="prototype-entry-heading" data-entry-type>
         <span>THE STUDENT-LED</span>
         <span>BLOCKCHAIN RESEARCH CLUB</span>
@@ -166,21 +145,7 @@ const responsiveBackgroundOrbs = [
       data-scene="bluenode"
       data-scene-index="1"
       aria-label="BlueNode identity pause"
-      aria-hidden="true"
-      inert
     >
-      <div class="responsive-scene-background responsive-scene-background--bluenode" aria-hidden="true">
-        {responsiveBackgroundOrbs.map((orb) => (
-          <img
-            class={`responsive-scene-background__orb responsive-scene-background__orb--${orb.name}`}
-            src={withBase(orb.src)}
-            width={orb.width}
-            height={orb.height}
-            alt=""
-          />
-        ))}
-      </div>
-
       <img
         class="bluenode-logo-lock"
         src={withBase('/images/noomo-prototype/bluenode-white-vertical.png')}
@@ -197,29 +162,7 @@ const responsiveBackgroundOrbs = [
       data-scene="about"
       data-scene-index="2"
       aria-labelledby="prototype-about-heading"
-      aria-hidden="true"
-      inert
     >
-      <div class="responsive-scene-background responsive-scene-background--about" aria-hidden="true">
-        {responsiveBackgroundOrbs.map((orb) => (
-          <img
-            class={`responsive-scene-background__orb responsive-scene-background__orb--${orb.name}`}
-            src={withBase(orb.src)}
-            width={orb.width}
-            height={orb.height}
-            alt=""
-          />
-        ))}
-      </div>
-
-      <header class="responsive-scene-header" aria-label="BlueNode mobile navigation">
-        <button class="responsive-scene-header__brand" type="button">BLUENODE</button>
-        <nav class="responsive-scene-header__actions" aria-label="About navigation">
-          <button class="responsive-scene-header__join" type="button">JOIN</button>
-          <button class="responsive-scene-header__menu" type="button">MENU</button>
-        </nav>
-      </header>
-
       <h2 class="about-title display-type" id="prototype-about-heading" data-about-type>
         <span>BLUENODE</span>
         <span>WHERE THOSE WHO</span>
@@ -232,10 +175,10 @@ const responsiveBackgroundOrbs = [
         <p>Web3 / Blockchain / Incheon</p>
       </div>
 
-      <button class="prototype-pill-button about-cta" type="button" data-jump-vh="450" data-about-cta>
+      <a class="prototype-pill-button about-cta" href={aboutRoute} data-about-cta>
         <span>ABOUT BLUENODE</span>
         <span aria-hidden="true">→</span>
-      </button>
+      </a>
 
       <div
         class="about-pengu"
@@ -244,9 +187,9 @@ const responsiveBackgroundOrbs = [
       >
         <img
           class="about-pengu__image"
-          src={withBase('/images/noomo-prototype/pengu-3d-front.png')}
-          width="2048"
-          height="2048"
+          src={withBase('/images/noomo-prototype/pengu-3d-front.webp')}
+          width="1600"
+          height="1600"
           alt="BlueNode mascot Pengu"
         />
       </div>
@@ -258,29 +201,7 @@ const responsiveBackgroundOrbs = [
       data-scene="activities"
       data-scene-index="3"
       aria-labelledby="prototype-activities-heading"
-      aria-hidden="true"
-      inert
     >
-      <div class="responsive-scene-background responsive-scene-background--activities" aria-hidden="true">
-        {responsiveBackgroundOrbs.map((orb) => (
-          <img
-            class={`responsive-scene-background__orb responsive-scene-background__orb--${orb.name}`}
-            src={withBase(orb.src)}
-            width={orb.width}
-            height={orb.height}
-            alt=""
-          />
-        ))}
-      </div>
-
-      <header class="responsive-scene-header" aria-label="BlueNode mobile navigation">
-        <button class="responsive-scene-header__brand" type="button">BLUENODE</button>
-        <nav class="responsive-scene-header__actions" aria-label="Activities navigation">
-          <button class="responsive-scene-header__join" type="button">JOIN</button>
-          <button class="responsive-scene-header__menu" type="button">MENU</button>
-        </nav>
-      </header>
-
       <h2 class="activities-word display-type" id="prototype-activities-heading" data-activities-word>
         ACTIVITIES
       </h2>
@@ -309,10 +230,10 @@ const responsiveBackgroundOrbs = [
         ))}
       </div>
 
-      <button class="prototype-pill-button activities-cta" type="button" data-jump-vh="450" data-activities-cta>
+      <a class="prototype-pill-button activities-cta" href={activitiesRoute} data-activities-cta>
         <span>VIEW ACTIVITIES</span>
         <span aria-hidden="true">→</span>
-      </button>
+      </a>
     </section>
 
     <section
@@ -321,21 +242,7 @@ const responsiveBackgroundOrbs = [
       data-scene="awards"
       data-scene-index="4"
       aria-labelledby="prototype-awards-heading"
-      aria-hidden="true"
-      inert
     >
-      <div class="responsive-scene-background responsive-scene-background--awards" aria-hidden="true">
-        {responsiveBackgroundOrbs.map((orb) => (
-          <img
-            class={`responsive-scene-background__orb responsive-scene-background__orb--${orb.name}`}
-            src={withBase(orb.src)}
-            width={orb.width}
-            height={orb.height}
-            alt=""
-          />
-        ))}
-      </div>
-
       <h2 class="awards-title display-type" id="prototype-awards-heading" data-awards-title>
         <span>RECOGNITION FOR</span>
         <span>DEDICATED WORK THAT</span>
@@ -365,29 +272,7 @@ const responsiveBackgroundOrbs = [
       data-scene="research"
       data-scene-index="5"
       aria-labelledby="prototype-research-heading"
-      aria-hidden="true"
-      inert
     >
-      <div class="responsive-scene-background responsive-scene-background--research" aria-hidden="true">
-        {responsiveBackgroundOrbs.map((orb) => (
-          <img
-            class={`responsive-scene-background__orb responsive-scene-background__orb--${orb.name}`}
-            src={withBase(orb.src)}
-            width={orb.width}
-            height={orb.height}
-            alt=""
-          />
-        ))}
-      </div>
-
-      <header class="responsive-scene-header" aria-label="BlueNode mobile navigation">
-        <button class="responsive-scene-header__brand" type="button">BLUENODE</button>
-        <nav class="responsive-scene-header__actions" aria-label="Research navigation">
-          <button class="responsive-scene-header__join" type="button">JOIN</button>
-          <button class="responsive-scene-header__menu" type="button">MENU</button>
-        </nav>
-      </header>
-
       <h2 class="research-title display-type" id="prototype-research-heading" data-research-title>
         OUR RESEARCH
       </h2>
@@ -425,17 +310,11 @@ const responsiveBackgroundOrbs = [
 
       <a
         class="research-all"
-        href="https://medium.com/bluenode"
-        target="_blank"
-        rel="noopener noreferrer"
+        href={researchRoute}
         data-research-all
       >
         VIEW ALL
       </a>
-
-      <p class="research-source" data-research-source>
-        SOURCE&nbsp;&nbsp;·&nbsp;&nbsp;BLUENODE MEDIUM&nbsp;&nbsp;/&nbsp;&nbsp;ORIGINAL POST THUMBNAILS
-      </p>
     </section>
 
     <section
@@ -444,29 +323,7 @@ const responsiveBackgroundOrbs = [
       data-scene="network"
       data-scene-index="6"
       aria-labelledby="prototype-network-heading"
-      aria-hidden="true"
-      inert
     >
-      <div class="responsive-scene-background responsive-scene-background--network" aria-hidden="true">
-        {responsiveBackgroundOrbs.map((orb) => (
-          <img
-            class={`responsive-scene-background__orb responsive-scene-background__orb--${orb.name}`}
-            src={withBase(orb.src)}
-            width={orb.width}
-            height={orb.height}
-            alt=""
-          />
-        ))}
-      </div>
-
-      <header class="responsive-scene-header" aria-label="BlueNode mobile navigation">
-        <button class="responsive-scene-header__brand" type="button">BLUENODE</button>
-        <nav class="responsive-scene-header__actions" aria-label="Network navigation">
-          <button class="responsive-scene-header__join" type="button">JOIN</button>
-          <button class="responsive-scene-header__menu" type="button">MENU</button>
-        </nav>
-      </header>
-
       <h2 class="network-title display-type" id="prototype-network-heading" data-network-title>
         FROM INCHEON TO A WIDER WEB3 ECOSYSTEM.
       </h2>
@@ -539,10 +396,10 @@ const responsiveBackgroundOrbs = [
         <span class="network-label label-singapore">SINGAPORE / BLOCKCHAIN@NTU</span>
       </div>
 
-      <button class="prototype-pill-button network-cta" type="button" data-jump-vh="1160" data-network-cta>
+      <a class="prototype-pill-button network-cta" href={networkRoute} data-network-cta>
         <span>VIEW NETWORK</span>
         <span aria-hidden="true">→</span>
-      </button>
+      </a>
     </section>
 
     <section
@@ -551,48 +408,26 @@ const responsiveBackgroundOrbs = [
       data-scene="join"
       data-scene-index="7"
       aria-labelledby="prototype-join-heading"
-      aria-hidden="true"
-      inert
     >
-      <div class="responsive-scene-background responsive-scene-background--join" aria-hidden="true">
-        {responsiveBackgroundOrbs.map((orb) => (
-          <img
-            class={`responsive-scene-background__orb responsive-scene-background__orb--${orb.name}`}
-            src={withBase(orb.src)}
-            width={orb.width}
-            height={orb.height}
-            alt=""
-          />
-        ))}
-      </div>
-
-      <header class="responsive-scene-header" aria-label="BlueNode mobile navigation">
-        <button class="responsive-scene-header__brand" type="button">BLUENODE</button>
-        <nav class="responsive-scene-header__actions" aria-label="Join navigation">
-          <button class="responsive-scene-header__join" type="button">JOIN</button>
-          <button class="responsive-scene-header__menu" type="button">MENU</button>
-        </nav>
-      </header>
-
       <h2 class="join-title display-type" id="prototype-join-heading" data-join-title>
         <span>IF WEB3 KEEPS YOU CURIOUS,</span>
         <span>WE WOULD LIKE TO MEET YOU.</span>
       </h2>
 
-      <form class="join-form" data-join-form>
+      <form class="join-form" action={joinRoute} data-join-form data-join-route={joinRoute}>
         <label class="join-field join-field--name" data-join-field>
           <span>YOUR NAME</span>
-          <input type="text" name="name" autocomplete="name" aria-label="Your name" />
+          <input type="text" autocomplete="name" aria-label="Your name" />
         </label>
 
         <label class="join-field join-field--email" data-join-field>
           <span>YOUR EMAIL</span>
-          <input type="email" name="email" autocomplete="email" aria-label="Your email" />
+          <input type="email" autocomplete="email" aria-label="Your email" />
         </label>
 
         <label class="join-field join-field--curiosity" data-join-field>
           <span>WHAT KEEPS YOU CURIOUS?</span>
-          <textarea name="curiosity" rows="1" aria-label="What keeps you curious?"></textarea>
+          <textarea rows="1" aria-label="What keeps you curious?"></textarea>
         </label>
 
         <fieldset class="join-interests" data-join-interests>
@@ -603,7 +438,7 @@ const responsiveBackgroundOrbs = [
         </fieldset>
 
         <button class="join-submit" type="submit" data-join-submit>
-          <span>MEET BLUENODE</span>
+          <span>CONTINUE TO JOIN</span>
           <span aria-hidden="true">→</span>
         </button>
       </form>
@@ -613,6 +448,31 @@ const responsiveBackgroundOrbs = [
       </footer>
     </section>
   </div>
+
+  <aside
+    class="prototype-navigator"
+    role="dialog"
+    aria-modal="true"
+    aria-label="BlueNode site navigator"
+    aria-hidden="true"
+    inert
+    data-prototype-navigator
+  >
+    <header class="prototype-navigator__header">
+      <span>BLUENODE</span>
+      <button type="button" data-navigator-close>CLOSE</button>
+    </header>
+    <nav class="prototype-navigator__links" aria-label="BlueNode page destinations">
+      <a href={aboutRoute}><span>01</span>ABOUT</a>
+      <a href={activitiesRoute}><span>02</span>ACTIVITIES</a>
+      <a href={researchRoute}><span>03</span>RESEARCH</a>
+      <a href={networkRoute}><span>04</span>NETWORK</a>
+      <a href={joinRoute}><span>05</span>JOIN</a>
+    </nav>
+    <p class="prototype-navigator__foot">
+      STUDENT-LED BLOCKCHAIN RESEARCH CLUB<br />INHA UNIVERSITY · INCHEON
+    </p>
+  </aside>
 </main>
 
 <script>

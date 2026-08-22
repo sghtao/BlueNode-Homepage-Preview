@@ -1,0 +1,106 @@
+---
+import { withBase } from '../../lib/paths'
+import '../../styles/noomo-subpages.css'
+import '@fontsource/instrument-sans/latin-700.css'
+import '@fontsource/inter/latin-400.css'
+import '@fontsource/inter/latin-500.css'
+import '@fontsource/inter/latin-600.css'
+
+interface Props {
+  current: 'about' | 'activities' | 'research' | 'network' | 'join'
+}
+
+const { current } = Astro.props
+const routes = [
+  { key: 'about', label: 'ABOUT', href: withBase('about/') },
+  { key: 'activities', label: 'ACTIVITIES', href: withBase('activities/') },
+  { key: 'research', label: 'RESEARCH', href: withBase('research/') },
+  { key: 'network', label: 'NETWORK', href: withBase('network/') },
+  { key: 'join', label: 'JOIN', href: withBase('join/') },
+] as const
+---
+
+<div class="noomo-subpage-page">
+  <div class="noomo-subpage-atmosphere" aria-hidden="true"></div>
+
+  <header class="noomo-subpage-header">
+    <a class="noomo-subpage-brand" href={withBase('noomo-prototype/')}>BLUENODE</a>
+    <button
+      class="noomo-subpage-menu-button"
+      type="button"
+      aria-haspopup="dialog"
+      aria-expanded="false"
+      data-subpage-menu-open
+    >
+      MENU ↗
+    </button>
+  </header>
+
+  <main id="main" class="noomo-subpage-main" tabindex="-1">
+    <slot />
+  </main>
+
+  <footer class="noomo-subpage-footer">
+    <span>INHA UNIVERSITY · INCHEON · SINCE 2023</span>
+    <a href={withBase('noomo-prototype/')}>BACK TO HOME ↑</a>
+  </footer>
+
+  <dialog class="noomo-subpage-navigator" data-subpage-navigator>
+    <div class="noomo-subpage-navigator__top">
+      <span>BLUENODE</span>
+      <button type="button" data-subpage-menu-close>CLOSE</button>
+    </div>
+    <p class="noomo-subpage-navigator__label">NAVIGATOR / 05 DESTINATIONS</p>
+    <nav aria-label="BlueNode page navigation">
+      {routes.map((route, index) => (
+        <a href={route.href} aria-current={route.key === current ? 'page' : undefined}>
+          <span>{String(index + 1).padStart(2, '0')}</span>
+          {route.label}
+        </a>
+      ))}
+    </nav>
+    <p class="noomo-subpage-navigator__context">
+      STUDENT-LED BLOCKCHAIN RESEARCH CLUB<br />INHA UNIVERSITY · INCHEON
+    </p>
+  </dialog>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.noomo-subpage-page').forEach((root) => {
+    if (root.dataset.menuBound === 'true') return
+    root.dataset.menuBound = 'true'
+
+    const dialog = root.querySelector<HTMLDialogElement>('[data-subpage-navigator]')
+    const openButton = root.querySelector<HTMLButtonElement>('[data-subpage-menu-open]')
+    const closeButton = root.querySelector<HTMLButtonElement>('[data-subpage-menu-close]')
+    if (!dialog || !openButton || !closeButton) return
+
+    const open = () => {
+      dialog.showModal()
+      openButton.setAttribute('aria-expanded', 'true')
+      document.documentElement.classList.add('has-subpage-navigator')
+      closeButton.focus()
+    }
+
+    const close = () => {
+      dialog.close()
+      openButton.setAttribute('aria-expanded', 'false')
+      document.documentElement.classList.remove('has-subpage-navigator')
+      openButton.focus()
+    }
+
+    openButton.addEventListener('click', open)
+    closeButton.addEventListener('click', close)
+    dialog.addEventListener('cancel', (event) => {
+      event.preventDefault()
+      close()
+    })
+    dialog.addEventListener('close', () => {
+      openButton.setAttribute('aria-expanded', 'false')
+      document.documentElement.classList.remove('has-subpage-navigator')
+    })
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) close()
+    })
+  })
+</script>
