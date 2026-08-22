@@ -42,26 +42,19 @@ const formatResearchDisplayDate = (publishedAt: string) =>
     .format(new Date(`${publishedAt}T00:00:00Z`))
     .toUpperCase()
 const researchDisplay = [
-  { keyword: 'ORACLE', sub: 'ORACLE / DEFI', meta: 'ORACLE' },
-  { keyword: 'STABLE', sub: 'STABLECOIN / PAYMENTS', meta: 'STABLECOIN' },
-  { keyword: 'EVM', sub: 'ETHEREUM / EVM', meta: 'ETHEREUM' },
+  { meta: 'ORACLE' },
+  { meta: 'STABLECOIN' },
+  { meta: 'ETHEREUM' },
 ]
-const researchMotifs = [
-  { left: 18, top: 12, size: 22, rotate: 8 },
-  { left: 61, top: 70, size: 36, rotate: 3 },
-  { left: 104, top: 12, size: 50, rotate: -2 },
-  { left: 147, top: 70, size: 22, rotate: -7 },
-  { left: 190, top: 12, size: 36, rotate: -12 },
-  { left: 233, top: 70, size: 50, rotate: -17 },
-  { left: 276, top: 12, size: 22, rotate: -22 },
-  { left: 319, top: 70, size: 36, rotate: -27 },
+
+const responsiveBackgroundOrbs = [
+  { name: 'milk', src: '/images/noomo-prototype/background/milk-cloud.svg', width: 610, height: 500 },
+  { name: 'ivory', src: '/images/noomo-prototype/background/ivory-patch.svg', width: 540, height: 440 },
+  { name: 'cool', src: '/images/noomo-prototype/background/cool-white.svg', width: 570, height: 650 },
+  { name: 'pearl', src: '/images/noomo-prototype/background/pearl-wash.svg', width: 720, height: 430 },
+  { name: 'ice', src: '/images/noomo-prototype/background/ice-flash.svg', width: 500, height: 360 },
 ]
 ---
-
-<div class="prototype-desktop-guard" role="status">
-  <strong>DESKTOP MOTION PROTOTYPE</strong>
-  <span>이 프로토타입은 1024px 이상의 화면에서 확인할 수 있습니다.</span>
-</div>
 
 <main class="prototype-shell" data-prototype-root>
   <div class="prototype-viewport" data-prototype-viewport>
@@ -131,6 +124,26 @@ const researchMotifs = [
       data-scene-index="0"
       aria-labelledby="prototype-entry-heading"
     >
+      <div class="responsive-scene-background responsive-scene-background--entry" aria-hidden="true">
+        {responsiveBackgroundOrbs.map((orb) => (
+          <img
+            class={`responsive-scene-background__orb responsive-scene-background__orb--${orb.name}`}
+            src={withBase(orb.src)}
+            width={orb.width}
+            height={orb.height}
+            alt=""
+          />
+        ))}
+      </div>
+
+      <header class="responsive-scene-header" aria-label="BlueNode mobile navigation">
+        <button class="responsive-scene-header__brand" type="button">BLUENODE</button>
+        <nav class="responsive-scene-header__actions" aria-label="Entry navigation">
+          <button class="responsive-scene-header__join" type="button">JOIN</button>
+          <button class="responsive-scene-header__menu" type="button">MENU</button>
+        </nav>
+      </header>
+
       <h1 class="entry-title display-type" id="prototype-entry-heading" data-entry-type>
         <span>THE STUDENT-LED</span>
         <span>BLOCKCHAIN RESEARCH CLUB</span>
@@ -156,6 +169,18 @@ const researchMotifs = [
       aria-hidden="true"
       inert
     >
+      <div class="responsive-scene-background responsive-scene-background--bluenode" aria-hidden="true">
+        {responsiveBackgroundOrbs.map((orb) => (
+          <img
+            class={`responsive-scene-background__orb responsive-scene-background__orb--${orb.name}`}
+            src={withBase(orb.src)}
+            width={orb.width}
+            height={orb.height}
+            alt=""
+          />
+        ))}
+      </div>
+
       <img
         class="bluenode-logo-lock"
         src={withBase('/images/noomo-prototype/bluenode-white-vertical.png')}
@@ -175,6 +200,26 @@ const researchMotifs = [
       aria-hidden="true"
       inert
     >
+      <div class="responsive-scene-background responsive-scene-background--about" aria-hidden="true">
+        {responsiveBackgroundOrbs.map((orb) => (
+          <img
+            class={`responsive-scene-background__orb responsive-scene-background__orb--${orb.name}`}
+            src={withBase(orb.src)}
+            width={orb.width}
+            height={orb.height}
+            alt=""
+          />
+        ))}
+      </div>
+
+      <header class="responsive-scene-header" aria-label="BlueNode mobile navigation">
+        <button class="responsive-scene-header__brand" type="button">BLUENODE</button>
+        <nav class="responsive-scene-header__actions" aria-label="About navigation">
+          <button class="responsive-scene-header__join" type="button">JOIN</button>
+          <button class="responsive-scene-header__menu" type="button">MENU</button>
+        </nav>
+      </header>
+
       <h2 class="about-title display-type" id="prototype-about-heading" data-about-type>
         <span>BLUENODE</span>
         <span>WHERE THOSE WHO</span>
@@ -216,6 +261,26 @@ const researchMotifs = [
       aria-hidden="true"
       inert
     >
+      <div class="responsive-scene-background responsive-scene-background--activities" aria-hidden="true">
+        {responsiveBackgroundOrbs.map((orb) => (
+          <img
+            class={`responsive-scene-background__orb responsive-scene-background__orb--${orb.name}`}
+            src={withBase(orb.src)}
+            width={orb.width}
+            height={orb.height}
+            alt=""
+          />
+        ))}
+      </div>
+
+      <header class="responsive-scene-header" aria-label="BlueNode mobile navigation">
+        <button class="responsive-scene-header__brand" type="button">BLUENODE</button>
+        <nav class="responsive-scene-header__actions" aria-label="Activities navigation">
+          <button class="responsive-scene-header__join" type="button">JOIN</button>
+          <button class="responsive-scene-header__menu" type="button">MENU</button>
+        </nav>
+      </header>
+
       <h2 class="activities-word display-type" id="prototype-activities-heading" data-activities-word>
         ACTIVITIES
       </h2>
@@ -259,6 +324,18 @@ const researchMotifs = [
       aria-hidden="true"
       inert
     >
+      <div class="responsive-scene-background responsive-scene-background--awards" aria-hidden="true">
+        {responsiveBackgroundOrbs.map((orb) => (
+          <img
+            class={`responsive-scene-background__orb responsive-scene-background__orb--${orb.name}`}
+            src={withBase(orb.src)}
+            width={orb.width}
+            height={orb.height}
+            alt=""
+          />
+        ))}
+      </div>
+
       <h2 class="awards-title display-type" id="prototype-awards-heading" data-awards-title>
         <span>RECOGNITION FOR</span>
         <span>DEDICATED WORK THAT</span>
@@ -291,6 +368,26 @@ const researchMotifs = [
       aria-hidden="true"
       inert
     >
+      <div class="responsive-scene-background responsive-scene-background--research" aria-hidden="true">
+        {responsiveBackgroundOrbs.map((orb) => (
+          <img
+            class={`responsive-scene-background__orb responsive-scene-background__orb--${orb.name}`}
+            src={withBase(orb.src)}
+            width={orb.width}
+            height={orb.height}
+            alt=""
+          />
+        ))}
+      </div>
+
+      <header class="responsive-scene-header" aria-label="BlueNode mobile navigation">
+        <button class="responsive-scene-header__brand" type="button">BLUENODE</button>
+        <nav class="responsive-scene-header__actions" aria-label="Research navigation">
+          <button class="responsive-scene-header__join" type="button">JOIN</button>
+          <button class="responsive-scene-header__menu" type="button">MENU</button>
+        </nav>
+      </header>
+
       <h2 class="research-title display-type" id="prototype-research-heading" data-research-title>
         OUR RESEARCH
       </h2>
@@ -304,14 +401,17 @@ const researchMotifs = [
           <li data-research-row>
             <a href={article.externalUrl} target="_blank" rel="noopener noreferrer">
               <span class={`research-card research-card--${index + 1}`} aria-hidden="true">
-                {researchMotifs.map((motif) => (
-                  <i
-                    class="research-card__motif"
-                    style={`--motif-left: ${motif.left}px; --motif-top: ${motif.top}px; --motif-size: ${motif.size}px; --motif-rotate: ${motif.rotate}deg`}
-                  ></i>
-                ))}
-                <span class="research-card__keyword">{researchDisplay[index].keyword}</span>
-                <span class="research-card__sub">{researchDisplay[index].sub}</span>
+                {article.thumbnail && (
+                  <img
+                    class="research-card__image"
+                    src={withBase(article.thumbnail.src)}
+                    width={article.thumbnail.width}
+                    height={article.thumbnail.height}
+                    alt=""
+                    loading="eager"
+                    decoding="async"
+                  />
+                )}
               </span>
               <strong>{article.title}</strong>
               <span class="research-meta">
@@ -334,7 +434,7 @@ const researchMotifs = [
       </a>
 
       <p class="research-source" data-research-source>
-        SOURCE&nbsp;&nbsp;·&nbsp;&nbsp;BLUENODE MEDIUM&nbsp;&nbsp;/&nbsp;&nbsp;THUMBNAILS TO SYNC FROM PUBLISHED POSTS
+        SOURCE&nbsp;&nbsp;·&nbsp;&nbsp;BLUENODE MEDIUM&nbsp;&nbsp;/&nbsp;&nbsp;ORIGINAL POST THUMBNAILS
       </p>
     </section>
 
@@ -347,6 +447,26 @@ const researchMotifs = [
       aria-hidden="true"
       inert
     >
+      <div class="responsive-scene-background responsive-scene-background--network" aria-hidden="true">
+        {responsiveBackgroundOrbs.map((orb) => (
+          <img
+            class={`responsive-scene-background__orb responsive-scene-background__orb--${orb.name}`}
+            src={withBase(orb.src)}
+            width={orb.width}
+            height={orb.height}
+            alt=""
+          />
+        ))}
+      </div>
+
+      <header class="responsive-scene-header" aria-label="BlueNode mobile navigation">
+        <button class="responsive-scene-header__brand" type="button">BLUENODE</button>
+        <nav class="responsive-scene-header__actions" aria-label="Network navigation">
+          <button class="responsive-scene-header__join" type="button">JOIN</button>
+          <button class="responsive-scene-header__menu" type="button">MENU</button>
+        </nav>
+      </header>
+
       <h2 class="network-title display-type" id="prototype-network-heading" data-network-title>
         FROM INCHEON TO A WIDER WEB3 ECOSYSTEM.
       </h2>
@@ -434,6 +554,26 @@ const researchMotifs = [
       aria-hidden="true"
       inert
     >
+      <div class="responsive-scene-background responsive-scene-background--join" aria-hidden="true">
+        {responsiveBackgroundOrbs.map((orb) => (
+          <img
+            class={`responsive-scene-background__orb responsive-scene-background__orb--${orb.name}`}
+            src={withBase(orb.src)}
+            width={orb.width}
+            height={orb.height}
+            alt=""
+          />
+        ))}
+      </div>
+
+      <header class="responsive-scene-header" aria-label="BlueNode mobile navigation">
+        <button class="responsive-scene-header__brand" type="button">BLUENODE</button>
+        <nav class="responsive-scene-header__actions" aria-label="Join navigation">
+          <button class="responsive-scene-header__join" type="button">JOIN</button>
+          <button class="responsive-scene-header__menu" type="button">MENU</button>
+        </nav>
+      </header>
+
       <h2 class="join-title display-type" id="prototype-join-heading" data-join-title>
         <span>IF WEB3 KEEPS YOU CURIOUS,</span>
         <span>WE WOULD LIKE TO MEET YOU.</span>

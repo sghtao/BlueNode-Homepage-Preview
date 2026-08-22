@@ -4,6 +4,11 @@ export type ResearchArticle = {
   recordId: string;
   slug: string;
   title: string;
+  thumbnail?: {
+    src: string;
+    width: number;
+    height: number;
+  };
   authorHandles: string[];
   publishedAt: string; // YYYY-MM-DD
   tags: string[];
@@ -16,6 +21,11 @@ export const researchArticles: ResearchArticle[] = [
     recordId: "R/oracle-and-external-prices",
     slug: "oracle-and-external-prices",
     title: "블록체인은 어떻게 ‘블록체인 바깥의 가격’을 신뢰하게 되는가",
+    thumbnail: {
+      src: "/images/noomo-prototype/research/oracle-and-external-prices.png",
+      width: 1200,
+      height: 675,
+    },
     authorHandles: ["arkstar"],
     publishedAt: "2026-05-12",
     tags: ["oracle", "DeFi"],
@@ -28,6 +38,11 @@ export const researchArticles: ResearchArticle[] = [
     recordId: "R/stablecoin-history-and-characteristics",
     slug: "stablecoin-history-and-characteristics",
     title: "Part 1. 스테이블코인의 역사와 특징",
+    thumbnail: {
+      src: "/images/noomo-prototype/research/stablecoin-history-and-characteristics.png",
+      width: 622,
+      height: 406,
+    },
     authorHandles: ["seungzookim", "yusemin"],
     publishedAt: "2026-04-28",
     tags: ["stablecoin", "payments"],
@@ -40,6 +55,11 @@ export const researchArticles: ResearchArticle[] = [
     recordId: "R/mastering-ethereum-chapter-1",
     slug: "mastering-ethereum-chapter-1",
     title: "이더리움이란? (마스터링 이더리움 1장)(1)",
+    thumbnail: {
+      src: "/images/noomo-prototype/research/mastering-ethereum-chapter-1.png",
+      width: 510,
+      height: 409,
+    },
     authorHandles: ["seungzookim"],
     publishedAt: "2026-03-18",
     tags: ["ethereum", "EVM"],
