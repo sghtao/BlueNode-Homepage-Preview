@@ -134,6 +134,16 @@ function initialisePrototype() {
 
   if (!root || !viewport || !header || !progressFill) return
 
+  // A hot-reloaded preview can otherwise retain the navigator's document-level
+  // scroll lock or an earlier pinned ScrollTrigger after its DOM has changed.
+  document.documentElement.classList.remove('has-prototype-navigator')
+  viewport.inert = false
+  ;['bluenode-responsive-prototype', 'bluenode-desktop-prototype'].forEach((id) => {
+    const staleTrigger = ScrollTrigger.getById(id)
+    staleTrigger?.animation?.kill()
+    staleTrigger?.kill(true)
+  })
+
   const scenes = qa<HTMLElement>(root, '[data-scene]')
   const sceneByName = new Map<SceneName, HTMLElement>()
   scenes.forEach((scene) => sceneByName.set(scene.dataset.scene as SceneName, scene))
@@ -486,6 +496,9 @@ function initialisePrototype() {
     if (event.key === 'Escape' && navigatorPanel?.classList.contains('is-open')) closeNavigator()
   }
 
+  // Always begin unlocked, including after Astro/Vite hot reloads.
+  setNavigatorOpen(false)
+
   mobileMenuButton?.addEventListener('click', openNavigator)
   navigatorCloseButton?.addEventListener('click', closeNavigator)
   navigatorSceneButtons.forEach((button) => {
@@ -628,8 +641,10 @@ function initialisePrototype() {
         const responsiveState = (name: SceneName, progress: number) =>
           sceneProgressTime(responsiveSceneRanges, name, progress)
 
-        const entryHold = responsiveState('entry', 0.45)
-        const entryLift = responsiveState('entry', 0.72)
+        // The page must visibly answer the first wheel/trackpad input. Keep the
+        // full entry composition, but begin its lift after a short 8% pause.
+        const entryHold = responsiveState('entry', 0.08)
+        const entryLift = responsiveState('entry', 0.48)
         const entryEnd = responsiveState('entry', 1)
         const bluenodeLock = responsiveState('bluenode', 0.35)
         const bluenodeLift = responsiveState('bluenode', 0.72)
@@ -727,7 +742,9 @@ function initialisePrototype() {
           }, start + duration * 0.45)
         }
 
-        // 01 Entry → 02 BlueNode — preserve the authored 45% hold and 72% lift state.
+        // 01 Entry → 02 BlueNode — immediate micro-response, then a two-stage lift.
+        timeline.to(entryScrollCue, { y: -2, duration: entryHold }, 0)
+        timeline.to(entryType, { y: -3, duration: entryHold }, 0)
         timeline.to(entryScrollCue, {
           autoAlpha: 0,
           y: -6,
@@ -1202,9 +1219,18 @@ function initialisePrototype() {
       })
 
       timeline.to(progressFill, { scaleX: 1, duration: TOTAL_VH }, 0)
-      timeline.to(Object.values(activeBackgroundOrbs), { y: 8, duration: 68 }, 0)
+      timeline.to(Object.values(activeBackgroundOrbs), { y: 8, duration: 58 }, 0)
 
-      addBackgroundTransition(timeline, 'bluenode', 68, 82)
+      const entryMotionStart = 12
+      const entryMotionMid = 58
+      const entryMotionEnd = 108
+
+      addBackgroundTransition(
+        timeline,
+        'bluenode',
+        entryMotionStart,
+        entryMotionEnd - entryMotionStart,
+      )
       addBackgroundTransition(timeline, 'about', 192, 78)
       addBackgroundTransition(timeline, 'activities', 414, 81)
       addBackgroundTransition(timeline, 'awards', 720, 30)
@@ -1212,14 +1238,40 @@ function initialisePrototype() {
       addBackgroundTransition(timeline, 'network', 1120, 40)
       addBackgroundTransition(timeline, 'join', 1340, 40)
 
-      // 01 Entry / 0–150vh — read, micro-hold, then a two-stage vertical handoff.
-      timeline.to(entryScrollCue, { autoAlpha: 0, y: -8, duration: 28 }, 68)
-      timeline.to(entry, { yPercent: -45, duration: 40 }, 68)
-      timeline.to(bluenode, { yPercent: 55, duration: 40 }, 68)
-      timeline.to(entryType, { autoAlpha: 0.82, y: -12, duration: 40 }, 68)
-      timeline.to(entry, { yPercent: -100, duration: 42 }, 108)
-      timeline.to(bluenode, { yPercent: 0, duration: 42 }, 108)
-      timeline.to(header, { autoAlpha: 0, y: -8, duration: 42 }, 108)
+      // 01 Entry / 0–150vh — answer the first input, then complete the handoff.
+      timeline.to(entryScrollCue, { y: -2, duration: entryMotionStart }, 0)
+      timeline.to(entryType, { y: -3, duration: entryMotionStart }, 0)
+      timeline.to(entryScrollCue, {
+        autoAlpha: 0,
+        y: -8,
+        duration: entryMotionMid - entryMotionStart,
+      }, entryMotionStart)
+      timeline.to(entry, {
+        yPercent: -45,
+        duration: entryMotionMid - entryMotionStart,
+      }, entryMotionStart)
+      timeline.to(bluenode, {
+        yPercent: 55,
+        duration: entryMotionMid - entryMotionStart,
+      }, entryMotionStart)
+      timeline.to(entryType, {
+        autoAlpha: 0.82,
+        y: -12,
+        duration: entryMotionMid - entryMotionStart,
+      }, entryMotionStart)
+      timeline.to(entry, {
+        yPercent: -100,
+        duration: entryMotionEnd - entryMotionMid,
+      }, entryMotionMid)
+      timeline.to(bluenode, {
+        yPercent: 0,
+        duration: entryMotionEnd - entryMotionMid,
+      }, entryMotionMid)
+      timeline.to(header, {
+        autoAlpha: 0,
+        y: -8,
+        duration: entryMotionEnd - entryMotionMid,
+      }, entryMotionMid)
 
       // 02 BlueNode / 150–270vh — logo pause before the next full-viewport push.
       timeline.to(bluenodeLogo, { scale: 1, duration: 42, ease: 'power2.out' }, 150)
@@ -1467,7 +1519,10 @@ function initialisePrototype() {
     },
   )
 
-  addEventListener('pagehide', () => media.revert(), { once: true })
+  addEventListener('pagehide', () => {
+    media.revert()
+    document.documentElement.classList.remove('has-prototype-navigator')
+  }, { once: true })
 }
 
 initialisePrototype()
