@@ -1,5 +1,6 @@
 ---
 import NoomoDesktopPrototype from '../components/noomo/NoomoDesktopPrototype.astro'
+import { withBase } from '../lib/paths'
 import '../styles/noomo-prototype.css'
 ---
 
@@ -9,6 +10,9 @@ import '../styles/noomo-prototype.css'
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
+    <link rel="icon" type="image/png" sizes="32x32" href={withBase('favicon-32x32.png')} />
+    <link rel="apple-touch-icon" sizes="180x180" href={withBase('apple-touch-icon.png')} />
     <title>BlueNode — GSAP Responsive Prototype</title>
   </head>
   <body class="noomo-prototype-page">
