@@ -504,7 +504,16 @@ function initialisePrototype() {
   // timeline, so let ScrollTrigger normalise that input on phones/tablets.
   // Pointer-only desktops retain their native scroll behaviour.
   const usesTouchNormalizer = ScrollTrigger.isTouch > 0
-  if (usesTouchNormalizer) ScrollTrigger.normalizeScroll(true)
+  const enableTouchNormalizer = () => ScrollTrigger.normalizeScroll({
+    allowNestedScroll: true,
+    lockAxis: true,
+    // normalizeScroll's default flick momentum is too strong for this long
+    // scene timeline on a phone. Cap the glide to a fraction of a second so a
+    // normal swipe advances deliberately instead of skipping several scenes.
+    momentum: (self) => Math.min(0.24, Math.abs(self.velocityY) / 16000),
+    type: 'touch,wheel',
+  })
+  if (usesTouchNormalizer) enableTouchNormalizer()
 
   mobileMenuButton?.addEventListener('click', openNavigator)
   navigatorCloseButton?.addEventListener('click', closeNavigator)
@@ -1568,7 +1577,7 @@ function initialisePrototype() {
       document.documentElement.classList.remove('has-prototype-navigator')
       viewport.inert = false
     }
-    if (usesTouchNormalizer) ScrollTrigger.normalizeScroll(true)
+    if (usesTouchNormalizer) enableTouchNormalizer()
     if (event.persisted) refreshLayout()
   }
 
