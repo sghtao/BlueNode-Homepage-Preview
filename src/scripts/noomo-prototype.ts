@@ -510,7 +510,7 @@ function initialisePrototype() {
     // normalizeScroll's default flick momentum is too strong for this long
     // scene timeline on a phone. Cap the glide to a fraction of a second so a
     // normal swipe advances deliberately instead of skipping several scenes.
-    momentum: (self) => Math.min(0.48, Math.abs(self.velocityY) / 10000),
+    momentum: (self) => Math.min(0.58, Math.abs(self.velocityY) / 9000),
     type: 'touch,wheel',
   })
   if (usesTouchNormalizer) enableTouchNormalizer()
@@ -915,20 +915,12 @@ function initialisePrototype() {
           duration: awardsStatement - activitiesHold,
           ease: 'power2.out',
         }, activitiesHold)
-        timeline.to(awardRows.slice(0, 4), {
+        timeline.to(awardRows, {
           autoAlpha: 1,
           y: 0,
-          duration: awardsEvidence - awardsStatement - 9,
-          stagger: 3,
+          duration: awardsEvidence - awardsStatement,
           ease: 'power2.out',
         }, awardsStatement)
-        timeline.to(awardRows.slice(4), {
-          autoAlpha: 1,
-          y: 0,
-          duration: awardsCountLock - awardsEvidence - 6,
-          stagger: 3,
-          ease: 'power2.out',
-        }, awardsEvidence)
         timeline.to(awardsCount, {
           autoAlpha: 1,
           y: 0,
@@ -955,9 +947,9 @@ function initialisePrototype() {
           timeline.to(researchRows[0], {
             autoAlpha: 1,
             y: 0,
-            duration: researchArticleOne - awardsEnd,
+            duration: researchArticleOne - (awardsEnd - 30),
             ease: 'power2.out',
-          }, awardsEnd)
+          }, awardsEnd - 30)
           timeline.to(researchRows[0], { autoAlpha: 0, y: -14, duration: 8 }, researchArticleOne)
           timeline.to(researchRows[1], {
             autoAlpha: 1,
@@ -980,9 +972,9 @@ function initialisePrototype() {
           timeline.to(researchRows[0], {
             autoAlpha: 1,
             y: 0,
-            duration: researchArticleOne - awardsEnd,
+            duration: researchArticleOne - (awardsEnd - 30),
             ease: 'power2.out',
-          }, awardsEnd)
+          }, awardsEnd - 30)
           timeline.to(researchRows[1], {
             autoAlpha: 1,
             y: 0,
@@ -1008,21 +1000,26 @@ function initialisePrototype() {
           y: -14,
           duration: 18,
         }, researchEnd - 30)
-        timeline.to(research, { yPercent: -100, duration: 30 }, researchEnd - 30)
-        timeline.to(network, { yPercent: 0, duration: 30 }, researchEnd - 30)
+        timeline.to(research, {
+          autoAlpha: 0,
+          yPercent: -6,
+          scale: 0.995,
+          duration: 22,
+        }, researchEnd - 30)
+        timeline.to(network, { yPercent: 0, duration: 20 }, researchEnd - 20)
         timeline.to([networkTitle, networkOrigin], {
           autoAlpha: 1,
           y: 0,
-          duration: networkDomestic - (researchEnd - 30),
+          duration: networkDomestic - (researchEnd - 6),
           ease: 'power2.out',
-        }, researchEnd - 30)
+        }, researchEnd - 6)
         timeline.to(networkStage, {
           autoAlpha: 1,
           scale: 1,
           yPercent: 0,
-          duration: networkDomestic - (researchEnd - 30),
+          duration: networkDomestic - (researchEnd - 6),
           ease: 'power2.out',
-        }, researchEnd - 30)
+        }, researchEnd - 6)
         timeline.to(networkHub, {
           autoAlpha: 1,
           duration: networkDomestic - (researchEnd - 30),
@@ -1403,22 +1400,14 @@ function initialisePrototype() {
       timeline.to(awards, { autoAlpha: 1, duration: 30 }, 720)
       timeline.to(header, { autoAlpha: 0, y: -8, duration: 30 }, 720)
 
-      // 05 Awards / 750–940vh — evidence rows build in two measured groups.
+      // 05 Awards / 750–940vh — the complete evidence list arrives as one set.
       timeline.to(awardsTitle, { autoAlpha: 1, y: 0, duration: 58, ease: 'power2.out' }, 720)
-      timeline.to(awardRows.slice(0, 4), {
+      timeline.to(awardRows, {
         autoAlpha: 1,
         y: 0,
-        duration: 24,
-        stagger: 4,
+        duration: 32,
         ease: 'power2.out',
       }, 770)
-      timeline.to(awardRows.slice(4), {
-        autoAlpha: 1,
-        y: 0,
-        duration: 26,
-        stagger: 4,
-        ease: 'power2.out',
-      }, 805)
       timeline.to(awardsCount, {
         autoAlpha: 1,
         y: 0,
