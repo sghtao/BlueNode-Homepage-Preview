@@ -334,7 +334,8 @@ function initialisePrototype() {
     const saveData = Boolean(
       (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData,
     )
-    const globePixelRatio = Math.min(devicePixelRatio || 1, 2)
+    const compactPhoneGlobe = matchMedia('(max-width: 599px)').matches
+    const globePixelRatio = Math.min(devicePixelRatio || 1, compactPhoneGlobe ? 1.5 : 2)
 
     const INCHEON: [number, number] = [37.4563, 126.7052]
     const INITIAL_PHI = Math.PI / 2 - (INCHEON[1] * Math.PI) / 180 + Math.PI
@@ -393,7 +394,7 @@ function initialisePrototype() {
         diffuse: 1.2,
         opacity: 1,
         scale: 1,
-        mapSamples: 16000,
+        mapSamples: compactPhoneGlobe ? 12000 : 16000,
         mapBrightness: 6,
         mapBaseBrightness: 0,
         baseColor: [1, 1, 1],
@@ -674,6 +675,9 @@ function initialisePrototype() {
         const networkSettle = responsiveState('network', 0.36)
         const networkContext = responsiveState('network', 0.56)
         const networkEnd = responsiveState('network', 1)
+        const compactPhoneMotion = matchMedia('(max-width: 599px)').matches
+        const networkMarksExit = networkEnd - (compactPhoneMotion ? 40 : 28)
+        const networkSceneExit = networkEnd - (compactPhoneMotion ? 22 : 28)
         const joinStart = responsiveState('join', 0)
         const joinStatement = responsiveState('join', 0.25)
         const joinForm = responsiveState('join', 0.5)
@@ -719,7 +723,12 @@ function initialisePrototype() {
         addBackgroundTransition(timeline, 'awards', activitiesHold, activitiesEnd - activitiesHold)
         addBackgroundTransition(timeline, 'research', awardsEnd - 30, 30)
         addBackgroundTransition(timeline, 'network', researchEnd - 30, 30)
-        addBackgroundTransition(timeline, 'join', networkEnd - 28, 28)
+        addBackgroundTransition(
+          timeline,
+          'join',
+          networkSceneExit,
+          networkEnd - networkSceneExit,
+        )
 
         const addResponsiveActivityStop = (
           fromIndex: number,
@@ -1002,26 +1011,41 @@ function initialisePrototype() {
           duration: networkContext - networkSettle,
           ease: 'power2.out',
         }, networkSettle)
-        // 07 Network → 08 Join — relationship marks quiet down before the invitation takes over.
+        // 07 Network → 08 Join — on phones, quiet the relationship marks
+        // first, then let the globe and statement hand the scene to Join.
         timeline.to([
-          networkTitle,
-          networkOrigin,
-          networkStage,
           networkHub,
           networkDomesticRoutes,
           networkFarRoutes,
           networkCta,
           ...domesticLabels,
           ...farLabels,
-        ], { autoAlpha: 0, duration: 18 }, networkEnd - 28)
-        timeline.to(network, { yPercent: -100, duration: 28 }, networkEnd - 28)
-        timeline.to(join, { yPercent: 0, duration: 28 }, networkEnd - 28)
+        ], {
+          autoAlpha: 0,
+          duration: compactPhoneMotion ? 12 : 18,
+        }, networkMarksExit)
+        timeline.to([
+          networkTitle,
+          networkOrigin,
+          networkStage,
+        ], {
+          autoAlpha: 0,
+          duration: compactPhoneMotion ? 14 : 18,
+        }, networkSceneExit)
+        timeline.to(network, {
+          yPercent: -100,
+          duration: networkEnd - networkSceneExit,
+        }, networkSceneExit)
+        timeline.to(join, {
+          yPercent: 0,
+          duration: networkEnd - networkSceneExit,
+        }, networkSceneExit)
         timeline.to(joinTitle, {
           autoAlpha: 1,
           y: 0,
-          duration: joinStatement - (networkEnd - 28),
+          duration: joinStatement - networkSceneExit,
           ease: 'power2.out',
-        }, networkEnd - 28)
+        }, networkSceneExit)
         timeline.to(joinFields, {
           autoAlpha: 1,
           y: 0,
