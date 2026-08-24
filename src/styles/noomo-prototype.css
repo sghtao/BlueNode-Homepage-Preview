@@ -1048,23 +1048,31 @@ html.has-prototype-navigator {
   top: 226px;
   right: 40px;
   display: flex;
-  width: 86px;
-  height: 36px;
+  width: 104px;
+  height: 40px;
   align-items: center;
   justify-content: center;
   padding: 0;
-  border: 1px solid rgb(20 20 24 / 80%);
+  border: 1px solid rgb(20 20 24 / 58%);
   border-radius: 999px;
-  background: #dee7f1;
+  background: transparent;
   color: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0;
-  line-height: 20px;
+  font-family: var(--prototype-display);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1;
   text-decoration: none;
   opacity: 0;
   transform: translateY(10px);
+  transition: border-color 180ms ease, color 180ms ease, transform 180ms ease;
   will-change: transform, opacity;
+}
+
+.research-all:hover,
+.research-all:focus-visible {
+  border-color: rgb(20 20 24 / 92%);
+  color: rgb(20 20 24 / 72%);
 }
 
 /* 07 — Network */
@@ -3056,7 +3064,7 @@ html.has-prototype-navigator {
   .research-all {
     top: 205px;
     right: 30px;
-    width: 86px;
+    width: 104px;
     height: 44px;
   }
 
