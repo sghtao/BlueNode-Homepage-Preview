@@ -1,5 +1,6 @@
 import createGlobe, { type Globe } from 'cobe'
 import { gsap } from 'gsap'
+import type { Observer } from 'gsap/Observer'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -508,16 +509,25 @@ function initialisePrototype() {
   // timeline, so let ScrollTrigger normalise that input on phones/tablets.
   // Pointer-only desktops retain their native scroll behaviour.
   const usesTouchNormalizer = ScrollTrigger.isTouch > 0
-  const enableTouchNormalizer = () => ScrollTrigger.normalizeScroll({
-    allowNestedScroll: true,
-    lockAxis: true,
-    // normalizeScroll's default flick momentum is too strong for this long
-    // scene timeline on a phone. Cap the glide to a fraction of a second so a
-    // normal swipe advances deliberately instead of skipping several scenes.
-    momentum: (self) => Math.min(0.58, Math.abs(self.velocityY) / 9000),
-    type: 'touch,wheel',
-  })
-  if (usesTouchNormalizer) enableTouchNormalizer()
+  let touchNormalizerEnabled = false
+  const enableTouchNormalizer = (force = false) => {
+    if (!usesTouchNormalizer || (touchNormalizerEnabled && !force)) return
+    ScrollTrigger.normalizeScroll({
+      allowNestedScroll: true,
+      lockAxis: true,
+      // normalizeScroll's default flick momentum is too strong for this long
+      // scene timeline on a phone. Cap the glide to a fraction of a second so a
+      // normal swipe advances deliberately instead of skipping several scenes.
+      momentum: (self: Observer) => Math.min(0.5, Math.abs(self.velocityY) / 10500),
+      type: 'touch,wheel',
+    })
+    touchNormalizerEnabled = true
+  }
+  const disableTouchNormalizer = () => {
+    if (!touchNormalizerEnabled) return
+    ScrollTrigger.normalizeScroll(false)
+    touchNormalizerEnabled = false
+  }
 
   mobileMenuButton?.addEventListener('click', openNavigator)
   navigatorCloseButton?.addEventListener('click', closeNavigator)
@@ -538,17 +548,20 @@ function initialisePrototype() {
     {
       desktop: '(min-width: 1024px)',
       responsive: '(max-width: 1023px)',
+      compactPhone: '(max-width: 599px)',
       shortLandscape: '(max-width: 1023px) and (max-height: 500px) and (orientation: landscape)',
       reduce: '(prefers-reduced-motion: reduce)',
     },
     (context) => {
-      const { desktop, shortLandscape, reduce } = context.conditions as {
+      const { desktop, compactPhone, shortLandscape, reduce } = context.conditions as {
         desktop: boolean
+        compactPhone: boolean
         shortLandscape: boolean
         reduce: boolean
       }
 
       if (!desktop && (reduce || shortLandscape)) {
+        disableTouchNormalizer()
         const responsiveStaticScenes = [entry, bluenode, about, activities, awards, research, network, join]
         root.classList.add('is-responsive-static')
         navigateFromPanel = (sceneName) => {
@@ -582,6 +595,7 @@ function initialisePrototype() {
       }
 
       if (!desktop) {
+        enableTouchNormalizer()
         root.classList.remove('is-responsive-static', 'is-reduced')
         root.classList.add('is-responsive-motion')
         const globe = initialiseGlobe()
@@ -675,9 +689,12 @@ function initialisePrototype() {
         const networkSettle = responsiveState('network', 0.36)
         const networkContext = responsiveState('network', 0.56)
         const networkEnd = responsiveState('network', 1)
-        const compactPhoneMotion = matchMedia('(max-width: 599px)').matches
-        const networkMarksExit = networkEnd - (compactPhoneMotion ? 40 : 28)
-        const networkSceneExit = networkEnd - (compactPhoneMotion ? 22 : 28)
+        const compactPhoneMotion = compactPhone
+        const responsiveScrub = compactPhoneMotion ? 0.34 : 0.42
+        const awardsResearchHandoff = compactPhoneMotion ? 34 : 30
+        const researchNetworkHandoff = compactPhoneMotion ? 34 : 30
+        const networkMarksExit = networkEnd - (compactPhoneMotion ? 44 : 34)
+        const networkSceneExit = networkEnd - (compactPhoneMotion ? 34 : 30)
         const joinStart = responsiveState('join', 0)
         const joinStatement = responsiveState('join', 0.25)
         const joinForm = responsiveState('join', 0.5)
@@ -705,7 +722,10 @@ function initialisePrototype() {
             end: () => `+=${Math.round(innerHeight * 9.4)}`,
             pin: viewport,
             pinSpacing: true,
-            scrub: 0.55,
+            // Native touch momentum is already normalised below 1024px. A
+            // shorter scrub catch-up keeps the canvas attached to the finger
+            // without making the typography visibly chase a completed swipe.
+            scrub: responsiveScrub,
             anticipatePin: 1,
             invalidateOnRefresh: true,
           },
@@ -721,8 +741,18 @@ function initialisePrototype() {
         addBackgroundTransition(timeline, 'about', bluenodeLock, bluenodeEnd - bluenodeLock)
         addBackgroundTransition(timeline, 'activities', aboutExit, activitiesTitleLock - aboutExit)
         addBackgroundTransition(timeline, 'awards', activitiesHold, activitiesEnd - activitiesHold)
-        addBackgroundTransition(timeline, 'research', awardsEnd - 30, 30)
-        addBackgroundTransition(timeline, 'network', researchEnd - 30, 30)
+        addBackgroundTransition(
+          timeline,
+          'research',
+          awardsEnd - awardsResearchHandoff,
+          awardsResearchHandoff,
+        )
+        addBackgroundTransition(
+          timeline,
+          'network',
+          researchEnd - researchNetworkHandoff,
+          researchNetworkHandoff,
+        )
         addBackgroundTransition(
           timeline,
           'join',
@@ -935,22 +965,32 @@ function initialisePrototype() {
           autoAlpha: 0,
           y: -14,
           duration: 18,
-        }, awardsEnd - 30)
-        timeline.to(awards, { yPercent: -100, duration: 30 }, awardsEnd - 30)
-        timeline.to(research, { yPercent: 0, duration: 30 }, awardsEnd - 30)
-        timeline.to(header, { autoAlpha: 1, y: 0, duration: 30 }, awardsEnd - 30)
+        }, awardsEnd - awardsResearchHandoff)
+        timeline.to(awards, {
+          yPercent: -100,
+          duration: awardsResearchHandoff,
+        }, awardsEnd - awardsResearchHandoff)
+        timeline.to(research, {
+          yPercent: 0,
+          duration: awardsResearchHandoff,
+        }, awardsEnd - awardsResearchHandoff)
+        timeline.to(header, {
+          autoAlpha: 1,
+          y: 0,
+          duration: awardsResearchHandoff,
+        }, awardsEnd - awardsResearchHandoff)
         timeline.to(researchTitle, {
           autoAlpha: 1,
           y: 0,
-          duration: researchContent - (awardsEnd - 30),
+          duration: researchContent - (awardsEnd - awardsResearchHandoff),
           ease: 'power2.out',
-        }, awardsEnd - 30)
+        }, awardsEnd - awardsResearchHandoff)
         timeline.to([...researchRows, researchAll], {
           autoAlpha: 1,
           y: 0,
-          duration: researchContent - (awardsEnd - 30),
+          duration: researchContent - (awardsEnd - awardsResearchHandoff),
           ease: 'power2.out',
-        }, awardsEnd - 30)
+        }, awardsEnd - awardsResearchHandoff)
         // 06 Research → 07 Network — globe first, Korea next, distant touchpoints last.
         timeline.to([researchTitle, ...researchRows, researchAll], {
           autoAlpha: 0,
@@ -963,7 +1003,10 @@ function initialisePrototype() {
           scale: 0.995,
           duration: 22,
         }, researchEnd - 30)
-        timeline.to(network, { yPercent: 0, duration: 20 }, researchEnd - 20)
+        timeline.to(network, {
+          yPercent: 0,
+          duration: researchNetworkHandoff,
+        }, researchEnd - researchNetworkHandoff)
         timeline.to([networkTitle, networkOrigin], {
           autoAlpha: 1,
           y: 0,
@@ -1022,7 +1065,7 @@ function initialisePrototype() {
           ...farLabels,
         ], {
           autoAlpha: 0,
-          duration: compactPhoneMotion ? 12 : 18,
+          duration: 18,
         }, networkMarksExit)
         timeline.to([
           networkTitle,
@@ -1030,7 +1073,7 @@ function initialisePrototype() {
           networkStage,
         ], {
           autoAlpha: 0,
-          duration: compactPhoneMotion ? 14 : 18,
+          duration: compactPhoneMotion ? 22 : 20,
         }, networkSceneExit)
         timeline.to(network, {
           yPercent: -100,
@@ -1090,6 +1133,7 @@ function initialisePrototype() {
           timeline.scrollTrigger?.kill()
           timeline.kill()
           globe.destroy()
+          disableTouchNormalizer()
           root.classList.remove('is-responsive-motion')
           navigateFromPanel = (sceneName) => {
             sceneByName.get(sceneName)?.scrollIntoView({ behavior: 'smooth' })
@@ -1099,6 +1143,7 @@ function initialisePrototype() {
         }
       }
 
+      disableTouchNormalizer()
       const globe = initialiseGlobe()
 
       if (reduce) {
@@ -1538,7 +1583,8 @@ function initialisePrototype() {
       document.documentElement.classList.remove('has-prototype-navigator')
       viewport.inert = false
     }
-    if (usesTouchNormalizer) enableTouchNormalizer()
+    if (root.classList.contains('is-responsive-motion')) enableTouchNormalizer(true)
+    else disableTouchNormalizer()
     if (event.persisted) refreshLayout()
   }
 
@@ -1552,7 +1598,7 @@ function initialisePrototype() {
     removeEventListener('orientationchange', refreshLayout)
     removeEventListener('pageshow', handlePageShow)
     removeEventListener('pagehide', handlePageHide)
-    if (usesTouchNormalizer) ScrollTrigger.normalizeScroll(false)
+    disableTouchNormalizer()
     media.revert()
     document.documentElement.classList.remove('has-prototype-navigator')
   }
