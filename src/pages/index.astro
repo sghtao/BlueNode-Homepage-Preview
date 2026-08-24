@@ -1,26 +1,78 @@
 ---
-const base = import.meta.env.BASE_URL.endsWith('/')
-  ? import.meta.env.BASE_URL
-  : `${import.meta.env.BASE_URL}/`
-const target = `${base}noomo-prototype/`
+import NoomoDesktopPrototype from '../components/noomo/NoomoDesktopPrototype.astro'
+import { withBase } from '../lib/paths'
+import '../styles/noomo-prototype.css'
+
+const isGitHubPreview = import.meta.env.BASE_URL.includes('BlueNode-Homepage-Preview')
+const previewBuildId = process.env.GITHUB_SHA ?? 'local'
+const previewVersionUrl = withBase('version.json')
+const previewWorkerUrl = withBase('preview-cache-worker.js')
+const previewWorkerScope = import.meta.env.BASE_URL
 ---
 
 <!doctype html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta http-equiv="refresh" content={`0; url=${target}`} />
-    <meta name="robots" content="noindex" />
-    <title>BlueNode Preview</title>
-    <script is:inline define:vars={{ target }}>
-      window.location.replace(target)
+    <script is:inline>
+      document.documentElement.classList.add('js')
     </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    {isGitHubPreview && (
+      <meta
+        name="bluenode-preview-build"
+        content={previewBuildId}
+        data-version-url={previewVersionUrl}
+      />
+    )}
+    <link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
+    <link rel="icon" type="image/png" sizes="32x32" href={withBase('favicon-32x32.png')} />
+    <link rel="apple-touch-icon" sizes="180x180" href={withBase('apple-touch-icon.png')} />
+    <title>BlueNode — GSAP Responsive Prototype</title>
+    {isGitHubPreview && (
+      <script is:inline>
+        const previewBuild = document.querySelector('meta[name="bluenode-preview-build"]')
+
+        if (previewBuild instanceof HTMLMetaElement) {
+          const currentBuildId = previewBuild.content
+          const versionUrl = previewBuild.dataset.versionUrl
+
+          if (versionUrl) {
+            fetch(`${versionUrl}?checked=${Date.now()}`, { cache: 'no-store' })
+              .then((response) => response.ok ? response.json() : undefined)
+              .then((version) => {
+                const latestBuildId = version?.buildId
+                if (!latestBuildId || latestBuildId === currentBuildId) return
+
+                const url = new URL(location.href)
+                const versionKey = latestBuildId.slice(0, 12)
+                if (url.searchParams.get('version') === versionKey) return
+                url.searchParams.set('version', versionKey)
+                location.replace(url)
+              })
+              .catch(() => {})
+          }
+        }
+      </script>
+    )}
+    {isGitHubPreview && (
+      <script is:inline define:vars={{ previewWorkerUrl, previewWorkerScope }}>
+        if ('serviceWorker' in navigator) {
+          addEventListener('load', () => {
+            navigator.serviceWorker
+              .register(previewWorkerUrl, {
+                scope: previewWorkerScope,
+                updateViaCache: 'none',
+              })
+              .then((registration) => registration.update())
+              .catch(() => {})
+          }, { once: true })
+        }
+      </script>
+    )}
   </head>
-  <body>
-    <p>
-      BlueNode 홈페이지 미리보기로 이동합니다.
-      <a href={target}>바로 이동</a>
-    </p>
+  <body class="noomo-prototype-page">
+    <NoomoDesktopPrototype />
   </body>
 </html>
