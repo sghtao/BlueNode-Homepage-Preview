@@ -54,6 +54,14 @@ export const members: Member[] = [
     displayName: "유세민",
     aliases: ["Yusemin", "yusemin"],
   },
+  {
+    handle: "sghtao55",
+    displayName: "신기호",
+    aliases: ["Sghtao", "sghtao55"],
+    links: {
+      medium: "https://medium.com/@sghtao55",
+    },
+  },
 ];
 
 const membersByHandle = new Map(members.map((member) => [member.handle, member]));

@@ -69,6 +69,23 @@ export const researchArticles: ResearchArticle[] = [
       "https://medium.com/bluenode/%EC%9D%B4%EB%8D%94%EB%A6%AC%EC%9B%80%EC%9D%B4%EB%9E%80-%EB%A7%88%EC%8A%A4%ED%84%B0%EB%A7%81-%EC%9D%B4%EB%8D%94%EB%A6%AC%EC%9B%80-1%EC%9E%A5-1-e90fab1579cd",
   },
   {
+    recordId: "R/rwa-one-market-two-worlds",
+    slug: "rwa-one-market-two-worlds",
+    title: "RWA의 모든 것 (1): 하나의 시장, 두 개의 세계",
+    thumbnail: {
+      src: "/images/noomo-prototype/research/rwa-one-market-two-worlds.png",
+      width: 1024,
+      height: 576,
+    },
+    authorHandles: ["sghtao55"],
+    publishedAt: "2026-02-22",
+    tags: ["RWA", "tokenization", "TradFi"],
+    snippet:
+      "하나의 RWA 시장 안에 공존하는 분산형과 표현형 자산을 두 가지 프레임워크로 나누고, 시장 규모의 이면을 살펴봅니다.",
+    externalUrl:
+      "https://medium.com/bluenode/rwa%EC%9D%98-%EB%AA%A8%EB%93%A0-%EA%B2%83-1-%ED%95%98%EB%82%98%EC%9D%98-%EC%8B%9C%EC%9E%A5-%EB%91%90-%EA%B0%9C%EC%9D%98-%EC%84%B8%EA%B3%84-e26350d6d512",
+  },
+  {
     recordId: "R/memecoin-guide",
     slug: "memecoin-guide",
     title: "밈코인이란?",
