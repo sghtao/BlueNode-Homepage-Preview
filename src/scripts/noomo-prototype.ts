@@ -499,6 +499,13 @@ function initialisePrototype() {
   // Always begin unlocked, including after Astro/Vite hot reloads.
   setNavigatorOpen(false)
 
+  // ScrollTrigger normally delegates to native scrolling. Touch-only Safari
+  // can intermittently stop reporting the gestures that drive a long pinned
+  // timeline, so let ScrollTrigger normalise that input on phones/tablets.
+  // Pointer-only desktops retain their native scroll behaviour.
+  const usesTouchNormalizer = ScrollTrigger.isTouch > 0
+  if (usesTouchNormalizer) ScrollTrigger.normalizeScroll(true)
+
   mobileMenuButton?.addEventListener('click', openNavigator)
   navigatorCloseButton?.addEventListener('click', closeNavigator)
   navigatorSceneButtons.forEach((button) => {
@@ -1555,6 +1562,13 @@ function initialisePrototype() {
   }
 
   const handlePageShow = (event: PageTransitionEvent) => {
+    // Safari may restore the document from bfcache with a class that previously
+    // locked the navigator. Only retain the lock when the panel is truly open.
+    if (!navigatorPanel?.classList.contains('is-open')) {
+      document.documentElement.classList.remove('has-prototype-navigator')
+      viewport.inert = false
+    }
+    if (usesTouchNormalizer) ScrollTrigger.normalizeScroll(true)
     if (event.persisted) refreshLayout()
   }
 
@@ -1568,6 +1582,7 @@ function initialisePrototype() {
     removeEventListener('orientationchange', refreshLayout)
     removeEventListener('pageshow', handlePageShow)
     removeEventListener('pagehide', handlePageHide)
+    if (usesTouchNormalizer) ScrollTrigger.normalizeScroll(false)
     media.revert()
     document.documentElement.classList.remove('has-prototype-navigator')
   }

@@ -49,6 +49,7 @@ html::-webkit-scrollbar {
 
 .noomo-prototype-page {
   min-width: 320px;
+  min-height: 100%;
   margin: 0;
   overflow-x: clip;
   background: var(--prototype-blue);
@@ -2593,6 +2594,28 @@ html.has-prototype-navigator {
 
 /* Small and Extra Small use their approved reflow instead of the desktop pin. */
 @media (max-width: 1023px) {
+  html,
+  .noomo-prototype-page,
+  .prototype-shell,
+  .prototype-viewport,
+  .prototype-scene {
+    /* Keep vertical page panning available through GSAP's pinned viewport on
+       touch-only browsers. In particular, Safari must not infer that an
+       absolutely positioned scene is a gesture surface of its own. */
+    touch-action: pan-y;
+  }
+
+  .noomo-prototype-page {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: auto;
+  }
+
+  .network-globe-canvas {
+    /* Vertical gestures continue scrolling the page; horizontal gestures can
+       still rotate COBE without creating horizontal page movement. */
+    touch-action: pan-y;
+  }
+
   .prototype-viewport {
     height: auto;
     min-height: 0;
