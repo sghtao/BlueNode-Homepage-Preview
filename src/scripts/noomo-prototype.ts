@@ -699,6 +699,11 @@ function initialisePrototype() {
           },
         })
 
+        // Keep the first card optically centred after a width/orientation
+        // change inside the same responsive media query. ScrollTrigger can
+        // invalidate function-based timeline values, while a standalone
+        // gsap.set() would otherwise retain the previous viewport width.
+        timeline.set(activitiesRail, { x: responsiveActivityRailX(0) }, 0)
         timeline.to(progressFill, { scaleX: 1, duration: RESPONSIVE_TOTAL_VH }, 0)
         addBackgroundTransition(timeline, 'bluenode', entryHold, entryEnd - entryHold)
         addBackgroundTransition(timeline, 'about', bluenodeLock, bluenodeEnd - bluenodeLock)
@@ -1025,7 +1030,7 @@ function initialisePrototype() {
           ease: 'power2.out',
         }, networkSettle)
         timeline.to(farLabels, {
-          autoAlpha: 0.52,
+          autoAlpha: 0.72,
           y: 0,
           duration: networkContext - networkSettle - 12,
           stagger: 6,
@@ -1228,6 +1233,9 @@ function initialisePrototype() {
         },
       })
 
+      // Re-evaluate the opening rail position when a desktop viewport grows
+      // or shrinks without crossing the 1024px media-query boundary.
+      timeline.set(activitiesRail, { x: railX(0) }, 0)
       timeline.to(progressFill, { scaleX: 1, duration: TOTAL_VH }, 0)
       timeline.to(Object.values(activeBackgroundOrbs), { y: 8, duration: 58 }, 0)
 
@@ -1466,7 +1474,7 @@ function initialisePrototype() {
         ease: 'power2.out',
       }, 1235)
       timeline.to(farLabels, {
-        autoAlpha: 0.52,
+        autoAlpha: 0.72,
         y: 0,
         duration: 22,
         stagger: 6,
@@ -1528,10 +1536,46 @@ function initialisePrototype() {
     },
   )
 
-  addEventListener('pagehide', () => {
+  let lastLayoutWidth = innerWidth
+  let layoutRefreshFrame = 0
+
+  const refreshLayout = () => {
+    cancelAnimationFrame(layoutRefreshFrame)
+    layoutRefreshFrame = requestAnimationFrame(() => {
+      ScrollTrigger.refresh(true)
+      ScrollTrigger.update()
+    })
+  }
+
+  const handleLayoutResize = () => {
+    const nextWidth = innerWidth
+    if (Math.abs(nextWidth - lastLayoutWidth) < 2) return
+    lastLayoutWidth = nextWidth
+    refreshLayout()
+  }
+
+  const handlePageShow = (event: PageTransitionEvent) => {
+    if (event.persisted) refreshLayout()
+  }
+
+  const handlePageHide = (event: PageTransitionEvent) => {
+    // Keep the timeline alive while the document is stored in the back-forward
+    // cache. It is refreshed on pageshow instead of returning as a dead scene.
+    if (event.persisted) return
+
+    cancelAnimationFrame(layoutRefreshFrame)
+    removeEventListener('resize', handleLayoutResize)
+    removeEventListener('orientationchange', refreshLayout)
+    removeEventListener('pageshow', handlePageShow)
+    removeEventListener('pagehide', handlePageHide)
     media.revert()
     document.documentElement.classList.remove('has-prototype-navigator')
-  }, { once: true })
+  }
+
+  addEventListener('resize', handleLayoutResize)
+  addEventListener('orientationchange', refreshLayout)
+  addEventListener('pageshow', handlePageShow)
+  addEventListener('pagehide', handlePageHide)
 }
 
 initialisePrototype()

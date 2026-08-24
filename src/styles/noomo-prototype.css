@@ -5310,3 +5310,74 @@ html:not(.js) .activities-titles p:nth-child(1) {
     height: 450px;
   }
 }
+
+/* Final responsive quality pass — keep the globe dominant while separating
+   route geometry from the labels that explain it. */
+@media (max-width: 1023px) {
+  .prototype-shell.is-responsive-motion .activities-titles {
+    min-height: 2.08em;
+  }
+
+  .prototype-shell.is-responsive-motion .network-route-layer {
+    filter: opacity(0.54);
+  }
+
+  .prototype-shell.is-responsive-motion .network-label,
+  .prototype-shell.is-responsive-motion .network-hub {
+    font-weight: 600;
+    text-shadow:
+      0 0 3px rgb(222 231 241 / 100%),
+      0 0 8px rgb(222 231 241 / 96%),
+      0 1px 16px rgb(248 248 243 / 92%);
+  }
+
+  .prototype-shell.is-responsive-motion .network-hub {
+    width: max-content;
+    height: auto;
+    padding: 2px 5px;
+    border-radius: 2px;
+    background: rgb(222 231 241 / 78%);
+    box-shadow: 0 0 12px rgb(222 231 241 / 72%);
+  }
+
+  .prototype-shell.is-responsive-motion .network-labels--far .network-label {
+    color: #34485a;
+  }
+}
+
+@media (min-width: 360px) and (max-width: 599px) and (min-height: 701px) {
+  .prototype-shell.is-responsive-motion .network-title {
+    top: 82px;
+    font-size: clamp(19px, 5.2vw, 21px);
+    line-height: 1.04;
+  }
+
+  .prototype-shell.is-responsive-motion .network-origin {
+    top: 142px;
+  }
+
+  .prototype-shell.is-responsive-motion .network-globe-stage {
+    top: 216px;
+  }
+
+  .prototype-shell.is-responsive-motion .network-route-layer {
+    top: 126px;
+    filter: opacity(0.46);
+  }
+
+  .prototype-shell.is-responsive-motion .network-hub {
+    top: 356px;
+    left: 206px;
+  }
+}
+
+@media (min-width: 360px) and (max-width: 599px) and (max-height: 700px) {
+  .prototype-shell.is-responsive-motion .network-title {
+    font-size: clamp(16px, 4.6vw, 18px);
+    line-height: 1.04;
+  }
+
+  .prototype-shell.is-responsive-motion .network-route-layer {
+    filter: opacity(0.42);
+  }
+}
