@@ -510,7 +510,7 @@ function initialisePrototype() {
     // normalizeScroll's default flick momentum is too strong for this long
     // scene timeline on a phone. Cap the glide to a fraction of a second so a
     // normal swipe advances deliberately instead of skipping several scenes.
-    momentum: (self) => Math.min(0.24, Math.abs(self.velocityY) / 16000),
+    momentum: (self) => Math.min(0.48, Math.abs(self.velocityY) / 10000),
     type: 'touch,wheel',
   })
   if (usesTouchNormalizer) enableTouchNormalizer()
