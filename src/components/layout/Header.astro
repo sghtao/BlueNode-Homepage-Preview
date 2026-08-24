@@ -17,11 +17,9 @@ const pathWithoutBase = configuredBase && Astro.url.pathname.startsWith(configur
   : Astro.url.pathname
 const normalizedPath = pathWithoutBase.replace(/\/$/, '') || '/'
 const isHome = normalizedPath === '/'
-const isResearchRoute = normalizedPath.startsWith('/research')
-const isResearchIndex = normalizedPath === '/research'
 const homeHref = withBase()
-const researchHref = isResearchRoute ? withBase('research/') : '#research'
 const homeAnchor = (id: string) => isHome ? `#${id}` : `${homeHref}#${id}`
+const researchHref = homeAnchor('research')
 ---
 
 <header
@@ -53,7 +51,7 @@ const homeAnchor = (id: string) => isHome ? `#${id}` : `${homeHref}#${id}`
       <nav class="hnav" aria-label="주요 메뉴">
         <a class="hlink" href={homeAnchor('activities')}>활동</a>
         <a class="hlink" href={homeAnchor('awards')}>기록</a>
-        <a class="hlink" href={researchHref} aria-current={isResearchIndex ? 'page' : undefined}>리서치</a>
+        <a class="hlink" href={researchHref}>리서치</a>
         <a class="hlink" href={homeAnchor('connections')}>커넥션</a>
         <a class="hcta" href={homeAnchor('join')}>
           <span class="roll-window"><span class="roll-track" data-label="합류">합류</span></span>
@@ -109,7 +107,7 @@ const homeAnchor = (id: string) => isHome ? `#${id}` : `${homeHref}#${id}`
         <a href={homeAnchor('teams')}>Teams</a>
         <a href={homeAnchor('activities')}>Activities</a>
         <a href={homeAnchor('awards')}>Awards</a>
-        <a href={researchHref} aria-current={isResearchIndex ? 'page' : undefined}>Research</a>
+        <a href={researchHref}>Research</a>
         <a href={homeAnchor('connections')}>Network</a>
         <a class="global-nav__join-link" href={homeAnchor('join')}>Join ↗</a>
       </nav>

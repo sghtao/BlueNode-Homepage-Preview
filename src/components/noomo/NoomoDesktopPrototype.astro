@@ -10,12 +10,25 @@ import '@fontsource/inter/latin-700.css'
 
 const activityReel = [
   {
-    ...activityArchive[0],
-    displayTitle: 'MANTLE HACKATHON',
+    ...activityArchive[4],
+    displayTitle: 'NINJA LABS X BLUENODE',
   },
-  { ...activityArchive[1], displayTitle: 'BUIDLHACK' },
-  { ...activityArchive[2], displayTitle: 'TIGER RESEARCH' },
-  { ...activityArchive[3], displayTitle: 'NINJA LABS SESSION' },
+  {
+    ...activityArchive[1],
+    displayTitle: 'BUIDL HACK 2026 1ST PLACE',
+  },
+  {
+    ...activityArchive[2],
+    displayTitle: 'TIGER RESEARCH OFFICE VISIT',
+  },
+  {
+    src: '/images/activities/blockchain-media-art.webp',
+    width: 2400,
+    height: 1800,
+    alt: 'Blockchain and Media Art 행사 무대에서 대화하는 연사들',
+    objectPosition: 'center 50%',
+    displayTitle: 'BLOCKCHAIN AND MEDIA ART',
+  },
 ]
 
 const awards = [
@@ -43,11 +56,8 @@ const researchDisplay = [
   { meta: 'STABLECOIN' },
   { meta: 'ETHEREUM' },
 ]
-const aboutRoute = withBase('about/')
-const activitiesRoute = withBase('activities/')
-const researchRoute = withBase('research/')
-const networkRoute = withBase('network/')
-const joinRoute = withBase('join/')
+const researchChannelUrl = 'https://medium.com/bluenode'
+const recruitmentUrl = 'https://x.com/web3BlueNode'
 
 ---
 
@@ -175,24 +185,25 @@ const joinRoute = withBase('join/')
         <p>Web3 / Blockchain / Incheon</p>
       </div>
 
-      <a class="prototype-pill-button about-cta" href={aboutRoute} data-about-cta>
-        <span>ABOUT BLUENODE</span>
-        <span aria-hidden="true">→</span>
-      </a>
-
-      <div
-        class="about-pengu"
-        data-about-pengu
-        style={`--pengu-mask: url("${withBase('/images/noomo-prototype/pengu-3d-mask.svg')}")`}
-      >
+      <div class="about-pengu" data-about-pengu>
         <img
           class="about-pengu__image"
-          src={withBase('/images/noomo-prototype/pengu-3d-front.webp')}
-          width="1600"
-          height="1600"
+          src={withBase('/images/noomo-prototype/pengu-gemini-pro-front-cutout.webp')}
+          width="2048"
+          height="2048"
           alt="BlueNode mascot Pengu"
         />
       </div>
+
+      <button
+        class="prototype-pill-button about-cta"
+        type="button"
+        data-about-cta
+        aria-disabled="true"
+      >
+        <span>ABOUT BLUENODE</span>
+        <span aria-hidden="true">→</span>
+      </button>
     </section>
 
     <section
@@ -226,14 +237,21 @@ const joinRoute = withBase('join/')
 
       <div class="activities-titles" aria-live="polite">
         {activityReel.map((activity, index) => (
-          <p class="display-type" data-activity-title data-title-index={index}>{activity.displayTitle}</p>
+          <p class="display-type" data-activity-title data-title-index={index}>
+            <strong>{activity.displayTitle}</strong>
+          </p>
         ))}
       </div>
 
-      <a class="prototype-pill-button activities-cta" href={activitiesRoute} data-activities-cta>
+      <button
+        class="prototype-pill-button activities-cta"
+        type="button"
+        data-activities-cta
+        aria-disabled="true"
+      >
         <span>VIEW ACTIVITIES</span>
         <span aria-hidden="true">→</span>
-      </a>
+      </button>
     </section>
 
     <section
@@ -310,7 +328,9 @@ const joinRoute = withBase('join/')
 
       <a
         class="research-all"
-        href={researchRoute}
+        href={researchChannelUrl}
+        target="_blank"
+        rel="noopener noreferrer"
         data-research-all
       >
         VIEW ALL
@@ -396,10 +416,15 @@ const joinRoute = withBase('join/')
         <span class="network-label label-singapore">SINGAPORE / BLOCKCHAIN@NTU</span>
       </div>
 
-      <a class="prototype-pill-button network-cta" href={networkRoute} data-network-cta>
+      <button
+        class="prototype-pill-button network-cta"
+        type="button"
+        data-network-cta
+        aria-disabled="true"
+      >
         <span>VIEW NETWORK</span>
         <span aria-hidden="true">→</span>
-      </a>
+      </button>
     </section>
 
     <section
@@ -414,7 +439,7 @@ const joinRoute = withBase('join/')
         <span>WE WOULD LIKE TO MEET YOU.</span>
       </h2>
 
-      <form class="join-form" action={joinRoute} data-join-form data-join-route={joinRoute}>
+      <form class="join-form" action={recruitmentUrl} data-join-form data-join-route={recruitmentUrl}>
         <label class="join-field join-field--name" data-join-field>
           <span>YOUR NAME</span>
           <input type="text" autocomplete="name" aria-label="Your name" />
@@ -438,8 +463,8 @@ const joinRoute = withBase('join/')
         </fieldset>
 
         <button class="join-submit" type="submit" data-join-submit>
-          <span>CONTINUE TO JOIN</span>
-          <span aria-hidden="true">→</span>
+          <span>CHECK RECRUITMENT</span>
+          <span aria-hidden="true">↗</span>
         </button>
       </form>
 
@@ -462,12 +487,12 @@ const joinRoute = withBase('join/')
       <span>BLUENODE</span>
       <button type="button" data-navigator-close>CLOSE</button>
     </header>
-    <nav class="prototype-navigator__links" aria-label="BlueNode page destinations">
-      <a href={aboutRoute}><span>01</span>ABOUT</a>
-      <a href={activitiesRoute}><span>02</span>ACTIVITIES</a>
-      <a href={researchRoute}><span>03</span>RESEARCH</a>
-      <a href={networkRoute}><span>04</span>NETWORK</a>
-      <a href={joinRoute}><span>05</span>JOIN</a>
+    <nav class="prototype-navigator__links" aria-label="BlueNode homepage scenes">
+      <button type="button" data-navigator-scene="about"><span>01</span>ABOUT</button>
+      <button type="button" data-navigator-scene="activities"><span>02</span>ACTIVITIES</button>
+      <button type="button" data-navigator-scene="research"><span>03</span>RESEARCH</button>
+      <button type="button" data-navigator-scene="network"><span>04</span>NETWORK</button>
+      <button type="button" data-navigator-scene="join"><span>05</span>JOIN</button>
     </nav>
     <p class="prototype-navigator__foot">
       STUDENT-LED BLOCKCHAIN RESEARCH CLUB<br />INHA UNIVERSITY · INCHEON
