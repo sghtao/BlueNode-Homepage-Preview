@@ -5404,3 +5404,64 @@ html:not(.js) .activities-titles p:nth-child(1) {
     filter: opacity(0.42);
   }
 }
+
+/* Mobile research closes like an editorial index: the content begins higher,
+   and VIEW ALL sits below the last rule without a pill-shaped container. */
+@media (max-width: 599px) {
+  .prototype-shell.is-responsive-motion .scene-research {
+    --mobile-research-list-top: 174px;
+    --mobile-research-visible-height: 560px;
+  }
+
+  .prototype-shell.is-responsive-motion .research-title {
+    top: 78px;
+  }
+
+  .prototype-shell.is-responsive-motion .research-list {
+    top: var(--mobile-research-list-top);
+  }
+
+  .prototype-shell.is-responsive-motion .research-all {
+    z-index: 4;
+    top: calc(
+      var(--mobile-research-list-top)
+      + var(--mobile-research-visible-height)
+      + 6px
+    );
+    right: 20px;
+    width: 84px;
+    height: 44px;
+    justify-content: flex-end;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    font-family: var(--prototype-display);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+}
+
+@media (max-width: 599px) and (max-height: 700px) {
+  .prototype-shell.is-responsive-motion .scene-research {
+    --mobile-research-list-top: 142px;
+    --mobile-research-visible-height: 186px;
+  }
+
+  .prototype-shell.is-responsive-motion .research-title {
+    top: 68px;
+  }
+}
+
+@media (max-width: 359px) and (max-height: 700px) {
+  .prototype-shell.is-responsive-motion .scene-research {
+    --mobile-research-list-top: 130px;
+    --mobile-research-visible-height: 220px;
+  }
+
+  .prototype-shell.is-responsive-motion .research-title {
+    top: 64px;
+  }
+}
