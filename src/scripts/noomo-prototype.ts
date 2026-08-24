@@ -429,7 +429,10 @@ function initialisePrototype() {
     }
 
     const startDragging = (event: PointerEvent) => {
-      if (!globe) return
+      // Preserve the scroll-linked COBE rotation on phones, but reserve touch
+      // gestures for page scrolling. Mouse/trackpad users can still drag the
+      // globe directly on larger pointer-driven devices.
+      if (!globe || event.pointerType === 'touch') return
       dragging = true
       dragStartX = event.clientX
       dragStartY = event.clientY
