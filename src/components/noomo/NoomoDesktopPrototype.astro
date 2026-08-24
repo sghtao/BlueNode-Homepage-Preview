@@ -66,6 +66,14 @@ const researchDisplay = [
   { meta: 'ETHEREUM' },
   { meta: 'RWA' },
 ]
+const researchCardVariants: Record<string, string> = {
+  'R/mastering-ethereum-chapter-1': 'research-card--ethereum',
+  'R/rwa-one-market-two-worlds': 'research-card--rwa',
+}
+const getResearchCardClass = (recordId: string, index: number) =>
+  ['research-card', `research-card--${index + 1}`, researchCardVariants[recordId]]
+    .filter(Boolean)
+    .join(' ')
 const researchChannelUrl = 'https://medium.com/bluenode'
 const recruitmentUrl = 'https://x.com/web3BlueNode'
 
@@ -315,7 +323,7 @@ const recruitmentUrl = 'https://x.com/web3BlueNode'
         {research.map((article, index) => (
           <li data-research-row>
             <a href={article.externalUrl} target="_blank" rel="noopener noreferrer">
-              <span class={`research-card research-card--${index + 1}`} aria-hidden="true">
+              <span class={getResearchCardClass(article.recordId, index)} aria-hidden="true">
                 {article.thumbnail && (
                   <img
                     class="research-card__image"

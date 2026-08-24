@@ -905,12 +905,6 @@ html.has-prototype-navigator {
   transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.research-card--3 .research-card__image {
-  padding: 8px 18px;
-  background: #fff;
-  object-fit: contain;
-}
-
 @media (hover: hover) and (pointer: fine) {
   .research-list a:hover .research-card__image {
     transform: scale(1.025);
@@ -982,6 +976,25 @@ html.has-prototype-navigator {
 
 .research-card--3 {
   background: #f2eee8;
+}
+
+.research-card--ethereum {
+  background: #fff;
+}
+
+.research-card--ethereum .research-card__image {
+  padding: 8px 18px;
+  background: #fff;
+  object-fit: contain;
+}
+
+.research-card--rwa {
+  background: #130b9e;
+}
+
+.research-card--rwa .research-card__image {
+  background: #130b9e;
+  object-fit: contain;
 }
 
 .research-list strong {
@@ -5533,7 +5546,7 @@ html:not(.js) .activities-titles p:nth-child(1) {
     height: 72px;
   }
 
-  .prototype-shell:is(.is-responsive-motion, .is-responsive-static) .research-card--3 .research-card__image {
+  .prototype-shell:is(.is-responsive-motion, .is-responsive-static) .research-card--ethereum .research-card__image {
     padding: 4px 8px;
   }
 
