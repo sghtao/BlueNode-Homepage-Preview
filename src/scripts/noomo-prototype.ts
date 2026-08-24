@@ -534,14 +534,12 @@ function initialisePrototype() {
     {
       desktop: '(min-width: 1024px)',
       responsive: '(max-width: 1023px)',
-      compact: '(max-height: 700px)',
       shortLandscape: '(max-width: 1023px) and (max-height: 500px) and (orientation: landscape)',
       reduce: '(prefers-reduced-motion: reduce)',
     },
     (context) => {
-      const { desktop, compact, shortLandscape, reduce } = context.conditions as {
+      const { desktop, shortLandscape, reduce } = context.conditions as {
         desktop: boolean
-        compact: boolean
         shortLandscape: boolean
         reduce: boolean
       }
@@ -624,14 +622,7 @@ function initialisePrototype() {
           y: 18,
         })
         gsap.set(awardRows, { autoAlpha: 0, y: 14 })
-        const compactResearchRowOffset = researchRows[0]?.offsetHeight || 220
-        if (compact) {
-          researchRows.forEach((row, index) => {
-            gsap.set(row, { autoAlpha: 0, y: 14 - index * compactResearchRowOffset })
-          })
-        } else {
-          gsap.set(researchRows, { autoAlpha: 0, y: 14 })
-        }
+        gsap.set(researchRows, { autoAlpha: 0, y: 14 })
         if (researchList) gsap.set(researchList, { y: 0 })
         gsap.set([networkTitle, networkOrigin, joinTitle], { autoAlpha: 0, y: 18 })
         gsap.set([networkStage, networkHub, networkDomesticRoutes, networkFarRoutes], {
@@ -673,9 +664,7 @@ function initialisePrototype() {
         const awardsEvidence = responsiveState('awards', 0.38)
         const awardsCountLock = responsiveState('awards', 0.6)
         const awardsEnd = responsiveState('awards', 1)
-        const researchArticleOne = responsiveState('research', 0.15)
-        const researchArticleTwo = responsiveState('research', 0.35)
-        const researchArticleThree = responsiveState('research', 0.55)
+        const researchContent = responsiveState('research', 0.18)
         const researchEnd = responsiveState('research', 1)
         const networkStart = responsiveState('network', 0)
         const networkDomestic = responsiveState('network', 0.16)
@@ -928,7 +917,8 @@ function initialisePrototype() {
           ease: 'power2.out',
         }, awardsCountLock)
 
-        // 05 Awards → 06 Research — a soft editorial crossfade; compact screens scroll the list inside the scene.
+        // 05 Awards → 06 Research — a soft editorial crossfade that presents
+        // the complete three-item index as one composition on every viewport.
         timeline.to([awardsTitle, ...awardRows, awardsCount], {
           autoAlpha: 0,
           y: -14,
@@ -940,60 +930,15 @@ function initialisePrototype() {
         timeline.to(researchTitle, {
           autoAlpha: 1,
           y: 0,
-          duration: researchArticleOne - (awardsEnd - 30),
+          duration: researchContent - (awardsEnd - 30),
           ease: 'power2.out',
         }, awardsEnd - 30)
-        if (compact) {
-          timeline.to(researchRows[0], {
-            autoAlpha: 1,
-            y: 0,
-            duration: researchArticleOne - (awardsEnd - 30),
-            ease: 'power2.out',
-          }, awardsEnd - 30)
-          timeline.to(researchRows[0], { autoAlpha: 0, y: -14, duration: 8 }, researchArticleOne)
-          timeline.to(researchRows[1], {
-            autoAlpha: 1,
-            y: -compactResearchRowOffset,
-            duration: researchArticleTwo - researchArticleOne,
-            ease: 'power2.out',
-          }, researchArticleOne)
-          timeline.to(researchRows[1], {
-            autoAlpha: 0,
-            y: -compactResearchRowOffset - 14,
-            duration: 8,
-          }, researchArticleTwo)
-          timeline.to(researchRows[2], {
-            autoAlpha: 1,
-            y: -compactResearchRowOffset * 2,
-            duration: researchArticleThree - researchArticleTwo,
-            ease: 'power2.out',
-          }, researchArticleTwo)
-        } else {
-          timeline.to(researchRows[0], {
-            autoAlpha: 1,
-            y: 0,
-            duration: researchArticleOne - (awardsEnd - 30),
-            ease: 'power2.out',
-          }, awardsEnd - 30)
-          timeline.to(researchRows[1], {
-            autoAlpha: 1,
-            y: 0,
-            duration: researchArticleTwo - researchArticleOne,
-            ease: 'power2.out',
-          }, researchArticleOne)
-          timeline.to(researchRows[2], {
-            autoAlpha: 1,
-            y: 0,
-            duration: researchArticleThree - researchArticleTwo,
-            ease: 'power2.out',
-          }, researchArticleTwo)
-        }
-        timeline.to(researchAll, {
+        timeline.to([...researchRows, researchAll], {
           autoAlpha: 1,
           y: 0,
-          duration: researchArticleThree - researchArticleTwo,
+          duration: researchContent - (awardsEnd - 30),
           ease: 'power2.out',
-        }, researchArticleTwo)
+        }, awardsEnd - 30)
         // 06 Research → 07 Network — globe first, Korea next, distant touchpoints last.
         timeline.to([researchTitle, ...researchRows, researchAll], {
           autoAlpha: 0,
